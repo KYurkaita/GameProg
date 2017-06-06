@@ -1,2 +1,7 @@
 *.exe
 *.class
+mk
+gm
+*cls
+*tex
+*pdf
