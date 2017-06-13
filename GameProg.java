@@ -34,8 +34,6 @@ public class GameProg extends JFrame implements ActionListener{
         contentPane.add(change,BorderLayout.CENTER);
         contentPane.add(bt,BorderLayout.PAGE_END);
 
-        //
-        //
         // contentPane.add(new JButton("1 - North"), BorderLayout.NORTH);
         // contentPane.add(new JButton("2-East"),BorderLayout.EAST);
         // contentPane.add(panel,BorderLayout.CENTER);
