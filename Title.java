@@ -9,7 +9,7 @@ import java.awt.event.* ;
 
 public class Title extends JPanel implements MouseListener {
 	private static final int WIDTH = 640;
-    private static final int HEIGHT = 240;
+    private static final int HEIGHT = 480;
     private String str;
     private Image image;
     private int x = 100;
@@ -40,8 +40,11 @@ public class Title extends JPanel implements MouseListener {
         }
 
     }
-    public void mouseClicked(MouseEvent e) { }
-
+    public void mouseClicked(MouseEvent e) {
+        x = e.getX();
+        y = e.getY();
+        repaint();
+	}
     public void mouseEntered(MouseEvent e) { }
 
     public void mouseExited(MouseEvent e) { }
