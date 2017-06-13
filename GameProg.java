@@ -5,21 +5,29 @@ import javax.swing.*;
 
 
 public class GameProg extends JFrame {
-  public GameProg(){
-    setTitle("HELLO WORLD");
+    Title title = new Title();
 
-    MainPanel panel = new MainPanel();
-    Container conP = getContentPane();
-    conP.add(panel);
+    public GameProg(){
+        setTitle("tyoujuugiga");
 
-    pack();
-  }
+        MainPanel panel = new MainPanel();
+        Title title = new Title();
+        Container conP = getContentPane();
 
-  public static void main(String[] arg){
-    GameProg frame = new GameProg();
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setVisible(true);
+        //conP.add(title);
 
-  }
+        conP.add(panel);
+
+        pack();
+    }
+
+
+    public static void main(String[] arg){
+        GameProg frame = new GameProg();
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+
+    }
 
 }
