@@ -12,23 +12,27 @@ public class Title extends JPanel implements MouseListener {
     private static final int HEIGHT = 480;
     private String str;
     private Image image;
+		private Image img;
     private int x = 100;
     private int y = 100;
+		GameProg flag ;
 
     public Title(){
         //panel size
-        setPreferredSize(new Dimension(WIDTH,HEIGHT));
+        //setPreferredSize(new Dimension(WIDTH,HEIGHT));
 
         str = "("+ x + ","+ y + ")";
 
         /*image initialize*/
         image = Toolkit.getDefaultToolkit().getImage(
                 getClass().getResource("IMG/ch_rabbit_1.png"));
-
+				img = Toolkit.getDefaultToolkit().getImage(
+                getClass().getResource("IMG/ICON/attack.png"));
         /*mediatracker input*/
         MediaTracker tracker = new MediaTracker(this);
         /*add(image,id)*/
         tracker.addImage(image,0);
+				tracker.addImage(img,0);
 
         addMouseListener(this);
 
@@ -40,18 +44,16 @@ public class Title extends JPanel implements MouseListener {
         }
 
     }
-    public void mouseClicked(MouseEvent e) {
-        x = e.getX();
-        y = e.getY();
-        repaint();
-	}
-    public void mouseEntered(MouseEvent e) { }
-
-    public void mouseExited(MouseEvent e) { }
-
-    public void mousePressed(MouseEvent e){ }
-
-    public void mouseReleased(MouseEvent e){ }
+    public void mouseClicked (MouseEvent e){}
+    public void mouseEntered (MouseEvent e){}
+    public void mouseExited  (MouseEvent e){}
+		public void mouseReleased(MouseEvent e){}
+    public void mousePressed (MouseEvent e){
+			x = e.getX();
+			y = e.getY();
+			repaint();
+			flag.setflag(1);
+		}
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
@@ -59,7 +61,9 @@ public class Title extends JPanel implements MouseListener {
         int hg = image.getHeight(this)/4;
         str = "("+ x + ","+ y + ")";
 
-        g.drawImage(image,x,y,-wh,hg,this);
+				g.drawImage(img,300,300,this);
+        g.drawImage(image,400,100,-wh,hg,this);
+
         g.drawString(str, 0, 20);
     }
 

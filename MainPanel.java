@@ -48,7 +48,8 @@ public class MainPanel extends JPanel implements MouseListener {
     public void mousePressed(MouseEvent e) {
         x = e.getX();
         y = e.getY();
-        repaint();
+        invalidate();
+        revalidate();
     }
 
     public void mouseReleased(MouseEvent e) { }

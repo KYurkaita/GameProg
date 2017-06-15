@@ -3,45 +3,44 @@ import javax.swing.*;
 import java.awt.event.* ;
 
 
-
-
 public class GameProg extends JFrame implements ActionListener{
     JPanel change = new JPanel();
+    JPanel title = new JPanel();
+    public static int flag = 0;
 
     public GameProg(){
-        Title title = new Title();
-        MainPanel panel = new MainPanel();
         Container contentPane = getContentPane();
 
+        /*titleパネル*/
+        create_title(title);
+
+        MainPanel main = new MainPanel();
         change.setLayout(new CardLayout());
-        change.add(title,"view1");
-        change.add(panel,"view2");
-
-        JButton bt1 = new JButton("change");
-        bt1.addActionListener(this);
-        bt1.setActionCommand("view1");
-
-        JButton bt2 = new JButton("change");
-        bt2.addActionListener(this);
-        bt2.setActionCommand("view2");
-        JPanel bt = new JPanel();
-        bt.add(bt1);
-        bt.add(bt2);
-
+        change.add(title,"title");
+        change.add(main,"main");
         setTitle("test");
 
         setLayout(new BorderLayout(100,20));
-        contentPane.add(change,BorderLayout.CENTER);
-        contentPane.add(bt,BorderLayout.PAGE_END);
-
-        // contentPane.add(new JButton("1 - North"), BorderLayout.NORTH);
-        // contentPane.add(new JButton("2-East"),BorderLayout.EAST);
-        // contentPane.add(panel,BorderLayout.CENTER);
-        // contentPane.add(title,BorderLayout.SOUTH);
+        contentPane.add(change);
 
         pack();
     }
 
+    private void create_title(JPanel tit){
+      Title title = new Title();
+      title.setBounds(50,0,640,480);
+
+      JButton btn = new JButton("start");
+      btn.addActionListener(this);
+      btn.setActionCommand("main");
+      btn.setBounds(30,70,100,20);
+
+      tit.setComponentZOrder(btn,0);
+      // tit.setComponentZOrder(title,1);
+      tit.setLayout(null);
+      tit.add(btn);
+      tit.add(title);
+    }
 
     public static void main(String[] arg){
         GameProg frame = new GameProg();
@@ -54,13 +53,22 @@ public class GameProg extends JFrame implements ActionListener{
         /*can see*/
         frame.setVisible(true);
 
+        while(true){
+          if( flag != 0 ) frame.repaint();
+        }
+    }
 
+    public void setflag(int i){
+      flag = i;
     }
 
     public void actionPerformed(ActionEvent e){
-        CardLayout cl = (CardLayout)(change.getLayout());
-        String cmd = e.getActionCommand();
-        cl.show(change,cmd);
+        CardLayout card = (CardLayout)(change.getLayout());
+        // String cmd = e.getActionCommand();
+        // cl.show(change,cmd);
+        if (e.getActionCommand() == "main"){
+          card.show(change,"main");
+        }
 
     }
 
