@@ -21,33 +21,25 @@ public class MainPanel extends JPanel implements MouseListener , MouseMotionList
 
     Thread chgLoop;
 
-    // JPanel game;
     MenuPanel menu;
     JPanel war;
 
     public MainPanel(){
         str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")";
 
-
         /* panelsize */
         setPreferredSize(new Dimension(WIDTH,HEIGHT));
 
-        // game = new JPanel();
-
         menu = new MenuPanel();
-
-        // war  = new JPanel();
+        war  = new JPanel();
 
         addMouseListener(this);
         addMouseMotionListener(this);
 
-
-
         /*card create */
         setLayout(new CardLayout());
         add(menu,"menu");
-        // game.add(war,"war");
-
+        add(war,"war");
 
         chgLoop = new Thread();
         chgLoop.start();
@@ -63,7 +55,7 @@ public class MainPanel extends JPanel implements MouseListener , MouseMotionList
         y = e.getY();
     }
     public void mouseDragged(MouseEvent e){;}
-    public void mouseMoved(MouseEvent e){
+    public void mouseMoved  (MouseEvent e){
         mx = e.getX();
         my = e.getY();
     }

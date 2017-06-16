@@ -26,14 +26,15 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     public MenuPanel(){
         /* panelsize */
         menu = new JPanel();
-        setBounds(0,0,640,480);
 
         str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")";
 
         addMouseListener(this);
         addMouseMotionListener(this);
 
-
+        setLayout(null);
+        setBounds(0,0,640,480);
+        //add(menu);
 
 
 
@@ -62,6 +63,9 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         g.drawString(str, 0, 20);
         g.drawString(m,100,100);
     }
+
+    // public int
+
 
     public boolean getFlag(){
         return this.changeFlag;

@@ -60,9 +60,9 @@ public class GameProg extends JFrame implements ActionListener , Runnable {
     }
 
     public void actionPerformed(ActionEvent e){
-        CardLayout card = (CardLayout)(change.getLayout());
         // String cmd = e.getActionCommand();
         // cl.show(change,cmd);
+        CardLayout card = (CardLayout)(change.getLayout());
         if (e.getActionCommand() == "main"){
             card.show(change,"main");
         }
