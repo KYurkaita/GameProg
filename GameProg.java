@@ -3,43 +3,47 @@ import javax.swing.*;
 import java.awt.event.* ;
 
 
-public class GameProg extends JFrame implements ActionListener{
-    JPanel change = new JPanel();
-    JPanel title = new JPanel();
-    public static int flag = 0;
+public class GameProg extends JFrame implements ActionListener , Runnable {
+    JPanel change;
+
+    private Thread gameLoop;
 
     public GameProg(){
-        Container contentPane = getContentPane();
+        /*title panel*/
+        JPanel title = new JPanel();
+        Title tit = new Title();
 
-        /*titleパネル*/
-        create_title(title);
+        JButton btn = new JButton("start");
+        btn.addActionListener(this);
+        btn.setActionCommand("main");
+        btn.setBounds(30,70,100,20);
 
+        title.setLayout(null);
+        title.add(btn);
+        title.add(tit);
+
+
+        /*main panel*/
         MainPanel main = new MainPanel();
+
+        /*change card*/
+        change = new JPanel();
         change.setLayout(new CardLayout());
         change.add(title,"title");
         change.add(main,"main");
-        setTitle("test");
 
-        setLayout(new BorderLayout(100,20));
+
+        /*content */
+        Container contentPane = getContentPane();
+        setTitle("test");
+        setLayout(new BorderLayout(0,0));
         contentPane.add(change);
 
         pack();
-    }
 
-    private void create_title(JPanel tit){
-      Title title = new Title();
-      title.setBounds(50,0,640,480);
+        gameLoop = new Thread(this);
+        gameLoop.start();
 
-      JButton btn = new JButton("start");
-      btn.addActionListener(this);
-      btn.setActionCommand("main");
-      btn.setBounds(30,70,100,20);
-
-      tit.setComponentZOrder(btn,0);
-      // tit.setComponentZOrder(title,1);
-      tit.setLayout(null);
-      tit.add(btn);
-      tit.add(title);
     }
 
     public static void main(String[] arg){
@@ -53,13 +57,6 @@ public class GameProg extends JFrame implements ActionListener{
         /*can see*/
         frame.setVisible(true);
 
-        while(true){
-          if( flag != 0 ) frame.repaint();
-        }
-    }
-
-    public void setflag(int i){
-      flag = i;
     }
 
     public void actionPerformed(ActionEvent e){
@@ -67,9 +64,21 @@ public class GameProg extends JFrame implements ActionListener{
         // String cmd = e.getActionCommand();
         // cl.show(change,cmd);
         if (e.getActionCommand() == "main"){
-          card.show(change,"main");
+            card.show(change,"main");
         }
 
     }
+
+    public void run(){
+        while(true){
+            repaint();
+            try{
+                Thread.sleep(20);
+            }catch(InterruptedException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
 
 }
