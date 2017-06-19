@@ -11,8 +11,8 @@ public class GameProg extends JFrame implements ActionListener , Runnable {
     public GameProg(){
         /*title panel*/
         JPanel title = new JPanel();
-        Title tit = new Title();
 
+        Title tit = new Title();
         JButton btn = new JButton("start");
         btn.addActionListener(this);
         btn.setActionCommand("main");

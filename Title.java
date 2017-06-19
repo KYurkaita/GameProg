@@ -29,7 +29,7 @@ public class Title extends JPanel implements MouseListener {
 		image = Toolkit.getDefaultToolkit().getImage(
 		getClass().getResource("IMG/ch_rabbit_1.png"));
 		img = Toolkit.getDefaultToolkit().getImage(
-		getClass().getResource("IMG/ICON/attack.png"));
+		getClass().getResource("IMG/ch_rabbit_1.png"));
 		/*mediatracker input*/
 		MediaTracker tracker = new MediaTracker(this);
 		/*add(image,id)*/
