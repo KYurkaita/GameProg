@@ -55,6 +55,7 @@ public class GameProg extends JFrame implements ActionListener , Runnable {
         /*windows location center*/
         frame.setLocationRelativeTo(null);
         /*can see*/
+        // frame.setSize(640  , 480);
         frame.setVisible(true);
 
     }

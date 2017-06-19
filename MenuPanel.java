@@ -1,4 +1,5 @@
 import javax.swing.JPanel;
+import javax.swing.ImageIcon;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -9,13 +10,16 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseEvent;
 
 class MENU {
-
     Image img;
+    Image change;
     int x;
     int y;
+    String msg;
+
     void MENU(){
         this.x = 0;
         this.y = 0;
+        this.msg = "test";
     }
 
     void put(int x, int y){
@@ -23,15 +27,30 @@ class MENU {
         this.y = y;
     }
 
-    void set(Image i){
-        this.img = i;
+    void set(String i){
+        ImageIcon icon = new ImageIcon(getClass().getResource(i));
+        this.img = icon.getImage();
     }
 
-    void add (MediaTracker t){
+    void change(String i){
+        ImageIcon icon = new ImageIcon(getClass().getResource(i));
+        this.change = icon.getImage();
+    }
+
+    void add(MediaTracker t){
         t.addImage(this.img,0);
+        t.addImage(this.change,0);
     }
     public void draw(Graphics g){
         g.drawImage( this.img, this.x, this.y, null );
+    }
+
+    public void c_draw(Graphics g){
+        g.drawImage( this.change, this.x, this.y, null );
+    }
+
+    public void message(Graphics g){
+        g.drawString( this.msg, 0, 450);
     }
 
 }
@@ -41,11 +60,17 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     private static final int MENU_MAX = 4;
     private static final int WIDTH = 640;
     private static final int HEIGHT = 480;
+    private static final int M_WIDTH = 150;
+    private static final int M_HEIGHT = 85;
+
     private String str;
-    private int x = 100;
-    private int y = 100;
+
+    private int x = 0;
+    private int y = 0;
     private int mx = 0;
     private int my = 0;
+
+    private int wh_menu = 5;
 
     public static boolean changeFlag = false;
 	private MENU menu[] = new MENU[MENU_MAX];
@@ -62,30 +87,17 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         setBounds(0,0,640,480);
         //add(menu);
 
-
         /*img*/
         for (int i = 0; i < MENU_MAX ; i++){
             menu[i] = new MENU();
-            menu[i].set(
-            Toolkit.getDefaultToolkit().getImage(
-            getClass().getResource("IMG/ITEM/menu"+i+".png"))
-            );
-        }
-
-		/*mediatracker input*/
-		MediaTracker tracker = new MediaTracker(this);
-		/*add(image,id)*/
-        menu[0].add(tracker);
-		menu[1].add(tracker);
-
-        try{
-            tracker.waitForID(0);
-        }catch(InterruptedException e){
-            e.printStackTrace();
-            return;
+            menu[i].set("IMG/ITEM/menu" + i + ".png" );
+            menu[i].change("IMG/ITEM/change" + i + ".png" );
+            menu[i].put( M_WIDTH * i + 20 , 20 );
         }
 
     }
+
+
     /*MouseEvent*/
     public void mouseClicked (MouseEvent e){;}
     public void mouseEntered (MouseEvent e){;}
@@ -97,8 +109,9 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     }
     public void mouseDragged(MouseEvent e){;}
     public void mouseMoved(MouseEvent e){
-        mx = e.getX();
-        my = e.getY();
+        mx = e.getX() ;
+        my = e.getY() ;
+        wh_menu = RetLocMenu(mx,my);
     }
 
 
@@ -106,17 +119,34 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         super.paintComponent(g);
         str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")";
         String m = "menuuuuuuu";
-        menu[0].put(x,y);
-        menu[1].draw(g);
-        menu[0].draw(g);
+        // menu[0].put(x,y);
+        for ( int i = 0 ; i < MENU_MAX; i++){
+            if( i != wh_menu)
+                menu[i].draw(g);
+            else {
+                menu[i].c_draw(g);
+                m = menu[i].msg;
+                g.drawString( "test" , 20, 470);
+                //menu[i].mssg(g);
+            }
+        }
         // g.drawImage(menu[0],x,y,this);
 
-        g.drawString(str, 0, 20);
-        g.drawString(m,100,100);
+        g.drawString(str, 0, 10);
+        // g.drawString(m,100,100);
 
     }
 
     // public int
+
+    private int RetLocMenu(int x,int y){
+        for (int i = 0; i < MENU_MAX; i++){
+            if( menu[i].x < x &&  x < ( menu[i].x + M_WIDTH ) &&
+                menu[i].y < y &&  y < ( menu[i].y + M_HEIGHT) )
+                return i;
+        }
+        return 5;
+    }
 
 
     public boolean getFlag(){

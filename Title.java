@@ -19,7 +19,7 @@ public class Title extends JPanel implements MouseListener {
     public Title(){
         //panel size
         //setPreferredSize(new Dimension(WIDTH,HEIGHT));
-		setBounds(50,0,640,480);
+		setBounds(0,0,640,480);
         str = "("+ x + ","+ y + ")";
 
 		/*MouseEvent*/
