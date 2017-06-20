@@ -8,14 +8,14 @@ import java.awt.event.* ;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseEvent;
 
-class MENU {
+class MENU_ITEM {
     Image img;
     Image change;
     int x;
     int y;
     String msg;
 
-    void MENU(){
+    void MENU_ITEM(){
         this.x = 0;
         this.y = 0;
         this.msg ="";
@@ -50,8 +50,8 @@ class MENU {
 
 }
 
-public class MenuPanel extends JPanel implements MouseListener , MouseMotionListener{
-    private static final int MENU_MAX = 4;
+public class MenuItem extends JPanel implements MouseListener , MouseMotionListener{
+    private static final int MENU_ITEM_MAX = 4;
     private static final int WIDTH = 640;
     private static final int HEIGHT = 480;
     private static final int M_WIDTH = 150;
@@ -64,17 +64,15 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     private int mx = 0;
     private int my = 0;
 
-    private MENU menu[] = new MENU[MENU_MAX];
+    private MENU_ITEM menu[] = new MENU_ITEM[MENU_ITEM_MAX];
     private int wh_menu = 5;
     private int ch_menu = 5;
 
     public static boolean changeFlag = false;
 
-    private JPanel card;
-    private MenuItem p_menu[] = new MenuItem[MENU_MAX];
 
 
-    public MenuPanel(){
+    public MenuItem(){
         /* panelsize */
 
         str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")";
@@ -86,19 +84,10 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         setBounds(0,0,640,480);
 
 
-        //add(menu);
-        card = new JPanel();
-        card.setLayout(new CardLayout());
-        for( int i = 0; i < MENU_MAX ; i++){
-            p_menu[i] = new MenuItem();
-        }
-
-        card.add(p_menu[0],"0");
-        add(card);
 
         /*img*/
-        for (int i = 0; i < MENU_MAX ; i++){
-            menu[i] = new MENU();
+        for (int i = 0; i < MENU_ITEM_MAX ; i++){
+            menu[i] = new MENU_ITEM();
             menu[i].set("IMG/ITEM/menu" + i + ".png" );
             menu[i].change("IMG/ITEM/change" + i + ".png" );
             menu[i].put( M_WIDTH * i + 20 , 20 );
@@ -131,7 +120,7 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")";
         String m = "menuuuuuuu";
         // menu[0].put(x,y);
-        for ( int i = 0 ; i < MENU_MAX; i++){
+        for ( int i = 0 ; i < MENU_ITEM_MAX; i++){
             if( i != wh_menu && i != ch_menu)
                 menu[i].draw(g);
             else {
@@ -149,7 +138,7 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     // public int
 
     private int RetLocMenu(int x,int y,int t){
-        for (int i = 0; i < MENU_MAX; i++){
+        for (int i = 0; i < MENU_ITEM_MAX; i++){
             if( menu[i].x < x &&  x < ( menu[i].x + M_WIDTH ) &&
                 menu[i].y < y &&  y < ( menu[i].y + M_HEIGHT) )
                 return i;

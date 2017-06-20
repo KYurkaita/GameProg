@@ -63,9 +63,8 @@ public class MainPanel extends JPanel implements MouseListener , MouseMotionList
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")";
 
-        //g.drawString(str, 0, 20);
+        // g.drawString(str, 0, 20);
     }
 
 
