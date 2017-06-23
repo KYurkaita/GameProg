@@ -10,7 +10,7 @@ import java.awt.event.* ;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseEvent;
 
-public class MainPanel extends JPanel implements MouseListener , MouseMotionListener , Runnable {
+public class MainPanel extends JPanel implements MouseListener , MouseMotionListener{
     private static final int WIDTH = 640;
     private static final int HEIGHT = 480;
     private String str;
@@ -20,12 +20,12 @@ public class MainPanel extends JPanel implements MouseListener , MouseMotionList
     private int mx = 0;
     private int my = 0;
 
-    Thread chgLoop;
-
     MenuPanel menu;
     JPanel war;
 
     MenuItem imenu[] = new MenuItem[4];
+    boolean changeFlag = false;
+    private CardLayout chmain ;
 
     public MainPanel(){
         str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")";
@@ -47,8 +47,7 @@ public class MainPanel extends JPanel implements MouseListener , MouseMotionList
         add(menu,"menu");
         add(war,"war");
 
-        chgLoop = new Thread();
-        chgLoop.start();
+        chmain = (CardLayout)getLayout();
 
     }
     /*MouseEvent*/
@@ -66,26 +65,16 @@ public class MainPanel extends JPanel implements MouseListener , MouseMotionList
         my = e.getY();
     }
 
-
-    public void paintComponent(Graphics g){
-        super.paintComponent(g);
-
-        // g.drawString(str, 0, 20);
+    public void ShowMain(String s){
+        chmain.show( this , s );
     }
 
+    public boolean gChangeMainFlag(){
+        return menu.getFlag();
+    }
 
-    public void run(){
-        while(true){
-            if(menu.getFlag() == true ) {
-
-            }
-
-            try{
-                Thread.sleep(20);
-            }catch(InterruptedException e){
-                e.printStackTrace();
-            }
-        }
+    public void sChangeMainFlag(boolean f){
+        menu.setFlag(f);
     }
 
 

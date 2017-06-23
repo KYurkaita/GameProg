@@ -7,6 +7,7 @@ public class GameProg extends JFrame implements ActionListener , Runnable {
     JPanel change;
 
     private Thread gameLoop;
+    MainPanel  mainp;
 
     public GameProg(){
         /*title panel*/
@@ -24,13 +25,13 @@ public class GameProg extends JFrame implements ActionListener , Runnable {
 
 
         /*main panel*/
-        MainPanel main = new MainPanel();
+        mainp = new MainPanel();
 
         /*change card*/
         change = new JPanel();
         change.setLayout(new CardLayout());
         change.add(title,"title");
-        change.add(main,"main");
+        change.add(mainp,"main");
 
 
         /*content */
@@ -72,7 +73,13 @@ public class GameProg extends JFrame implements ActionListener , Runnable {
 
     public void run(){
         while(true){
+
             repaint();
+            /* change main panel main to war */
+            if( mainp.gChangeMainFlag() == true ){
+                mainp.ShowMain("war");
+            }
+
             try{
                 Thread.sleep(20);
             }catch(InterruptedException e){

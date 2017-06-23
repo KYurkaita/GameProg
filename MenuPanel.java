@@ -92,13 +92,11 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         addMouseListener(this);
         addMouseMotionListener(this);
 
-        JPanel jp = new JPanel();
-        jp.setLayout(null);
-        jp.setBounds(400,350,100,100);
-        JButton j = new JButton("j");
-        j.setBounds(0,0,100,50);
-        jp.add(j);
-        add (jp);
+        // JPanel jp = new JPanel();
+        // jp.setLayout(null);
+        // jp.setBounds(400,350,100,100);
+        // add (jp);
+
         /*card make*/
         card = new JPanel();
         card.setLayout(new CardLayout());
@@ -146,6 +144,8 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         switch(ch_menu){
             case 0: CL.show( card , "first" ); break;
             case 1: CL.show( card , "second" ); break;
+            case 2: CL.show( card , "third" ); break;
+            case 3: CL.show( card , "fourth" ); break;
             default:
                 break;
         }
@@ -161,7 +161,7 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     /*drawing*/
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")"+ ch_menu ;
+        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")"+ ch_menu +"," + changeFlag;
         String m = "menuuuuuuu";
         // menu[0].put(x,y);
         for ( int i = 0 ; i < MENU_MAX; i++){
