@@ -1,4 +1,5 @@
 import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -24,13 +25,18 @@ public class MainPanel extends JPanel implements MouseListener , MouseMotionList
     MenuPanel menu;
     JPanel war;
 
+    MenuItem imenu[] = new MenuItem[4];
+
     public MainPanel(){
         str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")";
 
         /* panelsize */
         setPreferredSize(new Dimension(WIDTH,HEIGHT));
 
+        /*menu*/
         menu = new MenuPanel();
+
+        /*war*/
         war  = new JPanel();
 
         addMouseListener(this);
