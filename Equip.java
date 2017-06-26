@@ -6,13 +6,15 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.* ;
 
-enum EQ{
-    SWORD, RANCE, ARROW, SMISSILE, LMISSILE ,
-
-};
 
 public class Equip{
     private String name;
+
+    private static final int SWORD = 0;
+    private static final int RANCE = 1;
+    private static final int ARROW = 2;
+    private static final int SMISSILE = 3;
+    private static final int LMISSILE = 4;
 
     private int atk;
     private int def;
@@ -40,12 +42,12 @@ public class Equip{
                 set( "l-missile" , 10 , 10 , 6);
                 break;
             default:
-                Equip();
+                set("NONE",1,1,1);
          }
     }
 
     void set(String s,int a, int d, int r){
-        this.s = new String(s);
+        this.name = new String(s);
         this.atk = a;
         this.def = d;
         this.rng = r;

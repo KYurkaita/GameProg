@@ -23,7 +23,8 @@ public class MenuItem extends JPanel implements MouseListener , MouseMotionListe
 
     public static boolean changeFlag = false;
 
-
+    private MENU MBak = new MENU();
+    private MENU MSubBak = new MENU();
 
     public MenuItem(){
         /* panelsize */
@@ -36,8 +37,9 @@ public class MenuItem extends JPanel implements MouseListener , MouseMotionListe
         setLayout(null);
         setBounds( 20 , 170 , WIDTH , HEIGHT );
 
-
-
+        MBak.set("IMG/ITEM/menu.png");
+        MSubBak.set("IMG/ITEM/submenu.png");
+        MSubBak.put(450,0);
 
     }
 
@@ -62,6 +64,8 @@ public class MenuItem extends JPanel implements MouseListener , MouseMotionListe
         super.paintComponent(g);
         str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")";
 
+        MBak.draw(g);
+        MSubBak.draw(g);
         g.drawString(str, 0, 10);
 
     }

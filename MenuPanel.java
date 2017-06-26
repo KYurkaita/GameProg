@@ -8,31 +8,6 @@ import java.awt.event.* ;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseEvent;
 
-class MENU{
-    Image img;
-    int x;
-    int y;
-
-    MENU(){
-        this.x = 0;
-        this.y = 0;
-    }
-
-    void put(int x, int y){
-        this.x = x;
-        this.y = y;
-    }
-
-    void set(String i){
-        ImageIcon icon = new ImageIcon(getClass().getResource(i));
-        this.img = icon.getImage();
-    }
-
-    public void draw(Graphics g){
-        g.drawImage( this.img, this.x, this.y, null );
-    }
-}
-
 class MENU_LIST extends MENU {
     Image change;
     String msg;
@@ -63,24 +38,30 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     private static final int HEIGHT = 480;
     private static final int M_WIDTH = 150;
     private static final int M_HEIGHT = 85;
-
-    private String str;
+    private static final int UNIT_NUM = 6;
 
     private int x = 0;
     private int y = 0;
     private int mx = 0;
     private int my = 0;
 
+    private String str;
+
+    private JPanel card;
+    private CardLayout CL ;
+
+    public static boolean changeFlag = false;
     private MENU_LIST menu[] = new MENU_LIST[MENU_MAX];
     private MENU select;
     private int wh_menu = 5;
     private int ch_menu = 5;
-
-    public static boolean changeFlag = false;
-
-    private JPanel card;
     private MenuItem p_menu[] = new MenuItem[MENU_MAX];
-    private CardLayout CL ;
+    private UnitOrg unorg;
+
+    private Unit u[] = new Unit[25];
+    private Unit btmem[] = new Unit[6];
+    private int unum = 1;
+
 
     public MenuPanel(){
         /* panelsize */
@@ -108,8 +89,10 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         for( int i = 0; i < MENU_MAX ; i++){
             p_menu[i] = new MenuItem();
         }
+        unorg = new UnitOrg();
+
         card.add(p_menu[0],"first");
-        card.add(p_menu[1],"second");
+        card.add(unorg,"second");
         card.add(p_menu[2],"third");
         card.add(p_menu[3],"fourth");
 
@@ -123,10 +106,20 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
             menu[i].put( M_WIDTH * i + 20 , 20 );
             menu[i].msg = new String ("a");
         }
-        menu[0].msg = new String ("test");
+        menu[0].msg = new String ("現在の状況を確認します.");
+        menu[1].msg = new String ("ユニットを管理・追加します.");
+        menu[2].msg = new String ("ユニット用の戦術を研究します.");
+        menu[3].msg = new String ("ユニットを率いてステージに挑戦します.");
+
         select = new MENU();
         select.set("IMG/ITEM/select.png");
 
+        u[0] = new Unit();
+        u[0].set("IMG/CHARA/ch_frog.png");
+        u[1] = new Unit();
+        u[1].set("IMG/CHARA/ch_rabbit.png");
+        u[1].set(40,20,20,20);
+        unum = 2;
 
     }
 
@@ -142,10 +135,10 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         ch_menu = RetLocMenu(x,y,ch_menu);
 
         switch(ch_menu){
-            case 0: CL.show( card , "first" ); break;
-            case 1: CL.show( card , "second" ); break;
-            case 2: CL.show( card , "third" ); break;
-            case 3: CL.show( card , "fourth" ); break;
+            case 0: ShowMenuFirst(); break;
+            case 1: ShowMenuSecond(); break;
+            case 2: ShowMenuThird(); break;
+            case 3: ShowMenuFourth(); break;
             default:
                 break;
         }
@@ -185,7 +178,6 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
 
     }
 
-
     private int RetLocMenu(int x,int y,int t){
         for (int i = 0; i < MENU_MAX; i++){
             if( menu[i].x < x &&  x < ( menu[i].x + M_WIDTH ) &&
@@ -195,6 +187,36 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         return t;
     }
 
+    private void ShowMenuFirst(){
+        CL.show( card , "first" );
+    }
+
+    private void ShowMenuSecond(){
+        unorg.SaveUnit( u , unum );
+        CL.show( card , "second" );
+    }
+
+    private void ShowMenuThird(){
+        CL.show( card , "third" );
+    }
+
+    private void ShowMenuFourth(){
+        CL.show( card , "fourth" );
+    }
+
+    public void SaveWar(Unit u[], int n){
+        for(int i = 0 ; i < n ; i++){
+            this.btmem[i] = u[i];
+        }
+        this.unum = n;
+    }
+
+    public void LoadWar(Unit u[] , int n){
+        for(int i = 0 ; i < n ; i++){
+            u[i] = this.btmem[i];
+        }
+        n = this.unum;
+    }
 
     public boolean getFlag(){
         return this.changeFlag;

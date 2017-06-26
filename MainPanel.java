@@ -25,7 +25,10 @@ public class MainPanel extends JPanel implements MouseListener , MouseMotionList
 
     MenuItem imenu[] = new MenuItem[4];
     boolean changeFlag = false;
-    private CardLayout chmain ;
+    private CardLayout chmain;
+
+
+    public Unit test = new Unit();
 
     public MainPanel(){
         str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")";
