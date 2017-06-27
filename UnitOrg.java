@@ -15,7 +15,6 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
     private static final int SUBMENU_X = 450;
     private static final int SUBMENU_Y = 0;
 
-
     private String str;
 
     private int x = 0;
@@ -23,8 +22,8 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
     private int mx = 0;
     private int my = 0;
 
-
     public static boolean changeFlag = false;
+    private boolean createflag = false;
 
     private MENU MBak = new MENU();
     private MENU MSubBak = new MENU();
@@ -83,7 +82,7 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
         y = e.getY();
         selnum = SetWhM();
         if ( selnum == -1 ){
-
+            createflag = true;
         }
     }
     public void mouseDragged(MouseEvent e){;}
@@ -107,10 +106,13 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
         /* SUB MENU */
         MSubBak.draw(g);
         MSubIcom.draw(g);
-        if( selnum != -1 ) un[ selnum ].drawSubMenu(g);
+        if( selnum >= 0 ) un[ selnum ].drawSubMenu(g);
         else {
             g.drawString( "新規ユニットを作成する." , 450 + 5 , 160 );
         }
+
+        DrawCreateWindow(g);
+
         g.drawString(str, 0, 10);
     }
 
@@ -135,7 +137,15 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
                  i < unum )
                  return i;
              }
+        if( SUBMENU_X < mx && mx < WIDTH &&
+            SUBMENU_Y < my && my < HEIGHT )
+            return -2;
+
         return -1;
+    }
+
+    private void DrawCreateWindow(Graphics g){
+
     }
 
 }

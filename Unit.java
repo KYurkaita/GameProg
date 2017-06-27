@@ -16,6 +16,11 @@ public class Unit {
     // private static final int ;
     Image img;
 
+    Image hp_icon;
+    Image atk_icon;
+    Image def_icon;
+    Image spd_icon;
+
     int hp;
     int atk;
     int def;
@@ -30,6 +35,18 @@ public class Unit {
         set(new Equip(0),0,0);
         set("IMG/CHARA/ch_frog.png");
         this.num = 1;
+
+        ImageIcon icon = new ImageIcon(getClass().getResource("IMG/ICON/hp.png"));
+        this.hp_icon = icon.getImage();
+        icon = new ImageIcon(getClass().getResource("IMG/ICON/attack.png"));
+        this.atk_icon = icon.getImage();
+        icon = new ImageIcon(getClass().getResource("IMG/ICON/sield.png"));
+        this.def_icon = icon.getImage();
+        icon = new ImageIcon(getClass().getResource("IMG/ICON/speed.png"));
+        this.spd_icon = icon.getImage();
+
+
+
     }
 
     void set( int h , int a , int d , int s ){
@@ -50,11 +67,15 @@ public class Unit {
     }
 
     void drawSubMenu(Graphics g){
-        g.drawString( "HP :" + hp  , 450 + 5 , 160 );
-        g.drawString( "ATK:" + atk , 450 + 5 , 180 );
-        g.drawString( "DEF:" + def , 450 + 5 , 200 );
-        g.drawString( "SPD:" + spd , 450 + 5 , 220 );
+        g.drawString( "HP :" + hp  , 450 + 20 , 160 );
+        g.drawString( "ATK:" + atk , 450 + 20 , 180 );
+        g.drawString( "DEF:" + def , 450 + 20 , 200 );
+        g.drawString( "SPD:" + spd , 450 + 20 , 220 );
         g.drawImage ( img , 455 , 5 , 140, 130, null );
+        g.drawImage ( hp_icon  , 454 , 150 , 12, 12, null );
+        g.drawImage ( atk_icon , 454 , 170 , 12, 12, null );
+        g.drawImage ( def_icon , 454 , 190 , 12, 12, null );
+        g.drawImage ( spd_icon , 454 , 210 , 12, 12, null );
     }
 
 }

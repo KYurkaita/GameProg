@@ -148,7 +148,7 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     public void mouseMoved(MouseEvent e){
         mx = e.getX() ;
         my = e.getY() ;
-        wh_menu = RetLocMenu(mx,my,wh_menu);
+        wh_menu = RetLocMenu(mx,my,ch_menu);
     }
 
     /*drawing*/
