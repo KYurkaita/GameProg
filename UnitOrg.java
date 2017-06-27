@@ -130,22 +130,27 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
         this.unum = n;
     }
 
+    private void DrawCreateWindow( Graphics g ){
+        int i;
+
+    }
+
     private int SetWhM(){
         for (int i = 0 ; i < 25 ; i++ ){
             if ( Chr[ i ].x < mx && mx < ( Chr[ i ].x + 90)  &&
                  Chr[ i ].y < my && my < ( Chr[ i ].y + 70)  &&
                  i < unum )
-                 return i;
-             }
+                return i;
+        }
+
         if( SUBMENU_X < mx && mx < WIDTH &&
-            SUBMENU_Y < my && my < HEIGHT )
+            SUBMENU_Y < my && my < HEIGHT ){
             return -2;
-
-        return -1;
+        }
+        else{
+            return -1;
+        }
     }
 
-    private void DrawCreateWindow(Graphics g){
-
-    }
 
 }
