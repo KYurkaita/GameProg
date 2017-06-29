@@ -14,7 +14,7 @@ class MENU_LIST extends MENU {
 
     MENU_LIST(){
         super();
-        this.msg ="";
+        this.msg = "";
     }
 
     void change(String i){
@@ -55,8 +55,12 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     private MENU select;
     private int wh_menu = 5;
     private int ch_menu = 5;
-    private MenuItem p_menu[] = new MenuItem[MENU_MAX];
-    private UnitOrg unorg;
+    private int before_menu = 0;
+
+    private UnitOrg unorg; //戦況確認
+    private ConfSit confs; //部隊編成
+    private TactRes tact;  //戦術研究
+    private Sortie sortie; //出撃
 
     private Unit u[] = new Unit[25];
     private Unit btmem[] = new Unit[6];
@@ -73,11 +77,6 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         addMouseListener(this);
         addMouseMotionListener(this);
 
-        // JPanel jp = new JPanel();
-        // jp.setLayout(null);
-        // jp.setBounds(400,350,100,100);
-        // add (jp);
-
         /*card make*/
         card = new JPanel();
         card.setLayout(new CardLayout());
@@ -86,15 +85,16 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
 
 
         /*add menu*/
-        for( int i = 0; i < MENU_MAX ; i++){
-            p_menu[i] = new MenuItem();
-        }
-        unorg = new UnitOrg();
 
-        card.add(p_menu[0],"first");
-        card.add(unorg,"second");
-        card.add(p_menu[2],"third");
-        card.add(p_menu[3],"fourth");
+        confs = new ConfSit();
+        unorg = new UnitOrg();
+        tact = new TactRes();
+        sortie = new Sortie();
+
+        card.add( confs  , "first" );
+        card.add( unorg  , "second" );
+        card.add( tact   , "third" );
+        card.add( sortie , "fourth" );
 
         add(card);
 
@@ -104,16 +104,18 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
             menu[i].set("IMG/ITEM/menu" + i + ".png" );
             menu[i].change("IMG/ITEM/change" + i + ".png" );
             menu[i].put( M_WIDTH * i + 20 , 20 );
-            menu[i].msg = new String ("a");
         }
         menu[0].msg = new String ("現在の状況を確認します.");
         menu[1].msg = new String ("ユニットを管理・追加します.");
         menu[2].msg = new String ("ユニット用の戦術を研究します.");
         menu[3].msg = new String ("ユニットを率いてステージに挑戦します.");
 
+        /*select */
         select = new MENU();
         select.set("IMG/ITEM/select.png");
 
+
+        /* Unit first menu */
         u[0] = new Unit();
         u[0].set("IMG/CHARA/ch_frog.png");
         u[1] = new Unit();
@@ -133,6 +135,18 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         x = e.getX();
         y = e.getY();
         ch_menu = RetLocMenu(x,y,ch_menu);
+
+        switch(before_menu){
+            case 0:
+            case 1: unorg.LoadUnit( u , unum ); break;
+            case 2:
+            case 3: break;
+            default:
+                break;
+        }
+
+        before_menu = ch_menu;
+
 
         switch(ch_menu){
             case 0: ShowMenuFirst(); break;
@@ -154,12 +168,13 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     /*drawing*/
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")"+ ch_menu +"," + changeFlag;
+        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")"+ ch_menu +"," + changeFlag ;
         String m = "menuuuuuuu";
         // menu[0].put(x,y);
         for ( int i = 0 ; i < MENU_MAX; i++){
-            if( i != ch_menu)
+            if( i != ch_menu){
                 menu[i].draw(g);
+            }
             else {
                 menu[i].c_draw(g);
             }
@@ -188,6 +203,7 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     }
 
     private void ShowMenuFirst(){
+        // unorg.SaveUnit( u , unum );
         CL.show( card , "first" );
     }
 
@@ -201,6 +217,7 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     }
 
     private void ShowMenuFourth(){
+        sortie.SaveUnit( u , unum );
         CL.show( card , "fourth" );
     }
 

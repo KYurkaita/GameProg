@@ -7,7 +7,10 @@ public class GameProg extends JFrame implements ActionListener , Runnable {
     JPanel change;
 
     private Thread gameLoop;
-    MainPanel  mainp;
+    MainPanel mainp;
+
+    private Unit btmem[] = new Unit[6];
+    private int btnum = 1;
 
     public GameProg(){
         /*title panel*/
@@ -33,6 +36,11 @@ public class GameProg extends JFrame implements ActionListener , Runnable {
         change.add(title,"title");
         change.add(mainp,"main");
 
+
+        /*btmem inisialize*/
+        for( int i = 0; i < 6 ; i++){
+            btmem[i] = new Unit();
+        }
 
         /*content */
         Container contentPane = getContentPane();
@@ -77,6 +85,7 @@ public class GameProg extends JFrame implements ActionListener , Runnable {
             repaint();
             /* change main panel main to war */
             if( mainp.gChangeMainFlag() == true ){
+                mainp.LoadMainUnit( btmem , btnum );
                 mainp.ShowMain("war");
             }
 

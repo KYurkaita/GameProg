@@ -20,15 +20,15 @@ public class MainPanel extends JPanel implements MouseListener , MouseMotionList
     private int mx = 0;
     private int my = 0;
 
-    MenuPanel menu;
-    JPanel war;
+    private MenuPanel menu;
+    private War war;
 
-    MenuItem imenu[] = new MenuItem[4];
-    boolean changeFlag = false;
+    private MenuItem imenu[] = new MenuItem[4];
+    private boolean changeFlag = false;
     private CardLayout chmain;
 
-
-    public Unit test = new Unit();
+    private Unit btmem[] = new Unit[6];
+    private int btnum = 1;
 
     public MainPanel(){
         str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")";
@@ -40,7 +40,7 @@ public class MainPanel extends JPanel implements MouseListener , MouseMotionList
         menu = new MenuPanel();
 
         /*war*/
-        war  = new JPanel();
+        war  = new War();
 
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -78,6 +78,11 @@ public class MainPanel extends JPanel implements MouseListener , MouseMotionList
 
     public void sChangeMainFlag(boolean f){
         menu.setFlag(f);
+    }
+
+
+    public void LoadMainUnit(Unit u[], int n){
+        war.LoadUnit( btmem , btnum );
     }
 
 

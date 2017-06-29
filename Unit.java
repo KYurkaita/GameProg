@@ -45,8 +45,6 @@ public class Unit {
         icon = new ImageIcon(getClass().getResource("IMG/ICON/speed.png"));
         this.spd_icon = icon.getImage();
 
-
-
     }
 
     void set( int h , int a , int d , int s ){
