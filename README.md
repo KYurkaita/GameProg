@@ -8,35 +8,20 @@ cardlayoutで表示.
 
 * contentPane
     * title
-
     タイトル画面.
-
     * main
-
     メイン画面.
-
         * menu
-
         メニュー画面.
-
             * confs
-
             現在の状況を確認.
-
             * unorg
-
             ユニットを管理.
-
             * tact
-
             ユニットの戦術を研究.
-
             * sortie
-
             ステージに挑戦.
-
         * war
-
         まだだよ！
 
 
