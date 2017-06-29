@@ -38,9 +38,9 @@ public class GameProg extends JFrame implements ActionListener , Runnable {
 
 
         /*btmem inisialize*/
-        for( int i = 0; i < 6 ; i++){
-            btmem[i] = new Unit();
-        }
+        // for( int i = 0; i < 6 ; i++){
+        //     btmem[i] = new Unit();
+        // }
 
         /*content */
         Container contentPane = getContentPane();
@@ -70,8 +70,6 @@ public class GameProg extends JFrame implements ActionListener , Runnable {
     }
 
     public void actionPerformed(ActionEvent e){
-        // String cmd = e.getActionCommand();
-        // cl.show(change,cmd);
         CardLayout card = (CardLayout)(change.getLayout());
         if (e.getActionCommand() == "main"){
             card.show(change,"main");
@@ -85,7 +83,14 @@ public class GameProg extends JFrame implements ActionListener , Runnable {
             repaint();
             /* change main panel main to war */
             if( mainp.gChangeMainFlag() == true ){
-                mainp.LoadMainUnit( btmem , btnum );
+                try{
+                    mainp.LoadFromMainUnit( btmem , btnum );
+                    Thread.sleep(20);
+                }catch(InterruptedException e){
+                    e.printStackTrace();
+                }
+
+                mainp.SaveToWarUnit( btmem , btnum );
                 mainp.ShowMain("war");
             }
 

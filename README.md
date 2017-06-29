@@ -33,6 +33,6 @@ cardlayoutで表示.
 
 ボタンを押すとmain画面に移動.
 
-##GameProg:MainPanel
+## GameProg:MainPanel
 
 メイン画面

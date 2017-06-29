@@ -8,6 +8,34 @@ import java.awt.event.* ;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseEvent;
 
+class HPBAR extends MENU{
+    int width;
+    boolean f;
+
+    HPBAR(){
+        f = true;
+        super.set("IMG/ITEM/warcol.png");
+        this.width = 210;
+        super.put( 68 , 10 );
+    }
+
+    HPBAR(int t){
+        f = false;
+        super.set("IMG/ITEM/warcol.png");
+        this.width = 210;
+        super.put( 342 , 10 );
+    }
+
+    void draw( Graphics g , int x ){
+        if(f)
+            g.drawImage( this.img, this.x + 210 , this.y , - width * x / 100 , 70 , null );
+        else
+            g.drawImage( this.img, this.x , this.y , width * x / 100 , 70 , null );
+    }
+
+
+}
+
 public class War extends JPanel implements MouseListener , MouseMotionListener{
     private static final int MENU_ITEM_MAX = 4;
     private static final int WIDTH = 600;
@@ -23,12 +51,20 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
 
     public static boolean changeFlag = false;
 
-    private MENU MBak = new MENU();
-    private MENU MSubBak = new MENU();
+    private MENU Sett;
+    private MENU TeamHp;
+    private MENU EnemyHp;
+    private HPBAR THpBar;
+    private HPBAR EHpBar;
+    private MENU Time;
+    private MENU Mess;
 
-    private Unit un[] = new Unit[25];
+    private MENU ChrTile;
+    private MENU EnmTile;
+
     private Unit btmem[] = new Unit[6];
-    private int unum = 1;
+    private int btnum = 5;
+
 
     public War(){
         /* panelsize */
@@ -41,17 +77,40 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         setLayout(null);
         setBounds( 0 , 0 , WIDTH , HEIGHT );
 
-        MBak.set("IMG/ITEM/menu.png");
-        MSubBak.set("IMG/ITEM/submenu.png");
-        MSubBak.put(450,0);
+
+        Sett = new MENU();
+        Sett.set("IMG/ITEM/config.png");
+        Sett.put(10,20);
 
 
-        un[0] = new Unit();
-        un[0].set("IMG/CHARA/ch_frog.png");
-        un[1] = new Unit();
-        un[1].set("IMG/CHARA/ch_rabbit.png");
-        un[1].set(40,20,20,20);
-        unum = 2;
+        TeamHp = new MENU();
+        TeamHp.set("IMG/ITEM/warbar.png");
+        TeamHp.put(65,10);
+        EnemyHp = new MENU();
+        EnemyHp.set("IMG/ITEM/warbar2.png");
+        EnemyHp.put(345,10);
+        Time = new MENU();
+        Time.set("IMG/ITEM/warque.png");
+        Time.put(275,10);
+
+        ChrTile = new MENU();
+        ChrTile.set("IMG/ITEM/char.png");
+        ChrTile.put(50,120);
+        EnmTile = new MENU();
+        EnmTile.set("IMG/ITEM/char2.png");
+        EnmTile.put(370,120);
+
+
+        THpBar = new HPBAR();
+        EHpBar = new HPBAR(0);
+
+        Mess = new MENU();
+        Mess.set("IMG/ITEM/warmess.png");
+        Mess.put(0,400);
+
+        for(int i = 0; i < 6; i++){
+            btmem[i] = new Unit();
+        }
 
     }
 
@@ -74,26 +133,38 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")";
+        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")" + btnum;
 
-        MBak.draw(g);
-        MSubBak.draw(g);
+        Sett.draw(g);
+        Mess.draw(g);
+
+        THpBar.draw( g , 100 );
+        EHpBar.draw( g , 100 );
+
+        ChrTile.draw(g);
+        EnmTile.draw(g);
+
+        Time.draw(g);
+        TeamHp.draw(g);
+        EnemyHp.draw(g);
+
         g.drawString(str, 0, 10);
+        g.drawString( "" + btmem[1].spd , 15 , 420 );
 
     }
 
     public void LoadUnit(Unit u[], int n){
-        for( int i = 0 ; i< unum ; i++ ){
-            u[i] = this.un[i];
+        for( int i = 0 ; i < this.btnum ; i++ ){
+            u[i] = this.btmem[i];
         }
-        n = this.unum;
+        n = this.btnum;
     }
 
     public void SaveUnit(Unit u[], int n){
-        for (int i = 0; i < n ; i++ ){
-            this.un[i] = u[i];
+        for (int i = 0 ; i < n ; i++ ){
+            this.btmem[i] = u[i];
         }
-        this.unum = n;
+        this.btnum = n;
     }
 
 }

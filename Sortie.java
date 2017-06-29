@@ -15,6 +15,11 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
     private static final int SUBMENU_X = 450;
     private static final int SUBMENU_Y = 0;
 
+    private static final int BUT_X = 450;
+    private static final int BUT_Y = 270;
+    private static final int BUT_W = 150;
+    private static final int BUT_H = 80;
+
     private String str;
 
     private int x = 0;
@@ -24,6 +29,10 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
 
     private MENU MBak = new MENU();
     private MENU MSubBak = new MENU();
+    private MENU But = new MENU();
+
+    private boolean ch_flag = false;
+    private int bt = 0 ;
 
     private Unit un[] = new Unit[25];
     private Unit btmem[] = new Unit[6];
@@ -45,8 +54,9 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
         MBak.set("IMG/ITEM/menu.png");
         MSubBak.set("IMG/ITEM/submenu.png");
         MSubBak.put(SUBMENU_X,SUBMENU_Y);
-        // MSubIcom.set("IMG/ITEM/submenuicon.png");
-        // MSubIcom.put(SUBMENU_X,SUBMENU_Y);
+        But.set("IMG/ITEM/change3.png");
+        But.put(450,270);
+
 
         for( int i = 0 ; i < 25 ; i++ ){
             un[i] = new Unit();
@@ -63,6 +73,18 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
     public void mousePressed (MouseEvent e){
         x = e.getX();
         y = e.getY();
+
+        bt = SetWhM();
+        switch(bt){
+            case 7:
+                ch_flag = true;
+                break;
+            default:
+                break;
+        }
+
+
+
     }
     public void mouseDragged(MouseEvent e){;}
     public void mouseMoved(MouseEvent e){
@@ -73,15 +95,33 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")";
+        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")"+ unum;
 
         /*Main Menu Panel*/
         MBak.draw(g);
         /*Sub Menu Panel*/
         MSubBak.draw(g);
+        But.draw(g);
 
         g.drawString(str, 0, 10);
 
+    }
+
+    private int SetWhM(){
+        // for (int i = 0 ; i < 25 ; i++ ){
+        //     if ( Chr[ i ].x < mx && mx < ( Chr[ i ].x + 90)  &&
+        //          Chr[ i ].y < my && my < ( Chr[ i ].y + 70)  &&
+        //          i < unum )
+        //         return i;
+        // }
+
+        if( ( BUT_X ) < mx && mx < (BUT_X + BUT_W) &&
+            ( BUT_Y ) < my && my < (BUT_Y + BUT_H) ){
+            return 7;
+        }
+        else {
+            return -1;
+        }
     }
 
     public void LoadUnit(Unit u[], int n){
@@ -96,6 +136,14 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
             this.un[i] = u[i];
         }
         this.unum = n;
+    }
+
+    public boolean GetChangeWarFlag(){
+        return this.ch_flag;
+    }
+
+    public void SetChangeWarFlag( boolean f ){
+        this.ch_flag = f;
     }
 
 }

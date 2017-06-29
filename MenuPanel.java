@@ -65,6 +65,7 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     private Unit u[] = new Unit[25];
     private Unit btmem[] = new Unit[6];
     private int unum = 1;
+    private int btnum = 1;
 
 
     public MenuPanel(){
@@ -123,6 +124,10 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         u[1].set(40,20,20,20);
         unum = 2;
 
+        btmem[0] = u[0];
+        btmem[1] = u[1];
+        btnum = 2;
+
     }
 
 
@@ -147,7 +152,6 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
 
         before_menu = ch_menu;
 
-
         switch(ch_menu){
             case 0: ShowMenuFirst(); break;
             case 1: ShowMenuSecond(); break;
@@ -168,9 +172,8 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     /*drawing*/
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")"+ ch_menu +"," + changeFlag ;
-        String m = "menuuuuuuu";
-        // menu[0].put(x,y);
+        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")"+ ch_menu +"," + btnum ;
+
         for ( int i = 0 ; i < MENU_MAX; i++){
             if( i != ch_menu){
                 menu[i].draw(g);
@@ -186,10 +189,8 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
             }
 
         }
-        // g.drawImage(menu[0],x,y,this);
 
         g.drawString(str, 0, 10);
-        // g.drawString(m,100,100);
 
     }
 
@@ -219,24 +220,25 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     private void ShowMenuFourth(){
         sortie.SaveUnit( u , unum );
         CL.show( card , "fourth" );
+        sortie.LoadUnit( u , unum );
     }
 
-    public void SaveWar(Unit u[], int n){
+    public void SaveFromWar(Unit u[], int n){
         for(int i = 0 ; i < n ; i++){
             this.btmem[i] = u[i];
         }
-        this.unum = n;
+        this.btnum = n;
     }
 
-    public void LoadWar(Unit u[] , int n){
+    public void LoadToWar(Unit u[] , int n){
         for(int i = 0 ; i < n ; i++){
             u[i] = this.btmem[i];
         }
-        n = this.unum;
+        n = this.btnum;
     }
 
     public boolean getFlag(){
-        return this.changeFlag;
+        return sortie.GetChangeWarFlag();
     }
 
     public void setFlag(boolean f){

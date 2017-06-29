@@ -81,9 +81,12 @@ public class MainPanel extends JPanel implements MouseListener , MouseMotionList
     }
 
 
-    public void LoadMainUnit(Unit u[], int n){
-        war.LoadUnit( btmem , btnum );
+    public void LoadFromMainUnit(Unit u[], int n){
+        menu.LoadToWar(u,n);
     }
 
+    public void SaveToWarUnit(Unit u[], int n){
+        war.SaveUnit(u,n);
+    }
 
 }
