@@ -85,12 +85,13 @@ public class GameProg extends JFrame implements ActionListener , Runnable {
             if( mainp.GetMenuFlag() ){
 
                 mainp.SetMenuFlag(false);
+
                 this.btnum = mainp.LoadBtUnitNum();
                 for(int i = 0 ; i < this.btnum; i++){
                     this.btmem[i] = mainp.LoadBtUnit(i);
                 }
 
-                System.out.println( "" + this.btnum );
+                // System.out.println( "" + this.btnum );
                 mainp.SaveBtUnitToWar( btmem , btnum );
 
                 mainp.ChangeShow("war");
