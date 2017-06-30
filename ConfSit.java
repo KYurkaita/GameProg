@@ -46,12 +46,12 @@ public class ConfSit extends JPanel implements MouseListener , MouseMotionListen
         MSubBak.put(450,0);
 
 
-        un[0] = new Unit();
-        un[0].set("IMG/CHARA/ch_frog.png");
-        un[1] = new Unit();
-        un[1].set("IMG/CHARA/ch_rabbit.png");
-        un[1].set(40,20,20,20);
-        unum = 2;
+        // un[0] = new Unit();
+        // un[0].set("IMG/CHARA/ch_frog.png");
+        // un[1] = new Unit();
+        // un[1].set("IMG/CHARA/ch_rabbit.png");
+        // un[1].set(40,20,20,20);
+        // unum = 2;
 
     }
 

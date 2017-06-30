@@ -123,6 +123,7 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
     public void mousePressed (MouseEvent e){
         x = e.getX();
         y = e.getY();
+        SetFlag(true);
     }
     public void mouseDragged(MouseEvent e){;}
     public void mouseMoved(MouseEvent e){
@@ -133,7 +134,7 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")" + btnum;
+        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")" + btnum + changeFlag;
 
         Sett.draw(g);
         Mess.draw(g);
@@ -155,16 +156,26 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
 
     public void LoadUnit(Unit u[], int n){
         for( int i = 0 ; i < this.btnum ; i++ ){
-            u[i] = this.btmem[i];
+            u[i].copy(this.btmem[i]);
         }
         n = this.btnum;
     }
 
     public void SaveUnit(Unit u[], int n){
         for (int i = 0 ; i < n ; i++ ){
-            this.btmem[i] = u[i];
+            this.btmem[i].copy(u[i]);
         }
         this.btnum = n;
+    }
+
+
+    public void SetFlag(boolean b){
+        this.changeFlag = b;
+    }
+
+
+    public boolean GetFlag(){
+        return this.changeFlag;
     }
 
 }

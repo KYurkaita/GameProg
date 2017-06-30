@@ -10,7 +10,7 @@ public class GameProg extends JFrame implements ActionListener , Runnable {
     MainPanel mainp;
 
     private Unit btmem[] = new Unit[6];
-    private int btnum = 1;
+    private int btnum = 5;
 
     public GameProg(){
         /*title panel*/
@@ -38,9 +38,9 @@ public class GameProg extends JFrame implements ActionListener , Runnable {
 
 
         /*btmem inisialize*/
-        // for( int i = 0; i < 6 ; i++){
-        //     btmem[i] = new Unit();
-        // }
+        for( int i = 0; i < 6 ; i++){
+            btmem[i] = new Unit();
+        }
 
         /*content */
         Container contentPane = getContentPane();
@@ -82,16 +82,25 @@ public class GameProg extends JFrame implements ActionListener , Runnable {
 
             repaint();
             /* change main panel main to war */
-            if( mainp.gChangeMainFlag() == true ){
-                try{
-                    mainp.LoadFromMainUnit( btmem , btnum );
-                    Thread.sleep(20);
-                }catch(InterruptedException e){
-                    e.printStackTrace();
+            if( mainp.GetMenuFlag() ){
+
+                mainp.SetMenuFlag(false);
+                this.btnum = mainp.LoadBtUnitNum();
+                for(int i = 0 ; i < this.btnum; i++){
+                    this.btmem[i] = mainp.LoadBtUnit(i);
                 }
 
-                mainp.SaveToWarUnit( btmem , btnum );
-                mainp.ShowMain("war");
+                System.out.println( "" + this.btnum );
+                mainp.SaveBtUnitToWar( btmem , btnum );
+
+                mainp.ChangeShow("war");
+            }
+
+            if( mainp.GetWarFlag() ){
+
+                mainp.SetMenuFlag(false);
+                mainp.SetWarFlag(false);
+                mainp.ChangeShow("menu");
             }
 
             try{

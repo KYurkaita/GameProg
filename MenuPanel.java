@@ -50,7 +50,6 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     private JPanel card;
     private CardLayout CL ;
 
-    public static boolean changeFlag = false;
     private MENU_LIST menu[] = new MENU_LIST[MENU_MAX];
     private MENU select;
     private int wh_menu = 5;
@@ -118,15 +117,21 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
 
         /* Unit first menu */
         u[0] = new Unit();
-        u[0].set("IMG/CHARA/ch_frog.png");
+        u[0].set("IMG/CHARA/ch_rabbit_1.png");
+        u[0].set(41,21,21,21);
+
         u[1] = new Unit();
         u[1].set("IMG/CHARA/ch_rabbit.png");
-        u[1].set(40,20,20,20);
+        u[1].set(43,23,23,23);
         unum = 2;
 
-        btmem[0] = u[0];
-        btmem[1] = u[1];
-        btnum = 2;
+        for (int i = 0; i < 6 ; i++){
+            btmem[i] = new Unit();
+        }
+        btmem[0].copy(u[0]);
+        btmem[1].copy(u[1]);
+        btmem[2].copy(u[1]);
+        btnum = 3;
 
     }
 
@@ -143,7 +148,7 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
 
         switch(before_menu){
             case 0:
-            case 1: unorg.LoadUnit( u , unum ); break;
+            case 1: //unorg.LoadUnit( u , unum ); break;
             case 2:
             case 3: break;
             default:
@@ -172,7 +177,7 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     /*drawing*/
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")"+ ch_menu +"," + btnum ;
+        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")"+ ch_menu +"," + btmem[0].spd ;
 
         for ( int i = 0 ; i < MENU_MAX; i++){
             if( i != ch_menu){
@@ -203,6 +208,7 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         return t;
     }
 
+    /* menu show */
     private void ShowMenuFirst(){
         // unorg.SaveUnit( u , unum );
         CL.show( card , "first" );
@@ -220,29 +226,33 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     private void ShowMenuFourth(){
         sortie.SaveUnit( u , unum );
         CL.show( card , "fourth" );
-        sortie.LoadUnit( u , unum );
+        // sortie.LoadUnit( u , unum );
     }
 
-    public void SaveFromWar(Unit u[], int n){
+    /*set member*/
+    public void SaveBtToMenu(Unit u[], int n){
         for(int i = 0 ; i < n ; i++){
-            this.btmem[i] = u[i];
+            this.btmem[i].copy(u[i]);
         }
         this.btnum = n;
     }
 
-    public void LoadToWar(Unit u[] , int n){
-        for(int i = 0 ; i < n ; i++){
-            u[i] = this.btmem[i];
-        }
-        n = this.btnum;
+    public Unit LoadBtMember(int i){
+        return this.btmem[i];
+    }
+    
+    public int LoadBtNumber(){
+        return this.btnum;
     }
 
-    public boolean getFlag(){
-        return sortie.GetChangeWarFlag();
+    /*flag*/
+    public boolean GetFlag(){
+        return sortie.GetSorFlag();
     }
 
-    public void setFlag(boolean f){
-        this.changeFlag = f;
+    public void SetFlag(boolean f){
+        // this.changeFlag = f;
+        sortie.SetSorFlag(f);
     }
 
 }

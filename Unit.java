@@ -64,6 +64,13 @@ public class Unit {
         this.img = icon.getImage();
     }
 
+    void copy(Unit u){
+        set(u.hp,u.atk,u.def,u.spd);
+        /* ----add equip----- */
+        this.img = u.img;
+
+    };
+
     void drawSubMenu(Graphics g){
         g.drawString( "HP :" + hp  , 450 + 20 , 160 );
         g.drawString( "ATK:" + atk , 450 + 20 , 180 );

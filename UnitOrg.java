@@ -22,7 +22,6 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
     private int mx = 0;
     private int my = 0;
 
-    public static boolean changeFlag = false;
     private boolean createflag = false;
 
     private MENU MBak = new MENU();
@@ -143,8 +142,8 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
                 return i;
         }
 
-        if( SUBMENU_X < mx && mx < WIDTH &&
-            SUBMENU_Y < my && my < HEIGHT ){
+        if( (SUBMENU_X) < mx && mx < (WIDTH) &&
+            (SUBMENU_Y) < my && my < (HEIGHT) ){
             return -2;
         }
         else{
