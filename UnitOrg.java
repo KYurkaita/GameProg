@@ -115,11 +115,12 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
         g.drawString(str, 0, 10);
     }
 
-    public void LoadUnit(Unit u[], int n){
-        for( int i = 0 ; i< unum ; i++ ){
-            u[i] = this.un[i];
-        }
-        n = this.unum;
+    public Unit LoadUnit(int i){
+        return this.un[i];
+    }
+
+    public int LoadUnitNum(){
+        return this.unum;
     }
 
     public void SaveUnit(Unit u[], int n){

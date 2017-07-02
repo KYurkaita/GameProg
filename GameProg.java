@@ -3,14 +3,11 @@ import javax.swing.*;
 import java.awt.event.* ;
 
 
-public class GameProg extends JFrame implements ActionListener , Runnable {
+public class GameProg extends JFrame implements ActionListener {
     JPanel change;
 
     private Thread gameLoop;
     MainPanel mainp;
-
-    private Unit btmem[] = new Unit[6];
-    private int btnum = 5;
 
     public GameProg(){
         /*title panel*/
@@ -26,7 +23,6 @@ public class GameProg extends JFrame implements ActionListener , Runnable {
         title.add(btn);
         title.add(tit);
 
-
         /*main panel*/
         mainp = new MainPanel();
 
@@ -36,12 +32,6 @@ public class GameProg extends JFrame implements ActionListener , Runnable {
         change.add(title,"title");
         change.add(mainp,"main");
 
-
-        /*btmem inisialize*/
-        for( int i = 0; i < 6 ; i++){
-            btmem[i] = new Unit();
-        }
-
         /*content */
         Container contentPane = getContentPane();
         setTitle("test");
@@ -49,9 +39,6 @@ public class GameProg extends JFrame implements ActionListener , Runnable {
         contentPane.add(change);
 
         pack();
-
-        gameLoop = new Thread(this);
-        gameLoop.start();
 
     }
 
@@ -76,41 +63,5 @@ public class GameProg extends JFrame implements ActionListener , Runnable {
         }
 
     }
-
-    public void run(){
-        while(true){
-
-            repaint();
-            /* change main panel main to war */
-            if( mainp.GetMenuFlag() ){
-
-                mainp.SetMenuFlag(false);
-
-                this.btnum = mainp.LoadBtUnitNum();
-                for(int i = 0 ; i < this.btnum; i++){
-                    this.btmem[i] = mainp.LoadBtUnit(i);
-                }
-
-                // System.out.println( "" + this.btnum );
-                mainp.SaveBtUnitToWar( btmem , btnum );
-
-                mainp.ChangeShow("war");
-            }
-
-            if( mainp.GetWarFlag() ){
-
-                mainp.SetMenuFlag(false);
-                mainp.SetWarFlag(false);
-                mainp.ChangeShow("menu");
-            }
-
-            try{
-                Thread.sleep(20);
-            }catch(InterruptedException e){
-                e.printStackTrace();
-            }
-        }
-    }
-
 
 }

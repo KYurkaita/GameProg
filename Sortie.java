@@ -124,16 +124,17 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
         }
     }
 
-    public void LoadUnit(Unit u[], int n){
-        for( int i = 0 ; i< unum ; i++ ){
-            u[i].copy(this.un[i]);
-        }
-        n = this.unum;
+    public Unit LoadUnit(Unit u[], int i){
+        return this.un[i];
+    }
+
+    public int LoadUnitNum(){
+        return this.unum;
     }
 
     public void SaveUnit(Unit u[], int n){
         for (int i = 0; i < n ; i++ ){
-            this.un[i].copy(u[i]);
+            this.un[i] = u[i];
         }
         this.unum = n;
     }

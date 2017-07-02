@@ -150,20 +150,21 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         EnemyHp.draw(g);
 
         g.drawString(str, 0, 10);
-        g.drawString( "" + btmem[1].spd , 15 , 420 );
+        g.drawString( "" + btnum , 15 , 420 );
 
     }
 
-    public void LoadUnit(Unit u[], int n){
-        for( int i = 0 ; i < this.btnum ; i++ ){
-            u[i].copy(this.btmem[i]);
-        }
-        n = this.btnum;
+    public Unit LoadUnit(int i){
+        return this.btmem[i];
+    }
+
+    public int LoadUnitNum(){
+        return this.btnum;
     }
 
     public void SaveUnit(Unit u[], int n){
         for (int i = 0 ; i < n ; i++ ){
-            this.btmem[i].copy(u[i]);
+            this.btmem[i] = u[i];
         }
         this.btnum = n;
     }

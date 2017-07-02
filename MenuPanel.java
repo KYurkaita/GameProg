@@ -232,7 +232,7 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     /*set member*/
     public void SaveBtToMenu(Unit u[], int n){
         for(int i = 0 ; i < n ; i++){
-            this.btmem[i].copy(u[i]);
+            this.btmem[i] = u[i];
         }
         this.btnum = n;
     }
@@ -240,7 +240,7 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     public Unit LoadBtMember(int i){
         return this.btmem[i];
     }
-    
+
     public int LoadBtNumber(){
         return this.btnum;
     }
@@ -251,7 +251,6 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     }
 
     public void SetFlag(boolean f){
-        // this.changeFlag = f;
         sortie.SetSorFlag(f);
     }
 
