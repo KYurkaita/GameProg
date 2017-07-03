@@ -66,7 +66,6 @@ public class MainPanel extends JPanel implements Runnable {
                 for(int i = 0 ; i < this.btnum; i++){
                     this.btmem[i] = menu.LoadBtMember(i);
                 }
-
                 war.SaveUnit( btmem , btnum );
                 ChangeShow("war");
             }

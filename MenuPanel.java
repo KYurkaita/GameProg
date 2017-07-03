@@ -128,9 +128,9 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         for (int i = 0; i < 6 ; i++){
             btmem[i] = new Unit();
         }
-        btmem[0].copy(u[0]);
-        btmem[1].copy(u[1]);
-        btmem[2].copy(u[1]);
+        btmem[0] = u[0];
+        btmem[1] = u[1];
+        btmem[2] = u[1];
         btnum = 3;
 
     }
@@ -177,7 +177,7 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     /*drawing*/
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")"+ ch_menu +"," + btmem[0].spd ;
+        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")"+ ch_menu +"," + btmem[2].spd ;
 
         for ( int i = 0 ; i < MENU_MAX; i++){
             if( i != ch_menu){

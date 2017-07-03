@@ -40,6 +40,9 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
     private static final int MENU_ITEM_MAX = 4;
     private static final int WIDTH = 600;
     private static final int HEIGHT = 350;
+    private static final int MESSAGE_X = 15;
+    private static final int MESSAGE_Y = 420;
+
 
     private String str;
 
@@ -52,11 +55,14 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
     public static boolean changeFlag = false;
 
     private MENU Sett;
+
     private MENU TeamHp;
     private MENU EnemyHp;
     private HPBAR THpBar;
     private HPBAR EHpBar;
+
     private MENU Time;
+
     private MENU Mess;
 
     private MENU ChrTile;
@@ -82,7 +88,7 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         Sett.set("IMG/ITEM/config.png");
         Sett.put(10,20);
 
-
+        /* Time and HP */
         TeamHp = new MENU();
         TeamHp.set("IMG/ITEM/warbar.png");
         TeamHp.put(65,10);
@@ -93,6 +99,10 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         Time.set("IMG/ITEM/warque.png");
         Time.put(275,10);
 
+        THpBar = new HPBAR();
+        EHpBar = new HPBAR(0);
+
+        /* CHARA TILE */
         ChrTile = new MENU();
         ChrTile.set("IMG/ITEM/char.png");
         ChrTile.put(50,120);
@@ -100,10 +110,7 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         EnmTile.set("IMG/ITEM/char2.png");
         EnmTile.put(370,120);
 
-
-        THpBar = new HPBAR();
-        EHpBar = new HPBAR(0);
-
+        /* Message */
         Mess = new MENU();
         Mess.set("IMG/ITEM/warmess.png");
         Mess.put(0,400);
@@ -150,7 +157,7 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         EnemyHp.draw(g);
 
         g.drawString(str, 0, 10);
-        g.drawString( "" + btnum , 15 , 420 );
+        g.drawString( "" + btnum , MESSAGE_X , MESSAGE_Y );
 
     }
 
