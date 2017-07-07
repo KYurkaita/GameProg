@@ -131,7 +131,10 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         btmem[0] = u[0];
         btmem[1] = u[1];
         btmem[2] = u[1];
-        btnum = 3;
+        btmem[3] = u[0];
+        btmem[4] = u[0];
+        btmem[5] = u[0];
+        btnum = 6;
 
     }
 

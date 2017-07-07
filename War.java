@@ -51,6 +51,8 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
     private int mx = 0;
     private int my = 0;
 
+    private int turn = 0;
+    public  boolean t_next = false;
 
     public static boolean changeFlag = false;
 
@@ -83,7 +85,7 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         setLayout(null);
         setBounds( 0 , 0 , WIDTH , HEIGHT );
 
-
+        /* draw */
         Sett = new MENU();
         Sett.set("IMG/ITEM/config.png");
         Sett.put(10,20);
@@ -115,6 +117,8 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         Mess.set("IMG/ITEM/warmess.png");
         Mess.put(0,400);
 
+        /* draw ends */
+
         for(int i = 0; i < 6; i++){
             btmem[i] = new Unit();
         }
@@ -130,7 +134,7 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
     public void mousePressed (MouseEvent e){
         x = e.getX();
         y = e.getY();
-        SetFlag(true);
+    //    SetFlag(true);
     }
     public void mouseDragged(MouseEvent e){;}
     public void mouseMoved(MouseEvent e){
@@ -140,24 +144,55 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
 
 
     public void paintComponent(Graphics g){
+        int chper = 100;
+        int enper = 100;
+
         super.paintComponent(g);
         str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")" + btnum + changeFlag;
 
+        /* menu panel */
         Sett.draw(g);
         Mess.draw(g);
-
-        THpBar.draw( g , 100 );
-        EHpBar.draw( g , 100 );
-
         ChrTile.draw(g);
         EnmTile.draw(g);
 
+        int mhp = 0 , nhp = 0;
+        for(int i = 0; i < this.btnum; i++ ){
+            mhp += this.btmem[i].hp;
+            nhp += this.btmem[i].nh;
+        }
+        // nhp -= 1;
+        chper = nhp * 100 / mhp;
+
+        /*hp*/
+        g.drawString( nhp + "/" + mhp + ":" + chper  + "%", 73 , 33);
+
+        THpBar.draw( g , chper );
+        EHpBar.draw( g , enper );
         Time.draw(g);
         TeamHp.draw(g);
         EnemyHp.draw(g);
 
+        /* chara draw */
+        int cx = 0 , cy = 0;
+
+        for ( int i = 0; i < this.btnum ; i++ ){
+            switch(i){
+                case 0: cx = 175; cy =  90; break;
+                case 1: cx = 170; cy = 170; break;
+                case 2: cx = 165; cy = 270; break;
+
+                case 3: cx = 100; cy =  90; break;
+                case 4: cx =  90; cy = 170; break;
+                case 5: cx =  80; cy = 270; break;
+                default:
+                    break;
+            }
+            btmem[i].draw( g , cx , cy );
+        }
+
         g.drawString(str, 0, 10);
-        g.drawString( "" + btnum , MESSAGE_X , MESSAGE_Y );
+        g.drawString( "" + btmem[0].spd , MESSAGE_X , MESSAGE_Y );
 
     }
 

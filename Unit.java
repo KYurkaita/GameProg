@@ -26,6 +26,11 @@ public class Unit {
     int def;
     int spd;
 
+    int nh;
+    int na;
+    int nd;
+    int ns;
+
     int num;
     Equip eq[] = new Equip[4];
     int pre[] = new int[4];
@@ -52,6 +57,11 @@ public class Unit {
         this.atk = a;
         this.def = d;
         this.spd = s;
+
+        this.nh = h;
+        this.na = a;
+        this.nd = d;
+        this.ns = s;
     }
 
     void set( Equip e , int pre ,int n){
@@ -69,7 +79,15 @@ public class Unit {
         /* ----add equip----- */
         this.img = u.img;
 
-    };
+    }
+
+    void draw(Graphics g, int x, int y ){
+        g.drawImage( this.img, x + 80 , y, -80, 100 , null );
+    }
+
+    void draw(Graphics g, int x, int y ,boolean t){
+        g.drawImage( this.img, x , y, 80, 100 , null );
+    }
 
     void drawSubMenu(Graphics g){
         g.drawString( "HP :" + hp  , 450 + 20 , 160 );
