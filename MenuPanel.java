@@ -118,11 +118,11 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         /* Unit first menu */
         u[0] = new Unit();
         u[0].set("IMG/CHARA/ch_rabbit_1.png");
-        u[0].set(41,21,21,21);
+        u[0].set(150,50,50,50);
 
         u[1] = new Unit();
         u[1].set("IMG/CHARA/ch_rabbit.png");
-        u[1].set(43,23,23,23);
+        u[1].set(100,70,80,40);
         unum = 2;
 
         for (int i = 0; i < 6 ; i++){
@@ -150,9 +150,14 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         ch_menu = RetLocMenu(x,y,ch_menu);
 
         switch(before_menu){
-            case 0:
-            case 1: //unorg.LoadUnit( u , unum ); break;
-            case 2:
+            case 0: break;
+            case 1:
+            unum = unorg.LoadUnitNum();
+                for(int i = 0 ; i < unum ; i++){
+                    u[i] = unorg.LoadUnit( i );
+                }
+                break;
+            case 2:break;
             case 3: break;
             default:
                 break;

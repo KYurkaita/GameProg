@@ -16,14 +16,14 @@ class HPBAR extends MENU{
         f = true;
         super.set("IMG/ITEM/warcol.png");
         this.width = 210;
-        super.put( 68 , 10 );
+        super.put( 78 , 10 );
     }
 
     HPBAR(int t){
         f = false;
         super.set("IMG/ITEM/warcol.png");
         this.width = 210;
-        super.put( 342 , 10 );
+        super.put( 352 , 10 );
     }
 
     void draw( Graphics g , int x ){
@@ -93,13 +93,13 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         /* Time and HP */
         TeamHp = new MENU();
         TeamHp.set("IMG/ITEM/warbar.png");
-        TeamHp.put(65,10);
+        TeamHp.put(75,10);
         EnemyHp = new MENU();
         EnemyHp.set("IMG/ITEM/warbar2.png");
-        EnemyHp.put(345,10);
+        EnemyHp.put(355,10);
         Time = new MENU();
         Time.set("IMG/ITEM/warque.png");
-        Time.put(275,10);
+        Time.put(285,10);
 
         THpBar = new HPBAR();
         EHpBar = new HPBAR(0);
@@ -107,10 +107,10 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         /* CHARA TILE */
         ChrTile = new MENU();
         ChrTile.set("IMG/ITEM/char.png");
-        ChrTile.put(50,120);
+        ChrTile.put(78,120);
         EnmTile = new MENU();
-        EnmTile.set("IMG/ITEM/char2.png");
-        EnmTile.put(370,120);
+        EnmTile.set("IMG/ITEM/char.png");
+        EnmTile.put(355,120);
 
         /* Message */
         Mess = new MENU();
@@ -150,6 +150,7 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         super.paintComponent(g);
         str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")" + btnum + changeFlag;
 
+        // ChrTile.put(x,y);
         /* menu panel */
         Sett.draw(g);
         Mess.draw(g);
@@ -161,11 +162,11 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
             mhp += this.btmem[i].hp;
             nhp += this.btmem[i].nh;
         }
-        // nhp -= 1;
+        nhp -= 30;
         chper = nhp * 100 / mhp;
 
         /*hp*/
-        g.drawString( nhp + "/" + mhp + ":" + chper  + "%", 73 , 33);
+        g.drawString( nhp + "/" + mhp + ":" + chper  + "%", 83 , 33);
 
         THpBar.draw( g , chper );
         EHpBar.draw( g , enper );
@@ -177,18 +178,7 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         int cx = 0 , cy = 0;
 
         for ( int i = 0; i < this.btnum ; i++ ){
-            switch(i){
-                case 0: cx = 175; cy =  90; break;
-                case 1: cx = 170; cy = 170; break;
-                case 2: cx = 165; cy = 270; break;
-
-                case 3: cx = 100; cy =  90; break;
-                case 4: cx =  90; cy = 170; break;
-                case 5: cx =  80; cy = 270; break;
-                default:
-                    break;
-            }
-            btmem[i].draw( g , cx , cy );
+            btmem[i].wdraw( g , i );
         }
 
         g.drawString(str, 0, 10);

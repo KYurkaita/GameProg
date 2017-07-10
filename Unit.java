@@ -21,6 +21,8 @@ public class Unit {
     Image def_icon;
     Image spd_icon;
 
+    int place;
+
     int hp;
     int atk;
     int def;
@@ -36,7 +38,7 @@ public class Unit {
     int pre[] = new int[4];
 
     Unit(){
-        set(30,10,10,10);
+        set(50,50,50,50);
         set(new Equip(0),0,0);
         set("IMG/CHARA/ch_frog.png");
         this.num = 1;
@@ -74,19 +76,31 @@ public class Unit {
         this.img = icon.getImage();
     }
 
-    void copy(Unit u){
-        set(u.hp,u.atk,u.def,u.spd);
-        /* ----add equip----- */
-        this.img = u.img;
-
+    void put( int n ){
+        this.place = n;
     }
 
     void draw(Graphics g, int x, int y ){
-        g.drawImage( this.img, x + 80 , y, -80, 100 , null );
+        g.drawImage( this.img , x + 80 , y , -80 , 100 , null );
     }
 
-    void draw(Graphics g, int x, int y ,boolean t){
-        g.drawImage( this.img, x , y, 80, 100 , null );
+    void sdraw(Graphics g, int x, int y ){
+        g.drawImage( this.img , x + 2 , y + 2 , 80 , 60 , null );
+    }
+
+    void wdraw(Graphics g , int n){
+        int cx,cy;
+        switch(n){
+            case 0: cx = 186; cy = 100; break;
+            case 1: cx = 186; cy = 185; break;
+            case 2: cx = 186; cy = 270; break;
+            case 3: cx =  89; cy = 100; break;
+            case 4: cx =  89; cy = 185; break;
+            case 5: cx =  89; cy = 270; break;
+            default:
+                cx = 0; cy = 0; break;
+        }
+        draw( g , cx , cy );
     }
 
     void drawSubMenu(Graphics g){

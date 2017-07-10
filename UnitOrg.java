@@ -26,14 +26,25 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
 
     private MENU MBak = new MENU();
     private MENU MSubBak = new MENU();
+    private MENU MSubIcom = new MENU();
 
     private MENU Chr[] = new MENU[25];
-    private MENU MSubIcom = new MENU();
+    private int selnum = 0;
+
+    private MENU MWindow = new MENU();
+    private int  place = -1;
+    private MENU LArr = new MENU();
+    private MENU RArr = new MENU();
+    private MENU AddUnBt= new MENU();
+    private MENU Exit = new MENU();
 
     private Unit un[] = new Unit[25];
     private Unit btmem[] = new Unit[6];
     private int unum = 1 ;
-    private int selnum = 0;
+
+    private final int MAX_UNIT = 400;
+    private Unit crmem = new Unit();
+    private int max = 0;
 
     public UnitOrg(){
         /* panelsize */
@@ -51,6 +62,15 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
         MSubBak.put(SUBMENU_X,SUBMENU_Y);
         MSubIcom.set("IMG/ITEM/submenuicon.png");
         MSubIcom.put(SUBMENU_X,SUBMENU_Y);
+
+        MWindow.set("IMG/ITEM/mwin.png");
+        LArr.set("IMG/ICON/left.png");
+        RArr.set("IMG/ICON/right.png");
+        Exit.set("IMG/ICON/exit.png");
+        Exit.put(550,15);
+        AddUnBt.set("IMG/ITEM/addun.png");
+        AddUnBt.put(440,255);
+
 
         int xy;
         for(int y = 0 ; y < 5 ; y++ ){
@@ -79,16 +99,22 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
     public void mousePressed (MouseEvent e){
         x = e.getX();
         y = e.getY();
-        selnum = SetWhM();
-        if ( selnum == -1 ){
-            createflag = true;
+
+        if( createflag == false ){
+            selnum = SetWhM();
+            if ( selnum == -2 )  createflag = true;
+        }else{
+            SetWhWin();
         }
+
     }
     public void mouseDragged(MouseEvent e){;}
     public void mouseMoved(MouseEvent e){
         mx = e.getX() ;
         my = e.getY() ;
-        selnum = SetWhM();
+        if( createflag == false ){
+            selnum = SetWhM();
+        }
     }
 
 
@@ -102,6 +128,13 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
             Chr[ i ].draw(g);
         }
 
+        /* CHARA DRAW */
+        int sx = 0 , sy = 0;
+        for (int i = 0 ; i < unum ; i++ ){
+            sx = i % 5; sy = i / 5 ;
+            un[i].sdraw( g , 90 * sx , 70 * sy );
+        }
+
         /* SUB MENU */
         MSubBak.draw(g);
         MSubIcom.draw(g);
@@ -110,10 +143,97 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
             g.drawString( "新規ユニットを作成する." , 450 + 5 , 160 );
         }
 
-        DrawCreateWindow(g);
+        if( createflag ) DrawCreateWindow(g);
 
         g.drawString(str, 0, 10);
     }
+
+
+    private void DrawCreateWindow( Graphics g ){
+        int cy = 0 ;
+        MWindow.draw(g);
+        max = crmem.hp + crmem.atk + crmem.def + crmem.spd;
+        g.drawString( max + "/400" , 100 , 180 );
+
+        for( int i = 0 ; i < 4 ; i++ ){
+            cy = 180 +  40 * i;
+            g.drawString( "減　　　　　　　　　増" , 60 , cy + 20 );
+            if( i == 0 ) g.drawString( " HP:" + crmem.hp  , 100 , cy + 20 );
+            if( i == 1 ) g.drawString( "ATK:" + crmem.atk , 100 , cy + 20 );
+            if( i == 2 ) g.drawString( "DEF:" + crmem.def , 100 , cy + 20 );
+            if( i == 3 ) g.drawString( "SPD:" + crmem.spd , 100 , cy + 20 );
+
+            LArr.put(  20 , cy );
+            RArr.put( 200 , cy );
+
+            RArr.draw(g);
+            LArr.draw(g);
+        }
+        AddUnBt.draw(g);
+        Exit.draw(g);
+
+    }
+
+    private void SetWhWin(){
+        int cy = 0 ;
+        final int ADD = 10;
+
+        for( int i = 0 ; i < 4 ; i++ ){
+            cy = 180 +  40 * i;
+            max = crmem.hp + crmem.atk + crmem.def + crmem.spd;
+            if( 20 < x && x < 50 &&
+                cy < y && y < cy + 30 ){
+                if( crmem.hp  > 10 && i == 0 ) crmem.hp  -= ADD;
+                if( crmem.atk > 10 && i == 1 ) crmem.atk -= ADD;
+                if( crmem.def > 10 && i == 2 ) crmem.def -= ADD;
+                if( crmem.spd > 10 && i == 3 ) crmem.spd -= ADD;
+            }
+            else if( 200 < x && x < 230 &&
+                      cy < y && y < cy + 30 &&
+                     max < 400 ){
+                if( i == 0 ) crmem.hp  += ADD;
+                if( i == 1 ) crmem.atk += ADD;
+                if( i == 2 ) crmem.def += ADD;
+                if( i == 3 ) crmem.spd += ADD;
+            }
+        }
+
+        if( 550 < x && x < 580 &&
+             15 < y && y < 45 ){
+            createflag = false;
+            crmem = new Unit();
+        }
+
+        if( 440 < x && x < 590 &&
+            255 < y && y < 255 + 85 &&
+            unum < 25 ){
+            un[unum] = crmem;
+            unum += 1;
+            createflag = false;
+            crmem = new Unit();
+        }
+
+
+
+    }
+
+    private int SetWhM(){
+        for (int i = 0 ; i < 25 ; i++ ){
+            if( Chr[ i ].x < mx && mx < ( Chr[ i ].x + 90)  &&
+                Chr[ i ].y < my && my < ( Chr[ i ].y + 70)  &&
+                i < unum )
+            return i;
+        }
+
+        if( (SUBMENU_X) < mx && mx < (WIDTH) &&
+            (SUBMENU_Y) < my && my < (HEIGHT) ){
+            return -2;
+        }
+        else{
+            return -1;
+        }
+    }
+
 
     public Unit LoadUnit(int i){
         return this.un[i];
@@ -128,28 +248,6 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
             this.un[i] = u[i];
         }
         this.unum = n;
-    }
-
-    private void DrawCreateWindow( Graphics g ){
-        int i;
-
-    }
-
-    private int SetWhM(){
-        for (int i = 0 ; i < 25 ; i++ ){
-            if ( Chr[ i ].x < mx && mx < ( Chr[ i ].x + 90)  &&
-                 Chr[ i ].y < my && my < ( Chr[ i ].y + 70)  &&
-                 i < unum )
-                return i;
-        }
-
-        if( (SUBMENU_X) < mx && mx < (WIDTH) &&
-            (SUBMENU_Y) < my && my < (HEIGHT) ){
-            return -2;
-        }
-        else{
-            return -1;
-        }
     }
 
 
