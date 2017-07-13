@@ -64,7 +64,7 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     private Unit u[] = new Unit[25];
     private Unit btmem[] = new Unit[6];
     private int unum = 1;
-    private int btnum = 1;
+    private int btnum[] = new int[6];
 
 
     public MenuPanel(){
@@ -127,14 +127,9 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
 
         for (int i = 0; i < 6 ; i++){
             btmem[i] = new Unit();
+            btnum[i] = -1;
         }
-        btmem[0] = u[0];
-        btmem[1] = u[1];
-        btmem[2] = u[1];
-        btmem[3] = u[0];
-        btmem[4] = u[0];
-        btmem[5] = u[0];
-        btnum = 6;
+
 
     }
 
@@ -185,7 +180,7 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     /*drawing*/
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")"+ ch_menu +"," + btmem[2].spd ;
+        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")"+ ch_menu +"," + btnum[2] ;
 
         for ( int i = 0 ; i < MENU_MAX; i++){
             if( i != ch_menu){
@@ -238,18 +233,18 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     }
 
     /*set member*/
-    public void SaveBtToMenu(Unit u[], int n){
-        for(int i = 0 ; i < n ; i++){
-            this.btmem[i] = u[i];
-        }
-        this.btnum = n;
-    }
+    // public void SaveBtToMenu(Unit u[], int n){
+    //     for(int i = 0 ; i < n ; i++){
+    //         this.btmem[i] = u[i];
+    //     }
+    //     this.btnum = n;
+    // }
 
     public Unit LoadBtMember(int i){
         return this.btmem[i];
     }
 
-    public int LoadBtNumber(){
+    public int[] LoadBtNumber(){
         return this.btnum;
     }
 

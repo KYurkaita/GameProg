@@ -37,19 +37,19 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
     private MENU But = new MENU();
     private MENU Tile;
     private MENU Chr[] = new MENU[25];
-    private int  btl_mem[] = new int[6];
 
     private boolean CreateWinF = false;
     private MENU CreWin = new MENU();
+    private int selnum = 0;
 
 
     private boolean ch_flag = false;
-    private int bt = 0 ;
+    private int bt_sec = 0;
 
     private Unit un[] = new Unit[25];
     private Unit btmem[] = new Unit[6];
-    private int unum = 1 ;
-    private int selnum = 0;
+    private int  unum = 1 ;
+    private int  btnum[] = new int[6];
 
     public Sortie(){
         /* panelsize */
@@ -88,7 +88,7 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
         }
 
         for( int i = 0 ; i < 6 ; i++ ){
-            btl_mem[i] = 0;
+            btnum[i] = -1;
         }
 
 
@@ -108,13 +108,13 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
         x = e.getX();
         y = e.getY();
 
-        if( CreateWinF == false ){
-            bt = SetWhM();
-            if( bt == 7 )  ch_flag = true;
-            if( 0 <= bt && bt < 6 ) {
-                SetBtNum(bt);
-            }
+        if( CreateWinF != true ){
+            selnum = SetWhM();
+            if( selnum == 7 )  ch_flag = true;
+            if( 0 <= selnum && selnum < 6 ) CreateWinF = true;
         } else{
+            btnum[ selnum ] = SetBtNum();
+            CreateBtMem( selnum , SetBtNum() );
             CreateWinF = false;
         }
 
@@ -124,12 +124,19 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
     public void mouseMoved(MouseEvent e){
         mx = e.getX() ;
         my = e.getY() ;
+
+        if( CreateWinF == false ){
+            selnum = SetWhM();
+        }else{
+            bt_sec = SetBtNum();
+        }
+
     }
 
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")"+ bt;
+        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")"+ selnum + "," + bt_sec ;
 
         /*Main Menu Panel*/
         MBak.draw(g);
@@ -140,20 +147,30 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
 
         Tile.draw(g);
 
+
         int tx = 0 , ty = 0;
         for (int i = 0 ; i < 2 ; i++ ){
-            for ( int j = 0 ; j < 3 ; j++){
+            for ( int j = 0 ; j < 3 ; j++ ){
                 tx = TILE_W * ( 1 - i ) ;
                 ty = TILE_H * j ;
-                if( btl_mem[ i * 2 + j ] != 0)
-                    un[ btl_mem[ i * 2 + j ] ].sdraw( g , TILE_X + tx , TILE_Y + ty );
+                if( 0 <= btnum[ i * 3 + j ] && btnum[ i * 3 + j ] < unum )
+                    btmem[ i * 3 + j ].sdraw( g , TILE_X + tx , TILE_Y + ty );
             }
         }
 
 
-        if( CreateWinF ) DrawWindow(g);
+        if( CreateWinF ){
+            DrawWindow(g);
+            if( 0 <= bt_sec && bt_sec < unum ) un[ bt_sec ].drawSubMenu(g);
+        }else {
+            if( 0 < selnum && selnum < unum  && btnum[ selnum ] != -1 )
+                un[ btnum[ selnum ] ].drawSubMenu(g);
+        }
 
         g.drawString(str, 0, 10);
+        g.drawString( btnum[3] + "," + btnum[0] , 400, 20 );
+        g.drawString( btnum[4] + "," + btnum[1] , 400, 30 );
+        g.drawString( btnum[5] + "," + btnum[2] , 400, 40 );
 
     }
 
@@ -172,20 +189,25 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
 
     }
 
-    private void SetBtNum( int num ){
+    private void CreateBtMem( int num , int n ){
+        if( !( 0 <= num && num < 6 ) )  return ;
+        if( !( 0 <= n   && n < unum ) ) return ;
 
+        btmem[ num ] = un[ n ];
+        btmem[ num ].put(n);
+
+    }
+
+    private int SetBtNum(){
         for( int i = 0 ; i < 5 ; i++ ){
             for( int j = 0 ; j < 5 ; j++ ){
-                if( 85 * i + 10 < x && x < 85 * i + 95 &&
-                    66 * j + 10 < y && y < 66 * j + 76 ){
-                    un[ i * 5 + j ].put( num );
-                    btl_mem[ num ] = i * 5 + j;
+                if( ( 85 * j + 10 ) < mx && mx < ( 85 * j + 95 ) &&
+                    ( 66 * i + 10 ) < my && my < ( 66 * i + 76 ) ){
+                    if( ( i * 5 + j ) < unum )  return i * 5 + j ;
                 }
             }
         }
-
-        CreateWinF = true;
-
+        return -1;
     }
 
     private int SetWhM(){
@@ -211,14 +233,14 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
 
     }
 
-
-    public Unit LoadUnit(Unit u[], int i){
-        return this.un[i];
+    public Unit LoadBtUnit(int i){
+        return this.btmem[i];
     }
 
-    public int LoadUnitNum(){
-        return this.unum;
+    public int[] LoadBtUnitNum(){
+        return this.btnum;
     }
+
 
     public void SaveUnit(Unit u[], int n){
         for (int i = 0; i < n ; i++ ){

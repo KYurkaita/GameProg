@@ -71,7 +71,7 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
     private MENU EnmTile;
 
     private Unit btmem[] = new Unit[6];
-    private int btnum = 5;
+    private int btnum[] = new int[6];
 
 
     public War(){
@@ -121,6 +121,7 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
 
         for(int i = 0; i < 6; i++){
             btmem[i] = new Unit();
+            btnum[i] = -1;
         }
 
     }
@@ -158,9 +159,11 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         EnmTile.draw(g);
 
         int mhp = 0 , nhp = 0;
-        for(int i = 0; i < this.btnum; i++ ){
-            mhp += this.btmem[i].hp;
-            nhp += this.btmem[i].nh;
+        for(int i = 0; i < 6; i++ ){
+            if( btnum[i] != -1){
+                mhp += this.btmem[i].hp;
+                nhp += this.btmem[i].nh;
+            }
         }
         nhp -= 30;
         chper = nhp * 100 / mhp;
@@ -177,26 +180,26 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         /* chara draw */
         int cx = 0 , cy = 0;
 
-        for ( int i = 0; i < this.btnum ; i++ ){
-            btmem[i].wdraw( g , i );
+        for ( int i = 0; i < 6 ; i++ ){
+            if( btnum[i] != -1) btmem[i].wdraw( g , i );
         }
 
         g.drawString(str, 0, 10);
         g.drawString( "" + btmem[0].spd , MESSAGE_X , MESSAGE_Y );
 
     }
+    //
+    // public Unit LoadUnit(int i){
+    //     return this.btmem[i];
+    // }
+    //
+    // public int LoadUnitNum(){
+    //     return this.btnum[];
+    // }
 
-    public Unit LoadUnit(int i){
-        return this.btmem[i];
-    }
-
-    public int LoadUnitNum(){
-        return this.btnum;
-    }
-
-    public void SaveUnit(Unit u[], int n){
-        for (int i = 0 ; i < n ; i++ ){
-            this.btmem[i] = u[i];
+    public void SaveUnit(Unit u[], int[] n){
+        for (int i = 0 ; i < 6 ; i++ ){
+            if( n[i] != -1 ) this.btmem[i] = u[i];
         }
         this.btnum = n;
     }

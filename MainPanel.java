@@ -21,7 +21,7 @@ public class MainPanel extends JPanel implements Runnable {
     private CardLayout chmain;
 
     private Unit btmem[] = new Unit[6];
-    private int btnum = 5;
+    private int btnum[] = new int[6];
 
     public MainPanel(){
         /* panelsize */
@@ -63,8 +63,8 @@ public class MainPanel extends JPanel implements Runnable {
             if( menu.GetFlag() ){
                 menu.SetFlag(false);
                 this.btnum = menu.LoadBtNumber();
-                for(int i = 0 ; i < this.btnum; i++){
-                    this.btmem[i] = menu.LoadBtMember(i);
+                for(int i = 0 ; i < 6; i++){
+                    if( btnum[i] != -1 ) this.btmem[i] = menu.LoadBtMember(i);
                 }
                 war.SaveUnit( btmem , btnum );
                 ChangeShow("war");
