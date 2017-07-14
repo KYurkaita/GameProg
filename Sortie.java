@@ -110,7 +110,9 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
 
         if( CreateWinF != true ){
             selnum = SetWhM();
-            if( selnum == 7 )  ch_flag = true;
+            if( selnum == 7 && HasBtnumUnit() ){
+                ch_flag = true;
+            }
             if( 0 <= selnum && selnum < 6 ) CreateWinF = true;
         } else{
             btnum[ selnum ] = SetBtNum();
@@ -161,9 +163,9 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
 
         if( CreateWinF ){
             DrawWindow(g);
-            if( 0 <= bt_sec && bt_sec < unum ) un[ bt_sec ].drawSubMenu(g);
+            if( 0 <= bt_sec && bt_sec <= unum ) un[ bt_sec ].drawSubMenu(g);
         }else {
-            if( 0 < selnum && selnum < unum  && btnum[ selnum ] != -1 )
+            if( 0 <= selnum && selnum < unum  && btnum[ selnum ] != -1 )
                 un[ btnum[ selnum ] ].drawSubMenu(g);
         }
 
@@ -189,13 +191,19 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
 
     }
 
+    private boolean HasBtnumUnit(){
+        for(int i = 0 ; i < 6 ; i++ ){
+            if( btnum[i] != -1 ) return true;
+        }
+        return false;
+    }
+
     private void CreateBtMem( int num , int n ){
         if( !( 0 <= num && num < 6 ) )  return ;
         if( !( 0 <= n   && n < unum ) ) return ;
 
         btmem[ num ] = un[ n ];
         btmem[ num ].put(n);
-
     }
 
     private int SetBtNum(){
@@ -233,8 +241,8 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
 
     }
 
-    public Unit LoadBtUnit(int i){
-        return this.btmem[i];
+    public Unit[] LoadBtUnit(){
+        return this.btmem;
     }
 
     public int[] LoadBtUnitNum(){

@@ -73,6 +73,9 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
     private Unit btmem[] = new Unit[6];
     private int btnum[] = new int[6];
 
+    private Unit enmem[] = new Unit[6];
+    private int ennum[] = new int[6];
+
 
     public War(){
         /* panelsize */
@@ -122,6 +125,9 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         for(int i = 0; i < 6; i++){
             btmem[i] = new Unit();
             btnum[i] = -1;
+
+            enmem[i] = new Unit();
+            ennum[i] = -1;
         }
 
     }
@@ -135,7 +141,7 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
     public void mousePressed (MouseEvent e){
         x = e.getX();
         y = e.getY();
-    //    SetFlag(true);
+        SetFlag(true);
     }
     public void mouseDragged(MouseEvent e){;}
     public void mouseMoved(MouseEvent e){
@@ -149,7 +155,7 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         int enper = 100;
 
         super.paintComponent(g);
-        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")" + btnum + changeFlag;
+        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")" + btnum[0] + changeFlag;
 
         // ChrTile.put(x,y);
         /* menu panel */
@@ -165,7 +171,7 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
                 nhp += this.btmem[i].nh;
             }
         }
-        nhp -= 30;
+        // nhp -= 30;
         chper = nhp * 100 / mhp;
 
         /*hp*/

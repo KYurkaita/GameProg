@@ -212,21 +212,21 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     }
 
     /* menu show */
-    private void ShowMenuFirst(){
+    public void ShowMenuFirst(){
         // unorg.SaveUnit( u , unum );
         CL.show( card , "first" );
     }
 
-    private void ShowMenuSecond(){
+    public void ShowMenuSecond(){
         unorg.SaveUnit( u , unum );
         CL.show( card , "second" );
     }
 
-    private void ShowMenuThird(){
+    public void ShowMenuThird(){
         CL.show( card , "third" );
     }
 
-    private void ShowMenuFourth(){
+    public void ShowMenuFourth(){
         sortie.SaveUnit( u , unum );
         CL.show( card , "fourth" );
         // sortie.LoadUnit( u , unum );
@@ -240,11 +240,13 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     //     this.btnum = n;
     // }
 
-    public Unit LoadBtMember(int i){
-        return this.btmem[i];
+    public Unit[] LoadBtMember(){
+        this.btmem = sortie.LoadBtUnit();
+        return this.btmem;
     }
 
     public int[] LoadBtNumber(){
+        this.btnum = sortie.LoadBtUnitNum();
         return this.btnum;
     }
 

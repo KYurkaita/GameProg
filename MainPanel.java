@@ -64,7 +64,7 @@ public class MainPanel extends JPanel implements Runnable {
                 menu.SetFlag(false);
                 this.btnum = menu.LoadBtNumber();
                 for(int i = 0 ; i < 6; i++){
-                    if( btnum[i] != -1 ) this.btmem[i] = menu.LoadBtMember(i);
+                    this.btmem = menu.LoadBtMember();
                 }
                 war.SaveUnit( btmem , btnum );
                 ChangeShow("war");
@@ -72,6 +72,7 @@ public class MainPanel extends JPanel implements Runnable {
 
             if( war.GetFlag() ){
                 war.SetFlag(false);
+                menu.ShowMenuFirst();
                 ChangeShow("menu");
             }
 
