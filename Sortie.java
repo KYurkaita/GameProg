@@ -51,6 +51,8 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
     private int  unum = 1 ;
     private int  btnum[] = new int[6];
 
+
+
     public Sortie(){
         /* panelsize */
 
@@ -110,7 +112,7 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
 
         if( CreateWinF != true ){
             selnum = SetWhM();
-            if( selnum == 7 && HasBtnumUnit() ){
+            if( selnum == -2 && HasBtnumUnit() ){
                 ch_flag = true;
             }
             if( 0 <= selnum && selnum < 6 ) CreateWinF = true;
@@ -165,8 +167,9 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
             DrawWindow(g);
             if( 0 <= bt_sec && bt_sec <= unum ) un[ bt_sec ].drawSubMenu(g);
         }else {
-            if( 0 <= selnum && selnum < unum  && btnum[ selnum ] != -1 )
-                un[ btnum[ selnum ] ].drawSubMenu(g);
+            if( 0 <= selnum && selnum < unum  )
+                if( btnum[ selnum ] != -1 )
+                    un[ btnum[ selnum ] ].drawSubMenu(g);
         }
 
         g.drawString(str, 0, 10);
@@ -234,7 +237,7 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
 
         if( ( BUT_X ) < mx && mx < ( BUT_X + BUT_W ) &&
             ( BUT_Y ) < my && my < ( BUT_Y + BUT_H ) ){
-            return 7;
+            return -2;
         }
 
         return -1;

@@ -51,8 +51,6 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
     private int mx = 0;
     private int my = 0;
 
-    private int turn = 0;
-    public  boolean t_next = false;
 
     public static boolean changeFlag = false;
 
@@ -76,6 +74,10 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
     private Unit enmem[] = new Unit[6];
     private int ennum[] = new int[6];
 
+
+    private int turn = 0;
+    public  boolean t_next = false;
+    private Unit Que[] = new Unit[12];
 
     public War(){
         /* panelsize */
@@ -130,6 +132,10 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
             ennum[i] = -1;
         }
 
+        enmem[0].set(200,50,50,50);
+        enmem[1].set(150,150,50,50);
+        enmem[2].set(100,50,150,50);
+
     }
 
 
@@ -141,12 +147,19 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
     public void mousePressed (MouseEvent e){
         x = e.getX();
         y = e.getY();
-        SetFlag(true);
+        // SetFlag(true);
+        TurnAdd();
+
     }
     public void mouseDragged(MouseEvent e){;}
     public void mouseMoved(MouseEvent e){
         mx = e.getX() ;
         my = e.getY() ;
+    }
+
+    private void TurnAdd(){
+        // for( int i = 0 ; i < 12 ; i++ )
+        // Unit[i].spd
     }
 
 
@@ -187,13 +200,18 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         int cx = 0 , cy = 0;
 
         for ( int i = 0; i < 6 ; i++ ){
-            if( btnum[i] != -1) btmem[i].wdraw( g , i );
+            if( btnum[i] != -1 ) btmem[i].wdraw( g , i );
         }
 
         g.drawString(str, 0, 10);
         g.drawString( "" + btmem[0].spd , MESSAGE_X , MESSAGE_Y );
 
+        g.drawString( btnum[3] + "," + btnum[0] , 0, 130 );
+        g.drawString( btnum[4] + "," + btnum[1] , 0, 140 );
+        g.drawString( btnum[5] + "," + btnum[2] , 0, 150 );
+
     }
+
     //
     // public Unit LoadUnit(int i){
     //     return this.btmem[i];
