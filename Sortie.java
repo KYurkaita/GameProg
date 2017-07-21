@@ -206,7 +206,7 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
         if( !( 0 <= n   && n < unum ) ) return ;
 
         btmem[ num ] = un[ n ];
-        btmem[ num ].put(n);
+        btmem[ num ].put(num);
     }
 
     private int SetBtNum(){

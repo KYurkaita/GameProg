@@ -56,10 +56,10 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     private int ch_menu = 5;
     private int before_menu = 0;
 
-    private UnitOrg unorg; //戦況確認
-    private ConfSit confs; //部隊編成
-    private TactRes tact;  //戦術研究
-    private Sortie sortie; //出撃
+    private UnitOrg unorg;
+    private ConfSit confs;
+    private TactRes tact;
+    private Sortie sortie;
 
     private Unit u[] = new Unit[25];
     private Unit btmem[] = new Unit[6];
@@ -105,6 +105,7 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
             menu[i].change("IMG/ITEM/change" + i + ".png" );
             menu[i].put( M_WIDTH * i + 20 , 20 );
         }
+
         menu[0].msg = new String ("現在の状況を確認します.");
         menu[1].msg = new String ("ユニットを管理・追加します.");
         menu[2].msg = new String ("ユニット用の戦術を研究します.");
@@ -119,10 +120,12 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         u[0] = new Unit();
         u[0].set("IMG/CHARA/ch_rabbit_1.png");
         u[0].set(150,50,50,50);
+        u[0].set(new Equip(2),0,100);
 
         u[1] = new Unit();
         u[1].set("IMG/CHARA/ch_rabbit.png");
         u[1].set(100,70,80,40);
+        u[1].set(new Equip(0),0,100);
         unum = 2;
 
         for (int i = 0; i < 6 ; i++){

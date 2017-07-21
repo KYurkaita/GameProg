@@ -159,9 +159,9 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
             cy = 180 +  40 * i;
             g.drawString( "減　　　　　　　　　増" , 60 , cy + 20 );
             if( i == 0 ) g.drawString( " HP:" + crmem.hp  , 100 , cy + 20 );
-            if( i == 1 ) g.drawString( "ATK:" + crmem.atk , 100 , cy + 20 );
-            if( i == 2 ) g.drawString( "DEF:" + crmem.def , 100 , cy + 20 );
-            if( i == 3 ) g.drawString( "SPD:" + crmem.spd , 100 , cy + 20 );
+            else if( i == 1 ) g.drawString( "ATK:" + crmem.atk , 100 , cy + 20 );
+            else if( i == 2 ) g.drawString( "DEF:" + crmem.def , 100 , cy + 20 );
+            else if( i == 3 ) g.drawString( "SPD:" + crmem.spd , 100 , cy + 20 );
 
             LArr.put(  20 , cy );
             RArr.put( 200 , cy );
@@ -192,9 +192,9 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
                       cy < y && y < cy + 30 &&
                      max < 400 ){
                 if( i == 0 ) crmem.hp  += ADD;
-                if( i == 1 ) crmem.atk += ADD;
-                if( i == 2 ) crmem.def += ADD;
-                if( i == 3 ) crmem.spd += ADD;
+                else if( i == 1 ) crmem.atk += ADD;
+                else if( i == 2 ) crmem.def += ADD;
+                else if( i == 3 ) crmem.spd += ADD;
             }
         }
 

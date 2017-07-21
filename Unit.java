@@ -33,15 +33,20 @@ public class Unit {
     int nd;
     int ns;
 
-    int num;
+    int eqnum;
     Equip eq[] = new Equip[4];
     int pre[] = new int[4];
 
+
     Unit(){
         set(50,50,50,50);
-        set(new Equip(0),0,0);
+        set(new Equip(),0,0);
         set("IMG/CHARA/ch_frog.png");
-        this.num = 1;
+        this.place = -1;
+
+        for (int i = 0 ; i < 4 ; i++ ){
+            eq[i] = new Equip();
+        }
 
         ImageIcon icon = new ImageIcon(getClass().getResource("IMG/ICON/hp.png"));
         this.hp_icon = icon.getImage();
@@ -66,9 +71,10 @@ public class Unit {
         this.ns = s;
     }
 
-    void set( Equip e , int pre ,int n){
+    void set( Equip e , int n,int pre ){
         this.eq[n] = e;
         this.pre[n] = pre;
+        this.eqnum = HvEqNum();
     }
 
     void set(String s){
@@ -103,6 +109,21 @@ public class Unit {
         draw( g , cx , cy );
     }
 
+    void edraw(Graphics g , int n){
+        int cx,cy;
+        switch(n){
+            case 0: cx = 370; cy = 100; break;
+            case 1: cx = 370; cy = 185; break;
+            case 2: cx = 370; cy = 270; break;
+            case 3: cx = 470; cy = 100; break;
+            case 4: cx = 470; cy = 185; break;
+            case 5: cx = 470; cy = 270; break;
+            default:
+                cx = 0; cy = 0; break;
+        }
+        draw( g , cx , cy );
+    }
+
     void drawSubMenu(Graphics g){
         g.drawString( "HP :" + hp  , 450 + 20 , 160 );
         g.drawString( "ATK:" + atk , 450 + 20 , 180 );
@@ -113,6 +134,23 @@ public class Unit {
         g.drawImage ( atk_icon , 454 , 170 , 12, 12, null );
         g.drawImage ( def_icon , 454 , 190 , 12, 12, null );
         g.drawImage ( spd_icon , 454 , 210 , 12, 12, null );
+        g.drawString( "===================", 450 , 230 );
+        g.drawString( "E:ATK:DEF:RANGE", 450 , 250 );
+
+        for(int i = 0; i < eqnum; i++ ){
+            g.drawString( "E" + eq[i].getName() + ":" + eq[i].getAtk() + ":" +eq[i].getDef() + ":" + eq[i].getRng(), 450 +10, 270 + 20 * i );
+        }
+
+    }
+
+    private int HvEqNum(){
+        int i = 0;
+        while( i < 4 ){
+            if( this.pre[i] == 0 ) return i;
+            i++;
+        }
+
+        return 4;
     }
 
 }

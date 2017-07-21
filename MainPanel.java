@@ -67,11 +67,13 @@ public class MainPanel extends JPanel implements Runnable {
                     this.btmem = menu.LoadBtMember();
                 }
                 war.SaveUnit( btmem , btnum );
+                war.Init();
                 ChangeShow("war");
             }
 
             if( war.GetFlag() ){
                 war.SetFlag(false);
+                war.Exit();
                 menu.ShowMenuFirst();
                 ChangeShow("menu");
             }

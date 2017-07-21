@@ -21,11 +21,11 @@ public class Equip{
     private int rng;
 
     Equip(){
-        set("NONE",1,1,1);
+        set("NULL",0,0,0);
     }
 
-    Equip(int name){
-        switch(name){
+    Equip(int num){
+        switch(num){
             case SWORD:
                 set( "sword" , 10, 10, 3);
                 break;
