@@ -34,8 +34,8 @@ public class Unit {
     int ns;
 
     int eqnum;
-    Equip eq[] = new Equip[4];
-    int pre[] = new int[4];
+    Equip eq[] = new Equip[3];
+    int pre[] = new int[3];
 
 
     Unit(){
@@ -44,7 +44,7 @@ public class Unit {
         set("IMG/CHARA/ch_frog.png");
         this.place = -1;
 
-        for (int i = 0 ; i < 4 ; i++ ){
+        for (int i = 0 ; i < 3 ; i++ ){
             eq[i] = new Equip();
         }
 
@@ -71,7 +71,8 @@ public class Unit {
         this.ns = s;
     }
 
-    void set( Equip e , int n,int pre ){
+    void set( Equip e , int n , int pre ){
+        if( n > 3 ) return ;
         this.eq[n] = e;
         this.pre[n] = pre;
         this.eqnum = HvEqNum();
@@ -134,23 +135,23 @@ public class Unit {
         g.drawImage ( atk_icon , 454 , 170 , 12, 12, null );
         g.drawImage ( def_icon , 454 , 190 , 12, 12, null );
         g.drawImage ( spd_icon , 454 , 210 , 12, 12, null );
-        g.drawString( "===================", 450 , 230 );
-        g.drawString( "E:ATK:DEF:RANGE", 450 , 250 );
+        g.drawString( "=====================", 450 , 230 );
+        g.drawString( "E:ATK:DEF:RANGE", 455 , 240 );
 
         for(int i = 0; i < eqnum; i++ ){
-            g.drawString( "E" + eq[i].getName() + ":" + eq[i].getAtk() + ":" +eq[i].getDef() + ":" + eq[i].getRng(), 450 +10, 270 + 20 * i );
+            g.drawString( "E" + eq[i].getName() + ":" + eq[i].getAtk() + ":" +eq[i].getDef() + ":" + eq[i].getRng(), 450+10, 252 + 12 * i );
         }
 
     }
 
     private int HvEqNum(){
         int i = 0;
-        while( i < 4 ){
+        while( i < 3 ){
             if( this.pre[i] == 0 ) return i;
             i++;
         }
 
-        return 4;
+        return 3;
     }
 
 }

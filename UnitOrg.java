@@ -7,6 +7,8 @@ import java.awt.Image;
 import java.awt.event.* ;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseEvent;
+import java.awt.Color;
+
 
 public class UnitOrg extends JPanel implements MouseListener , MouseMotionListener{
     private static final int MENU_ITEM_MAX = 4;
@@ -14,6 +16,7 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
     private static final int HEIGHT = 350;
     private static final int SUBMENU_X = 450;
     private static final int SUBMENU_Y = 0;
+    private static final int MAX_EQ_NUM = 5;
 
     private String str;
 
@@ -37,6 +40,12 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
     private MENU RArr = new MENU();
     private MENU AddUnBt= new MENU();
     private MENU Exit = new MENU();
+
+    private Equip eq[] = new Equip[MAX_EQ_NUM];
+    private int eqnum = 0;
+    private boolean eqsel[][] = new boolean[MAX_EQ_NUM][3];
+    private MENU AddBt = new MENU();
+    private MENU SubBt = new MENU();
 
     private Unit un[] = new Unit[25];
     private Unit btmem[] = new Unit[6];
@@ -71,6 +80,9 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
         AddUnBt.set("IMG/ITEM/addun.png");
         AddUnBt.put(440,255);
 
+        AddBt.set("IMG/ICON/add.png");
+        SubBt.set("IMG/ICON/sub.png");
+
 
         int xy;
         for(int y = 0 ; y < 5 ; y++ ){
@@ -86,6 +98,15 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
             un[i] = new Unit();
         }
 
+        for( int i = 0 ; i < MAX_EQ_NUM ; i++ ){
+            eq[i] = new Equip(i);
+        }
+
+        for( int j = 0 ; j < MAX_EQ_NUM ; j++ ){
+            for( int i = 0 ; i < 3 ;i++){
+                eqsel[j][i] = false;
+            }
+        }
 
 
     }
@@ -120,7 +141,7 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")" + selnum;
+        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")" + selnum + ":" + eqnum;
 
         /* MENU */
         MBak.draw(g);
@@ -164,15 +185,46 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
             else if( i == 3 ) g.drawString( "SPD:" + crmem.spd , 100 , cy + 20 );
 
             LArr.put(  20 , cy );
-            RArr.put( 200 , cy );
-
-            RArr.draw(g);
             LArr.draw(g);
+            RArr.put( 200 , cy );
+            RArr.draw(g);
         }
+
+        // Font font = new Font("", Font.PLAIN, 12);
+        // setFont(font);
+        g.drawString( "equip"  , 250 , 15 );
+        for(int i = 0; i < MAX_EQ_NUM ; i++ ){
+            // for (int j = 0 ; j < 3 ; j++){
+            //     if( eqsel[j] == i ) g.setColor(Color.red);
+            // }
+
+            g.drawString( "E" + eq[i].getName() , 250 , 35 + i * 40 );
+            g.drawString( "|" + eq[i].getAtk() + ":" + eq[i].getDef() + ":"
+            + eq[i].getRng() , 320 , 35 + i * 40 );
+
+            for (int j = 0 ; j < 3 ; j++){
+                if( eqsel[i][j] == false ){
+                    AddBt.put( 380 + 40 * j , 15 + i * 40 );
+                    AddBt.draw(g);
+                }else{
+                    SubBt.put( 380 + 40 * j , 15 + i * 40 );
+                    SubBt.draw(g);
+                }
+            }
+
+            g.setColor(Color.black);
+
+        }
+
+        g.setColor(Color.black);
+
+
         AddUnBt.draw(g);
         Exit.draw(g);
 
     }
+
+
 
     private void SetWhWin(){
         int cy = 0 ;
@@ -189,12 +241,31 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
                 if( crmem.spd > 10 && i == 3 ) crmem.spd -= ADD;
             }
             else if( 200 < x && x < 230 &&
-                      cy < y && y < cy + 30 &&
+                     cy  < y && y < cy + 30 &&
                      max < 400 ){
                 if( i == 0 ) crmem.hp  += ADD;
                 else if( i == 1 ) crmem.atk += ADD;
                 else if( i == 2 ) crmem.def += ADD;
                 else if( i == 3 ) crmem.spd += ADD;
+            }
+        }
+
+        for(int i = 0; i < MAX_EQ_NUM; i++ ){
+            for(int j = 0 ; j < 3 ; j++ ){
+                if( 380 + 40 * j < x && x < 420 + 40 * j &&
+                     15 + i * 40 < y && y < 55 + i * 40 ){
+                    if( eqsel[i][j] ){
+                        if( 0 <= eqnum  ){
+                            eqsel[i][j] = false ;
+                            eqnum--;
+                        }
+                    } else {
+                        if( eqnum < 3 ){
+                            eqsel[i][j] = true ;
+                            eqnum++;
+                        }
+                    }
+                }
             }
         }
 
@@ -206,10 +277,22 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
 
         if( 440 < x && x < 590 &&
             255 < y && y < 255 + 85 &&
-            unum < 25 ){
+            unum < 25  && 0 < eqnum ){
             un[unum] = crmem;
-            unum += 1;
             createflag = false;
+
+            int i = 0 , num = 0;
+            while( num < 3  && i < 3 ){
+                for(int j = 0 ; j < eqnum ; j++ ){
+                    if( eqsel[j][i] == true ){
+                        un[unum].set( eq[j] , num , 100 );
+                        num++;
+                    }
+                }
+                i++;
+            }
+            unum += 1;
+
             crmem = new Unit();
         }
 

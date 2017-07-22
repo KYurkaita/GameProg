@@ -150,7 +150,7 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         ennum[1] = 1 ;
         ennum[2] = 1 ;
 
-        for(int i=0;i<12;i++){
+        for(int i = 0 ; i < 12 ; i++ ){
             que[i] = new Unit();
         }
 

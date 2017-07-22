@@ -42,7 +42,7 @@ public class Equip{
                 set( "l-missile" , 10 , 10 , 6);
                 break;
             default:
-                set("NONE",1,1,1);
+                set("NONE",0,0,0);
          }
     }
 

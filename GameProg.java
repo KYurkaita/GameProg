@@ -1,12 +1,11 @@
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.* ;
-
+import java.awt.Font;
+import java.io.File;
 
 public class GameProg extends JFrame implements ActionListener {
     JPanel change;
-
-    private Thread gameLoop;
     MainPanel mainp;
 
     public GameProg(){
@@ -37,6 +36,7 @@ public class GameProg extends JFrame implements ActionListener {
         setTitle("test");
         setLayout(new BorderLayout(0,0));
         contentPane.add(change);
+
 
         pack();
 
