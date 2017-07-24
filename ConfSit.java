@@ -90,9 +90,7 @@ public class ConfSit extends JPanel implements MouseListener , MouseMotionListen
     }
 
     public void SaveUnit(Unit u[], int n){
-        for (int i = 0; i < n ; i++ ){
-            this.un[i] = u[i];
-        }
+        this.un = u;
         this.unum = n;
     }
 

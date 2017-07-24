@@ -72,7 +72,7 @@ public class Unit {
     }
 
     void set( Equip e , int n , int pre ){
-        if( n > 3 ) return ;
+        if( n >= 3 ) return ;
         this.eq[n] = e;
         this.pre[n] = pre;
         this.eqnum = HvEqNum();

@@ -7,6 +7,8 @@ import java.awt.Image;
 import java.awt.event.* ;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseEvent;
+import java.util.Random;
+import java.lang.Math;
 
 class HPBAR extends MENU{
     int width;
@@ -44,6 +46,10 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
     private static final int MESSAGE_Y = 420;
     private static final int CHEAM_MEM = 0;
     private static final int ENEMY_MEM = 1;
+    private static final boolean FIRST_LINE  = true;
+    private static final boolean SECOND_LINE = false;
+    private static final boolean PLAYER_SIDE = true;
+    private static final boolean ENEMY_SIDE  = false;
 
     private String str;
 
@@ -144,11 +150,8 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         }
 
         enmem[0].set(200,50,50,10);
-        enmem[1].set(150,150,50,40);
-        enmem[2].set(100,50,150,150);
         ennum[0] = 1 ;
-        ennum[1] = 1 ;
-        ennum[2] = 1 ;
+
 
         for(int i = 0 ; i < 12 ; i++ ){
             que[i] = new Unit();
@@ -241,19 +244,155 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
 
     }
 
-    private void UnitAct( int n ){
-        int p;
-        p = que[n].place;
+    private int SelectEqip( int n ){
+        int e;
+        e = que[n].eqnum;
+        Random rnd = new Random();
+        int ran = rnd.nextInt(100);
 
-        if( ( p / 10 ) != 1 ){
-            // que[n];
-            ;
+        for (int i = 0; i < e ; i++ ){
+            if( ( 100 / e ) * (i) <= ran &&
+                  ran < ( 100 / e ) * (i+1) )
+                return i;
+        }
+        return 0;
+
+    }
+
+    private void DamageCalc( int at , int df ,int sel ){
+        Unit Aunit;
+        Unit Dunit;
+
+        double lg;
+        double dmg;
+
+        Random rnd = new Random();
+        int ran = rnd.nextInt(100);
+        // if( at ==-1 || df == -1 )return ;
+
+        if( ( at / 10 ) != 1 ){
+            if( btnum[at] == -1 || ennum[df % 10] == -1) return;
+            Aunit = btmem[ at ];
+            Dunit = enmem[ df % 10 ] ;
         }else{
-            ;
+            if( btnum[df] == -1 || ennum[at % 10] == -1) return;
+            Aunit = enmem[ at % 10  ];
+            Dunit = btmem[ df ] ;
         }
 
-        que[0].nh -= 10;
-        que[1].nh -= 10;
+        lg = (double)Aunit.atk / Dunit.def;
+
+        dmg = ( (double)(Aunit.eq[sel].getAtk() + 100)/100) * Aunit.atk *  Math.log10( lg + 1);
+
+        // random dmg
+        dmg *= ( 1.00 - (double)( 50 - ran ) / 1000 );
+
+        Dunit.nh -= dmg;
+        System.out.println( at + " to " + df + ":" + Aunit.eq[sel].getName() + ":" + dmg );
+
+    }
+
+    private int CheckLine( boolean pos , boolean line ){
+        //if line is true ,its 1st
+        int LN = 0;
+        if( line != FIRST_LINE ){ LN = 3;}
+
+        if( pos == PLAYER_SIDE ){
+            for (int i = 0; i < 3 ; i++ ){
+                if( btnum[ i + LN ] != -1 ) return i;
+            }
+        }
+        else {
+            for (int i = 0; i < 3 ; i++ ){
+                if( ennum[ i + LN ] != -1 ) return i;
+            }
+        }
+        System.out.println("x");
+
+        return -1;
+
+    }
+
+    private void UnitAct( int n ){
+        int select;
+        select = SelectEqip(n);
+        int range= que[n].eq[ select ].getRng();
+        int p = que[n].place;
+
+        int at , df ;
+        at = p;
+
+        switch(range){
+            case 1:
+                if( ( p / 10 ) != 1 ){
+                    if( ennum[ ( p % 10 ) % 3 ] != -1 )
+                        df = ( p % 10 ) % 3 + 10;
+                    else{
+                        if( CheckLine( ENEMY_SIDE ,  FIRST_LINE ) != -1 )
+                            df = CheckLine( ENEMY_SIDE ,  FIRST_LINE );
+                        else df = CheckLine( ENEMY_SIDE ,  SECOND_LINE );
+                    }
+                }
+                else{
+                    if( btnum[ p % 10 ] != -1 ) df = p % 10 ;
+                    else{
+                        if( CheckLine( PLAYER_SIDE ,  FIRST_LINE ) != -1 )
+                            df = CheckLine( PLAYER_SIDE ,  FIRST_LINE );
+                        else df = CheckLine( PLAYER_SIDE ,  SECOND_LINE );
+                    }
+                }
+                DamageCalc( at , df , select);
+                break;
+            case 2:
+                if( ( p / 10 ) != 1 ){
+                    if( ennum[ p % 3 ] != -1 ) df = p + 10;
+
+                    else{
+                        if( CheckLine( ENEMY_SIDE ,  FIRST_LINE ) != -1 )
+                        df = CheckLine( ENEMY_SIDE ,  FIRST_LINE );
+                        else df = CheckLine( ENEMY_SIDE ,  SECOND_LINE );
+                    }
+                }
+                else{
+                    if( btnum[ (p % 10) % 3 ] != -1 ) df = (p % 10) % 3 ;
+                    else{
+                        if( CheckLine( PLAYER_SIDE ,  FIRST_LINE ) != -1 )
+                            df = CheckLine( PLAYER_SIDE ,  FIRST_LINE );
+                        else df = CheckLine( PLAYER_SIDE ,  SECOND_LINE );
+                    }
+                }
+                DamageCalc( at , df , select);
+                DamageCalc( at , df + 3 , select);
+                break;
+
+            case 3:
+                if( ( p / 10 ) != 1 ){
+                    if( CheckLine( ENEMY_SIDE ,  FIRST_LINE ) != -1 )
+                        df = 10;
+                    else df = 13;
+                }
+                else{
+                    if( CheckLine( PLAYER_SIDE ,  FIRST_LINE ) != -1 )
+                        df = 0;
+                    else df = 3;
+                }
+                DamageCalc( at , df , select);
+                DamageCalc( at , df + 1 , select);
+                DamageCalc( at , df + 2 , select);
+                break;
+            case 6:
+                if( ( p / 10 ) != 1 )   df = 10;
+                else                    df = 0;
+
+                for(int i = 0 ; i < 6 ; i++ ){
+                    DamageCalc( at , df + i , select);
+                }
+
+                break;
+            default:
+                break;
+        }
+
 
     }
 
@@ -266,12 +405,11 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         int ch =0;
         while( i < qnum && ch == 0){
             //check
-            ch = UnitCheck();
+            if( ( ch = UnitCheck() ) != 0 ) break;
 
             //act
             UnitAct(i);
             i++;
-
         }
 
         return ch;
@@ -347,16 +485,30 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
             enmem[i] = new Unit();
             ennum[i] = -1;
         }
+
         enmem[0].set(200,50,50,10);
         enmem[0].put(10);
-        enmem[1].set(150,150,50,40);
-        enmem[1].put(11);
-        enmem[2].set(100,50,150,150);
-        enmem[2].put(12);
+        enmem[0].set(new Equip(2),0,100);
         ennum[0] = 1 ;
-        ennum[1] = 1 ;
-        ennum[2] = 1 ;
 
+        enmem[4].set(150,150,50,40);
+        enmem[4].put(14);
+        enmem[4].set(new Equip(2),0,100);
+        // ennum[1] = 1;
+        ennum[4] = 1 ;
+
+        enmem[5].set(100,50,150,150);
+        enmem[5].put(15);
+        enmem[5].set(new Equip(2),0,100);
+        ennum[5] = 2 ;
+
+        for(int i = 0; i < 6; i++ ){
+            this.btmem[i].nh = this.btmem[i].hp;
+
+            if( ennum[i] != -1 ){
+                this.enmem[i].nh = this.enmem[i].hp;
+            }
+        }
 
         for(int i = 0; i < 6; i++ ){
             if( btnum[i] != -1 ){
@@ -368,6 +520,7 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
             }
         }
         UnitCheck();
+        QueInput();
     }
 
     public void Exit(){

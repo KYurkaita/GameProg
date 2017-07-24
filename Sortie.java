@@ -167,7 +167,7 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
             DrawWindow(g);
             if( 0 <= bt_sec && bt_sec <= unum ) un[ bt_sec ].drawSubMenu(g);
         }else {
-            if( 0 <= selnum && selnum < unum  )
+            if( 0 <= selnum && selnum < 6  )
                 if( btnum[ selnum ] != -1 )
                     un[ btnum[ selnum ] ].drawSubMenu(g);
         }

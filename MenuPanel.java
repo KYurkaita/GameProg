@@ -218,7 +218,7 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
 
     /* menu show */
     public void ShowMenuFirst(){
-        // unorg.SaveUnit( u , unum );
+        unorg.SaveUnit( u , unum );
         CL.show( card , "first" );
     }
 

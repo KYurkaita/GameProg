@@ -283,7 +283,7 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
 
             int i = 0 , num = 0;
             while( num < 3  && i < 3 ){
-                for(int j = 0 ; j < eqnum ; j++ ){
+                for(int j = 0 ; j < MAX_EQ_NUM ; j++ ){
                     if( eqsel[j][i] == true ){
                         un[unum].set( eq[j] , num , 100 );
                         num++;
@@ -293,6 +293,12 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
             }
             unum += 1;
 
+            for( int x = 0 ; x < MAX_EQ_NUM ; x++ ){
+                for( int y = 0 ; y < 3 ;y++){
+                    eqsel[x][y] = false;
+                }
+            }
+            eqnum = 0;
             crmem = new Unit();
         }
 
