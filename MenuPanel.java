@@ -39,6 +39,7 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     private static final int M_WIDTH = 150;
     private static final int M_HEIGHT = 85;
     private static final int UNIT_NUM = 6;
+    private static final int MAX_EQ_NUM = 5;
 
     private int x = 0;
     private int y = 0;
@@ -66,6 +67,9 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     private int unum = 1;
     private int btnum[] = new int[6];
 
+    private Equip eq[] = new Equip[MAX_EQ_NUM];
+
+    private int point;
 
     public MenuPanel(){
         /* panelsize */
@@ -121,8 +125,7 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         u[0].set("IMG/CHARA/ch_rabbit_1.png");
         u[0].set(150,50,50,50);
         u[0].set(new Equip(2),0,100);
-        u[0].set(new Equip(2),1,100);
-        u[0].set(new Equip(2),2,100);
+
 
         u[1] = new Unit();
         u[1].set("IMG/CHARA/ch_rabbit.png");
@@ -135,6 +138,11 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
             btnum[i] = -1;
         }
 
+        for( int i = 0 ; i < MAX_EQ_NUM ; i++ ){
+            eq[i] = new Equip(i);
+        }
+
+        point = 100;
 
     }
 
@@ -152,12 +160,13 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         switch(before_menu){
             case 0: break;
             case 1:
-            unum = unorg.LoadUnitNum();
-                for(int i = 0 ; i < unum ; i++){
-                    u[i] = unorg.LoadUnit( i );
-                }
+                unum = unorg.LoadUnitNum();
+                u = unorg.LoadUnit();
                 break;
-            case 2:break;
+            case 2:
+                point = tact.LoadPoint();
+                eq = tact.LoadEquip();
+                break;
             case 3: break;
             default:
                 break;
@@ -218,16 +227,21 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
 
     /* menu show */
     public void ShowMenuFirst(){
-        unorg.SaveUnit( u , unum );
+        confs.SaveUnit ( u , unum );
+        confs.SaveEquip( eq );
+        confs.SavePoint( point );
         CL.show( card , "first" );
     }
 
     public void ShowMenuSecond(){
         unorg.SaveUnit( u , unum );
+        unorg.SaveEquip(eq);
         CL.show( card , "second" );
     }
 
     public void ShowMenuThird(){
+        tact.SaveEquip(eq);
+        tact.SavePoint(point);
         CL.show( card , "third" );
     }
 
@@ -236,14 +250,6 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         CL.show( card , "fourth" );
         // sortie.LoadUnit( u , unum );
     }
-
-    /*set member*/
-    // public void SaveBtToMenu(Unit u[], int n){
-    //     for(int i = 0 ; i < n ; i++){
-    //         this.btmem[i] = u[i];
-    //     }
-    //     this.btnum = n;
-    // }
 
     public Unit[] LoadBtMember(){
         this.btmem = sortie.LoadBtUnit();
@@ -262,6 +268,17 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
 
     public void SetFlag(boolean f){
         sortie.SetSorFlag(f);
+    }
+
+    public void Init(){
+        before_menu = 0 ;
+        ch_menu = 0;
+        wh_menu = 0;
+        for (int i = 0; i < 6 ; i++){
+            btmem[i] = new Unit();
+            btnum[i] = -1;
+        }
+        ShowMenuFirst();
     }
 
 }

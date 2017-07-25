@@ -44,6 +44,8 @@ public class MainPanel extends JPanel implements Runnable {
         for( int i = 0; i < 6 ; i++){
             btmem[i] = new Unit();
         }
+        
+        menu.Init();
 
         gameLoop = new Thread(this);
         gameLoop.start();
@@ -74,7 +76,7 @@ public class MainPanel extends JPanel implements Runnable {
             if( war.GetFlag() ){
                 war.SetFlag(false);
                 war.Exit();
-                menu.ShowMenuFirst();
+                menu.Init();
                 ChangeShow("menu");
             }
 

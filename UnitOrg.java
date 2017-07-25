@@ -194,25 +194,24 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
         // setFont(font);
         g.drawString( "equip"  , 250 , 15 );
         for(int i = 0; i < MAX_EQ_NUM ; i++ ){
-            // for (int j = 0 ; j < 3 ; j++){
-            //     if( eqsel[j] == i ) g.setColor(Color.red);
-            // }
+            for (int j = 0 ; j < 3 ; j++){
+                if( eqsel[i][j] == true )
+                    g.setColor(Color.red);
+            }
 
             g.drawString( "E" + eq[i].getName() , 250 , 35 + i * 40 );
-            g.drawString( "|" + eq[i].getAtk() + ":" + eq[i].getDef() + ":"
-            + eq[i].getRng() , 320 , 35 + i * 40 );
+            g.drawString( ":Lv." + eq[i].getLv() + " : " + eq[i].getAtk() + ":" + eq[i].getRng() , 320 , 35 + i * 40 );
 
+            g.setColor(Color.black);
             for (int j = 0 ; j < 3 ; j++){
                 if( eqsel[i][j] == false ){
-                    AddBt.put( 380 + 40 * j , 15 + i * 40 );
+                    AddBt.put( 400 + 40 * j , 15 + i * 40 );
                     AddBt.draw(g);
                 }else{
-                    SubBt.put( 380 + 40 * j , 15 + i * 40 );
+                    SubBt.put( 400 + 40 * j , 15 + i * 40 );
                     SubBt.draw(g);
                 }
             }
-
-            g.setColor(Color.black);
 
         }
 
@@ -252,7 +251,7 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
 
         for(int i = 0; i < MAX_EQ_NUM; i++ ){
             for(int j = 0 ; j < 3 ; j++ ){
-                if( 380 + 40 * j < x && x < 420 + 40 * j &&
+                if( 400 + 40 * j < x && x < 440 + 40 * j &&
                      15 + i * 40 < y && y < 55 + i * 40 ){
                     if( eqsel[i][j] ){
                         if( 0 <= eqnum  ){
@@ -273,6 +272,12 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
              15 < y && y < 45 ){
             createflag = false;
             crmem = new Unit();
+            for( int x = 0 ; x < MAX_EQ_NUM ; x++ ){
+                for( int y = 0 ; y < 3 ;y++){
+                    eqsel[x][y] = false;
+                }
+            }
+            eqnum = 0;
         }
 
         if( 440 < x && x < 590 &&
@@ -322,10 +327,12 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
             return -1;
         }
     }
+    public void SaveEquip(Equip[] e){
+        this.eq = e;
+    }
 
-
-    public Unit LoadUnit(int i){
-        return this.un[i];
+    public Unit[] LoadUnit(){
+        return this.un;
     }
 
     public int LoadUnitNum(){
@@ -333,9 +340,8 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
     }
 
     public void SaveUnit(Unit u[], int n){
-        for (int i = 0; i < n ; i++ ){
-            this.un[i] = u[i];
-        }
+        this.un = u;
+
         this.unum = n;
     }
 

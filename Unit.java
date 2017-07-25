@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.* ;
+import java.util.Random;
 
 enum SEED {
     FROG,
@@ -136,12 +137,24 @@ public class Unit {
         g.drawImage ( def_icon , 454 , 190 , 12, 12, null );
         g.drawImage ( spd_icon , 454 , 210 , 12, 12, null );
         g.drawString( "=====================", 450 , 230 );
-        g.drawString( "E:ATK:DEF:RANGE", 455 , 240 );
+        g.drawString( "E : LV : ATK : RANGE", 455 , 240 );
 
         for(int i = 0; i < eqnum; i++ ){
-            g.drawString( "E" + eq[i].getName() + ":" + eq[i].getAtk() + ":" +eq[i].getDef() + ":" + eq[i].getRng(), 450+10, 252 + 12 * i );
+            g.drawString( "E" + eq[i].getName() +  ":Lv." + eq[i].getLv()+":" + eq[i].getAtk() + ":" + eq[i].getRng()  , 450+10, 252 + 12 * i );
         }
 
+    }
+
+    public int SelectEqip(){
+        Random rnd = new Random();
+        int ran = rnd.nextInt(100);
+
+        for (int i = 0; i < this.eqnum ; i++ ){
+            if( ( 100 / this.eqnum ) * (i) <= ran &&
+                  ran < ( 100 / this.eqnum ) * ( i + 1 ) )
+                return i;
+        }
+        return 0;
     }
 
     private int HvEqNum(){

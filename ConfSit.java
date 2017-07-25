@@ -12,6 +12,7 @@ public class ConfSit extends JPanel implements MouseListener , MouseMotionListen
     private static final int MENU_ITEM_MAX = 4;
     private static final int WIDTH = 600;
     private static final int HEIGHT = 350;
+    private static final int MAX_EQ_NUM = 5;
 
     private String str;
 
@@ -26,8 +27,10 @@ public class ConfSit extends JPanel implements MouseListener , MouseMotionListen
     private MENU MSubBak = new MENU();
 
     private Unit un[] = new Unit[25];
-    private Unit btmem[] = new Unit[6];
     private int unum = 1;
+
+    private Equip eq[] = new Equip[MAX_EQ_NUM];
+    private int point;
 
     public ConfSit(){
         /* panelsize */
@@ -44,13 +47,11 @@ public class ConfSit extends JPanel implements MouseListener , MouseMotionListen
         MSubBak.set("IMG/ITEM/submenu.png");
         MSubBak.put(450,0);
 
+        for( int i = 0 ; i < MAX_EQ_NUM ; i++ ){
+            eq[i] = new Equip(i);
+        }
+        point = 0;
 
-        // un[0] = new Unit();
-        // un[0].set("IMG/CHARA/ch_frog.png");
-        // un[1] = new Unit();
-        // un[1].set("IMG/CHARA/ch_rabbit.png");
-        // un[1].set(40,20,20,20);
-        // unum = 2;
 
     }
 
@@ -79,19 +80,33 @@ public class ConfSit extends JPanel implements MouseListener , MouseMotionListen
         MSubBak.draw(g);
         g.drawString(str, 0, 10);
 
-    }
+        g.drawString("所持ユニット数:" + unum , 20 , 35 );
+        g.drawString("所持ポイント:"+point, 20 , 55 );
 
-    public Unit LoadUnit(int i){
-        return this.un[i];
-    }
+        g.drawString( "所持装備" , 250 , 25 );
+        g.drawString( "LV"     , 320 , 25 );
+        g.drawString( "ATK"  , 355 , 25 );
+        g.drawString( "RNG"  , 405 , 25 );
 
-    public int LoadUnitNum(){
-        return this.unum;
+        for(int i = 0 ; i <  MAX_EQ_NUM;i++){
+            g.drawString( "・" + eq[i].getName() , 250 , 45 + i * 20 );
+            g.drawString( ":Lv." + eq[i].getLv() , 320 , 45 + i * 20 );
+            g.drawString( ":" + eq[i].getAtk(), 355 , 45 + i * 20 );
+            g.drawString( ":" + eq[i].getRng() , 405 , 45 + i * 20 );
+        }
+
+    }
+    public void SaveEquip(Equip[] e){
+        this.eq = e;
     }
 
     public void SaveUnit(Unit u[], int n){
         this.un = u;
         this.unum = n;
+    }
+
+    public void SavePoint(int p){
+        this.point = p;
     }
 
 }

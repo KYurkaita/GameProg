@@ -244,20 +244,6 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
 
     }
 
-    private int SelectEqip( int n ){
-        int e;
-        e = que[n].eqnum;
-        Random rnd = new Random();
-        int ran = rnd.nextInt(100);
-
-        for (int i = 0; i < e ; i++ ){
-            if( ( 100 / e ) * (i) <= ran &&
-                  ran < ( 100 / e ) * (i+1) )
-                return i;
-        }
-        return 0;
-
-    }
 
     private void DamageCalc( int at , int df ,int sel ){
         Unit Aunit;
@@ -289,7 +275,7 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
 
         lg = (double)Aunit.atk / Dunit.def;
 
-        dmg = ( (double)(Aunit.eq[sel].getAtk() + 100)/100) * Aunit.atk *  Math.log10( lg + 1);
+        dmg = ( (double)(Aunit.eq[sel].getAtk())/100) * Aunit.atk *  Math.log10( lg + 1);
 
         // random dmg
         dmg *= ( 1.00 - (double)( 50 - ran ) / 1000 );
@@ -317,7 +303,6 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
     private int CheckColumn( int pos , boolean line ){
         //if line is true ,its 1st
         int LN = 0;
-        int sec = 0;
         if( line == SECOND_LINE ){ LN = 3; }
 
         if( pos == CHEAM_MEM ){
@@ -335,21 +320,70 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
 
     }
 
+    private int SelDefFromRange( int p , int range ){
+        int df = -1 ;
+
+        switch( range ){
+        case 1: case 2:
+            if( CheckRow( p ) != -1 ) df = CheckRow(p);
+            else {
+                if( CheckColumn( 1 - p / 10 , FIRST_LINE) != -1 )
+                    df = CheckColumn( 1 - p / 10 , FIRST_LINE);
+                else
+                    df = CheckColumn( 1 - p / 10 , SECOND_LINE);
+            }
+            break;
+        case 3:
+            if( CheckColumn( 1 - p / 10 , FIRST_LINE) != -1 )
+                df = 10 - ( p / 10 ) * 10;
+            else
+                df = 13 - ( p / 10 ) * 10;
+            break;
+        case 6:
+            df = 10 - ( p / 10 ) * 10;
+            break;
+        case 5:
+
+            break;
+        default:
+            break;
+        }
+
+        return df;
+
+    }
+
+    private int RandomDmg( int p ){
+        Random rnd = new Random();
+        int ran = rnd.nextInt(6);
+        int count = 0;
+        if( p / 10 == CHEAM_MEM ){
+            while( ennum[ran] == -1 && count < 10000 ){
+                ran = rnd.nextInt(6);
+                count++;
+            }
+        }
+        else {
+            while( btnum[ran] == -1 && count < 10000 ){
+                ran = rnd.nextInt(6);
+                count++;
+            }
+        }
+        return ran;
+
+    }
+
     private void UnitAct( int n ){
-        int select;
-        select = SelectEqip(n);
+        int select = que[n].SelectEqip();
         int range = que[n].eq[ select ].getRng();
         int p = que[n].place;
+
+        Random rnd = new Random();
+
         int at , df ;
         at = p;
 
-        if( CheckRow( p ) != -1 ) df = CheckRow(p);
-        else {
-            if( CheckColumn( 1 - p / 10 , FIRST_LINE) != -1 )
-                df = CheckColumn( 1 - p / 10 , FIRST_LINE);
-            else
-                df = CheckColumn( 1 - p / 10 , SECOND_LINE);
-        }
+        df = SelDefFromRange( p , range );
 
         switch(range){
             case 1:
@@ -362,28 +396,20 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
                 break;
 
             case 3:
-                if( ( p / 10 ) != 1 ){
-                    if( CheckColumn( ENEMY_SIDE ,  FIRST_LINE ) != -1 )
-                        df = 10;
-                    else df = 13;
-                }
-                else{
-                    if( CheckColumn( PLAYER_SIDE ,  FIRST_LINE ) != -1 )
-                        df = 0;
-                    else df = 3;
-                }
                 DamageCalc( at , df , select);
                 DamageCalc( at , df + 1 , select);
                 DamageCalc( at , df + 2 , select);
                 break;
             case 6:
-                if( ( p / 10 ) != 1 )   df = 10;
-                else                    df = 0;
-
                 for(int i = 0 ; i < 6 ; i++ ){
                     DamageCalc( at , df + i , select);
                 }
-
+                break;
+            case 5:
+                for(int i = 0 ; i < 5 ; i++){
+                    df = RandomDmg(p);
+                    DamageCalc( at , df, select );
+                }
                 break;
             default:
                 break;
@@ -482,20 +508,20 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
             ennum[i] = -1;
         }
 
-        enmem[0].set(200,50,50,10);
+        enmem[0].set(200,50,50,51);
         enmem[0].put(10);
         enmem[0].set(new Equip(2),0,100);
         ennum[0] = 1 ;
 
-        enmem[4].set(150,150,50,40);
+        enmem[4].set(150,50,50,52);
         enmem[4].put(14);
-        enmem[4].set(new Equip(2),0,100);
+        enmem[4].set(new Equip(4),0,100);
         // ennum[1] = 1;
         ennum[4] = 1 ;
 
-        enmem[5].set(100,50,150,150);
+        enmem[5].set(100,50,50,150);
         enmem[5].put(15);
-        enmem[5].set(new Equip(2),0,100);
+        enmem[5].set(new Equip(0),0,100);
         ennum[5] = 2 ;
 
         for(int i = 0; i < 6; i++ ){
