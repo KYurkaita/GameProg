@@ -48,8 +48,8 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
     private static final int ENEMY_MEM = 1;
     private static final boolean FIRST_LINE  = true;
     private static final boolean SECOND_LINE = false;
-    private static final boolean PLAYER_SIDE = true;
-    private static final boolean ENEMY_SIDE  = false;
+    private static final int PLAYER_SIDE = 0;
+    private static final int ENEMY_SIDE  = 1;
 
     private String str;
 
@@ -268,14 +268,21 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
 
         Random rnd = new Random();
         int ran = rnd.nextInt(100);
-        // if( at ==-1 || df == -1 )return ;
 
-        if( ( at / 10 ) != 1 ){
-            if( btnum[at] == -1 || ennum[df % 10] == -1) return;
+        if( ! ( 0 <= ( at % 10 ) && ( at % 10 ) < 6) ||
+            ! ( 0 <= ( df % 10 ) && ( df % 10 ) < 6) )
+            return;
+
+        if( ( at / 10 ) == CHEAM_MEM ){
+            if( ennum[(df % 10)] == -1 || btnum[at] == -1
+             )
+              return;
             Aunit = btmem[ at ];
             Dunit = enmem[ df % 10 ] ;
         }else{
-            if( btnum[df] == -1 || ennum[at % 10] == -1) return;
+            if( btnum[df] == -1 ||
+             ennum[at % 10] == -1 )
+              return;
             Aunit = enmem[ at % 10  ];
             Dunit = btmem[ df ] ;
         }
@@ -292,22 +299,37 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
 
     }
 
-    private int CheckLine( boolean pos , boolean line ){
+    private int CheckRow( int row ){
+        int pos = ( row % 10 ) % 3;
+
+        if( ( row / 10 ) == CHEAM_MEM ){
+            if( ennum[ pos ] != -1 ) return pos + 10;
+            else if( ennum[ pos + 3 ] != -1 ) return pos + 13;
+        }
+        else {
+            if( btnum[ pos ] != -1 ) return pos;
+            else if( btnum[ pos + 3 ] != -1 ) return pos + 3;
+        }
+
+        return -1;
+    }
+
+    private int CheckColumn( int pos , boolean line ){
         //if line is true ,its 1st
         int LN = 0;
-        if( line != FIRST_LINE ){ LN = 3;}
+        int sec = 0;
+        if( line == SECOND_LINE ){ LN = 3; }
 
-        if( pos == PLAYER_SIDE ){
+        if( pos == CHEAM_MEM ){
             for (int i = 0; i < 3 ; i++ ){
-                if( btnum[ i + LN ] != -1 ) return i;
+                if( btnum[ i + LN ] != -1 )    return i + LN;
             }
         }
         else {
             for (int i = 0; i < 3 ; i++ ){
-                if( ennum[ i + LN ] != -1 ) return i;
+                if( ennum[ i + LN ] != -1 )  return i + LN;
             }
         }
-        System.out.println("x");
 
         return -1;
 
@@ -316,63 +338,37 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
     private void UnitAct( int n ){
         int select;
         select = SelectEqip(n);
-        int range= que[n].eq[ select ].getRng();
+        int range = que[n].eq[ select ].getRng();
         int p = que[n].place;
-
         int at , df ;
         at = p;
 
+        if( CheckRow( p ) != -1 ) df = CheckRow(p);
+        else {
+            if( CheckColumn( 1 - p / 10 , FIRST_LINE) != -1 )
+                df = CheckColumn( 1 - p / 10 , FIRST_LINE);
+            else
+                df = CheckColumn( 1 - p / 10 , SECOND_LINE);
+        }
+
         switch(range){
             case 1:
-                if( ( p / 10 ) != 1 ){
-                    if( ennum[ ( p % 10 ) % 3 ] != -1 )
-                        df = ( p % 10 ) % 3 + 10;
-                    else{
-                        if( CheckLine( ENEMY_SIDE ,  FIRST_LINE ) != -1 )
-                            df = CheckLine( ENEMY_SIDE ,  FIRST_LINE );
-                        else df = CheckLine( ENEMY_SIDE ,  SECOND_LINE );
-                    }
-                }
-                else{
-                    if( btnum[ p % 10 ] != -1 ) df = p % 10 ;
-                    else{
-                        if( CheckLine( PLAYER_SIDE ,  FIRST_LINE ) != -1 )
-                            df = CheckLine( PLAYER_SIDE ,  FIRST_LINE );
-                        else df = CheckLine( PLAYER_SIDE ,  SECOND_LINE );
-                    }
-                }
                 DamageCalc( at , df , select);
                 break;
-            case 2:
-                if( ( p / 10 ) != 1 ){
-                    if( ennum[ p % 3 ] != -1 ) df = p + 10;
 
-                    else{
-                        if( CheckLine( ENEMY_SIDE ,  FIRST_LINE ) != -1 )
-                        df = CheckLine( ENEMY_SIDE ,  FIRST_LINE );
-                        else df = CheckLine( ENEMY_SIDE ,  SECOND_LINE );
-                    }
-                }
-                else{
-                    if( btnum[ (p % 10) % 3 ] != -1 ) df = (p % 10) % 3 ;
-                    else{
-                        if( CheckLine( PLAYER_SIDE ,  FIRST_LINE ) != -1 )
-                            df = CheckLine( PLAYER_SIDE ,  FIRST_LINE );
-                        else df = CheckLine( PLAYER_SIDE ,  SECOND_LINE );
-                    }
-                }
+            case 2:
                 DamageCalc( at , df , select);
                 DamageCalc( at , df + 3 , select);
                 break;
 
             case 3:
                 if( ( p / 10 ) != 1 ){
-                    if( CheckLine( ENEMY_SIDE ,  FIRST_LINE ) != -1 )
+                    if( CheckColumn( ENEMY_SIDE ,  FIRST_LINE ) != -1 )
                         df = 10;
                     else df = 13;
                 }
                 else{
-                    if( CheckLine( PLAYER_SIDE ,  FIRST_LINE ) != -1 )
+                    if( CheckColumn( PLAYER_SIDE ,  FIRST_LINE ) != -1 )
                         df = 0;
                     else df = 3;
                 }
