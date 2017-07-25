@@ -123,7 +123,7 @@ public class Unit {
             default:
                 cx = 0; cy = 0; break;
         }
-        draw( g , cx , cy );
+        g.drawImage( this.img , cx  , cy , 80 , 100 , null );
     }
 
     void drawSubMenu(Graphics g){
@@ -138,6 +138,7 @@ public class Unit {
         g.drawImage ( spd_icon , 454 , 210 , 12, 12, null );
         g.drawString( "=====================", 450 , 230 );
         g.drawString( "E : LV : ATK : RANGE", 455 , 240 );
+        if( this.place != -1 ) g.drawString( "" + this.place, 540 , 160 );
 
         for(int i = 0; i < eqnum; i++ ){
             g.drawString( "E" + eq[i].getName() +  ":Lv." + eq[i].getLv()+":" + eq[i].getAtk() + ":" + eq[i].getRng()  , 450+10, 252 + 12 * i );

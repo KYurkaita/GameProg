@@ -122,7 +122,7 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
 
         /* Unit first menu */
         u[0] = new Unit();
-        u[0].set("IMG/CHARA/ch_rabbit_1.png");
+        u[0].set("IMG/CHARA/ch_rabbit1.png");
         u[0].set(150,50,50,50);
         u[0].set(new Equip(2),0,100);
 

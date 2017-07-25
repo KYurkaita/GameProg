@@ -93,6 +93,7 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
 
 
     private int turn = 0;
+    private int[] sumdmg = new int[2];
     public  boolean t_next = false;
 
 
@@ -156,7 +157,8 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         for(int i = 0 ; i < 12 ; i++ ){
             que[i] = new Unit();
         }
-
+        sumdmg[CHEAM_MEM] = 0;
+        sumdmg[ENEMY_MEM] = 0;
 
     }
 
@@ -169,8 +171,13 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
     public void mousePressed (MouseEvent e){
         x = e.getX();
         y = e.getY();
-        if( TurnAdd() != 0 ){
-            SetFlag(true);
+        int t;
+        if( ( t = TurnAdd() ) != 0 ){
+            // if( t == 2 )
+             SetFlag(true);
+            // if( unum[ENEMY_MEM] == 0 ) return 2;
+            // if( unum[CHEAM_MEM] == 0 ) return 1;
+            // return 0;
         }
 
     }
@@ -244,7 +251,6 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
 
     }
 
-
     private void DamageCalc( int at , int df ,int sel ){
         Unit Aunit;
         Unit Dunit;
@@ -267,8 +273,8 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
             Dunit = enmem[ df % 10 ] ;
         }else{
             if( btnum[df] == -1 ||
-             ennum[at % 10] == -1 )
-              return;
+                ennum[at % 10] == -1 )
+                return;
             Aunit = enmem[ at % 10  ];
             Dunit = btmem[ df ] ;
         }
@@ -281,6 +287,7 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         dmg *= ( 1.00 - (double)( 50 - ran ) / 1000 );
 
         Dunit.nh -= dmg;
+        sumdmg[at/10] += dmg;
         System.out.println( at + " to " + df + ":" + Aunit.eq[sel].getName() + ":" + dmg );
 
     }
@@ -420,11 +427,19 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
 
     private int TurnAdd(){
         //input que aft sort
+        turn++;
+        sumdmg[CHEAM_MEM] = 0;
+        sumdmg[ENEMY_MEM] = 0;
+        
         QueInput();
         if(qnum == 0) return 3;
 
+        int ch = 0;
+        if( ( ch = UnitCheck()) != 0) return ch;
+
+        System.out.println( "turn(" + turn + "):start"  );
+
         int i = 0;
-        int ch =0;
         while( i < qnum && ch == 0){
             //check
             if( ( ch = UnitCheck() ) != 0 ) break;
@@ -433,6 +448,9 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
             UnitAct(i);
             i++;
         }
+        UnitCheck();//update
+
+        System.out.println( "CHEAM_DMG = [" + sumdmg[CHEAM_MEM] + "]:ENEMY_DMG = [" + sumdmg[ENEMY_MEM] + "]");
 
         return ch;
 
@@ -489,14 +507,6 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
 
     }
 
-    //
-    // public Unit LoadUnit(int i){
-    //     return this.btmem[i];
-    // }
-    //
-    // public int LoadUnitNum(){
-    //     return this.btnum[];
-    // }
 
     public void Init(){
         mhp = 0;
@@ -516,7 +526,6 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         enmem[4].set(150,50,50,52);
         enmem[4].put(14);
         enmem[4].set(new Equip(4),0,100);
-        // ennum[1] = 1;
         ennum[4] = 1 ;
 
         enmem[5].set(100,50,50,150);
@@ -548,13 +557,12 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
     public void Exit(){
         for(int i = 0; i < 6; i++ ){
             this.btmem[i].nh = this.btmem[i].hp;
-
+            this.btmem[i].place = -1;
             if( ennum[i] != -1 ){
                 this.enmem[i].nh = this.enmem[i].hp;
             }
         }
-
-
+        turn = 0;
     }
 
 

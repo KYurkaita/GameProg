@@ -7,6 +7,8 @@ import java.awt.Image;
 import java.awt.event.* ;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseEvent;
+import java.awt.Graphics2D;
+import java.awt.Color;
 
 public class Sortie extends JPanel implements MouseListener , MouseMotionListener{
     private static final int MENU_ITEM_MAX = 4;
@@ -40,6 +42,7 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
 
     private boolean CreateWinF = false;
     private MENU CreWin = new MENU();
+    private MENU SelWin = new MENU();
     private int selnum = 0;
 
 
@@ -76,6 +79,7 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
         Tile.set("IMG/ITEM/char.png");
         Tile.put( TILE_X , TILE_Y );
         CreWin.set("IMG/ITEM/mwin2.png");
+        SelWin.set("IMG/ITEM/ch_menu4.png");
         // CreWin.put(210,0);
         //85,66
 
@@ -117,7 +121,7 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
             }
             if( 0 <= selnum && selnum < 6 ) CreateWinF = true;
         } else{
-            btnum[ selnum ] = SetBtNum();
+            // btnum[ selnum ] = SetBtNum();
             CreateBtMem( selnum , SetBtNum() );
             CreateWinF = false;
         }
@@ -176,22 +180,33 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
         g.drawString( btnum[3] + "," + btnum[0] , 400, 20 );
         g.drawString( btnum[4] + "," + btnum[1] , 400, 30 );
         g.drawString( btnum[5] + "," + btnum[2] , 400, 40 );
-
     }
 
     private void DrawWindow(Graphics g){
-        CreWin.draw( g );
+        Graphics2D g2 = (Graphics2D)g;
+        AlphaComposite half = AlphaComposite.getInstance(
+                    AlphaComposite.SRC_OVER, 0.5f);
+        AlphaComposite def = AlphaComposite.getInstance(
+                    AlphaComposite.SRC_OVER, 1f);
 
+        CreWin.draw( g );
         int sx = 0 , sy = 0;
         for (int i = 0 ; i < unum ; i++ ){
             sx = i % 5; sy = i / 5 ;
             un[i].sdraw( g , 85 * sx + 10 , 66 * sy + 10 );
         }
 
-        for (int i = 0 ; i < 25 ; i++){
-            Chr[ i ].draw( g );
+        for ( int x = 0 ; x < 5 ; x++ ){
+            for ( int y = 0 ; y < 5 ; y++ ){
+                if( IsBtHas( x * 5 + y ) != -1 ){
+                    g2.setComposite(half);
+                    SelWin.put( y * 85 + 12 , x * 66 + 10 );
+                    SelWin.draw(g2);
+                    g2.setComposite(def);
+                }
+                else Chr[ x * 5 + y ].draw( g );
+            }
         }
-
     }
 
     private boolean HasBtnumUnit(){
@@ -201,12 +216,30 @@ public class Sortie extends JPanel implements MouseListener , MouseMotionListene
         return false;
     }
 
+    private int IsBtHas( int num ){
+        for( int i = 0; i < 6 ; i++ ){
+            if( btnum[i] == num ) return i;
+        }
+        return -1;
+    }
+
     private void CreateBtMem( int num , int n ){
         if( !( 0 <= num && num < 6 ) )  return ;
-        if( !( 0 <= n   && n < unum ) ) return ;
+        if( !( 0 <= n   && n < unum ) ){
+            btnum[ num ] = -1;
+            return;
+        }
+
+        int x;
+        if( ( x = IsBtHas( n ) ) != -1 ){
+            btnum[ num ] = -1;
+            return;
+        }
 
         btmem[ num ] = un[ n ];
         btmem[ num ].put(num);
+        btnum[ num ] = n;
+
     }
 
     private int SetBtNum(){
