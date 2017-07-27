@@ -32,26 +32,11 @@ class MENU_LIST extends MENU {
 
 }
 
-public class MenuPanel extends JPanel implements MouseListener , MouseMotionListener{
-    private static final int MENU_MAX = 4;
-    private static final int WIDTH = 640;
-    private static final int HEIGHT = 480;
-    private static final int M_WIDTH = 150;
-    private static final int M_HEIGHT = 85;
-    private static final int UNIT_NUM = 6;
-    private static final int MAX_EQ_NUM = 5;
-
-    private int x = 0;
-    private int y = 0;
-    private int mx = 0;
-    private int my = 0;
-
-    private String str;
-
+public class MenuPanel extends PANEL{
     private JPanel card;
     private CardLayout CL ;
 
-    private MENU_LIST menu[] = new MENU_LIST[MENU_MAX];
+    private MENU_LIST menu[] = new MENU_LIST[MENU_ITEM_MAX];
     private MENU select;
     private int wh_menu = 5;
     private int ch_menu = 5;
@@ -62,24 +47,11 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     private TactRes tact;
     private Sortie sortie;
 
-    private Unit u[] = new Unit[25];
-    private Unit btmem[] = new Unit[6];
-    private int unum = 1;
-    private int btnum[] = new int[6];
-
-    private Equip eq[] = new Equip[MAX_EQ_NUM];
-
-    private int point;
-
     public MenuPanel(){
         /* panelsize */
-        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")";
-
+        super();
         setLayout(null);
-        setBounds(0,0,640,480);
-
-        addMouseListener(this);
-        addMouseMotionListener(this);
+        setBounds(0,0,WIN_WIDTH,WIN_HEIGHT);
 
         /*card make*/
         card = new JPanel();
@@ -103,7 +75,7 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         add(card);
 
         /*menu list*/
-        for (int i = 0; i < MENU_MAX ; i++){
+        for (int i = 0; i < MENU_ITEM_MAX ; i++){
             menu[i] = new MENU_LIST();
             menu[i].set("IMG/ITEM/menu" + i + ".png" );
             menu[i].change("IMG/ITEM/change" + i + ".png" );
@@ -119,47 +91,30 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         select = new MENU();
         select.set("IMG/ITEM/select.png");
 
-        for (int i = 0; i < 6 ; i++){
-            btmem[i] = new Unit();
-            btnum[i] = -1;
-        }
-
-        for( int i = 0 ; i < MAX_EQ_NUM ; i++ ){
-            eq[i] = new Equip(i);
-        }
-
-        point = 100;
         /* Unit first menu */
-        u[0] = new Unit();
-        u[0].set("IMG/CHARA/ch_rabbit1.png");
-        u[0].set(150,50,50,50);
-        u[0].set(eq[2],0,100);
+        un[0] = new Unit();
+        un[0].set("IMG/CHARA/ch_rabbit1.png");
+        un[0].set(150,50,50,50);
+        un[0].set(eq[2],0,100);
 
 
-        u[1] = new Unit();
-        u[1].set("IMG/CHARA/ch_rabbit.png");
-        u[1].set(100,70,80,40);
-        u[1].set(eq[0],0,100);
+        un[1] = new Unit();
+        un[1].set("IMG/CHARA/ch_rabbit.png");
+        un[1].set(100,70,80,40);
+        un[1].set(eq[0],0,100);
         unum = 2;
 
     }
 
-
-    /*MouseEvent*/
-    public void mouseClicked (MouseEvent e){;}
-    public void mouseEntered (MouseEvent e){;}
-    public void mouseExited  (MouseEvent e){;}
-    public void mouseReleased(MouseEvent e){;}
     public void mousePressed (MouseEvent e){
-        x = e.getX();
-        y = e.getY();
+        super.mousePressed(e);
         ch_menu = RetLocMenu(x,y,ch_menu);
 
         switch(before_menu){
             case 0: break;
             case 1:
                 unum = unorg.LoadUnitNum();
-                u = unorg.LoadUnit();
+                un = unorg.LoadUnit();
                 break;
             case 2:
                 point = tact.LoadPoint();
@@ -182,10 +137,8 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         }
 
     }
-    public void mouseDragged(MouseEvent e){;}
     public void mouseMoved(MouseEvent e){
-        mx = e.getX() ;
-        my = e.getY() ;
+        super.mouseMoved(e);
         wh_menu = RetLocMenu(mx,my,ch_menu);
     }
 
@@ -194,7 +147,7 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         super.paintComponent(g);
         str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")"+ ch_menu +"," + btnum[2] ;
 
-        for ( int i = 0 ; i < MENU_MAX; i++){
+        for ( int i = 0 ; i < MENU_ITEM_MAX; i++){
             if( i != ch_menu){
                 menu[i].draw(g);
             }
@@ -215,7 +168,7 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     }
 
     private int RetLocMenu(int x,int y,int t){
-        for (int i = 0; i < MENU_MAX; i++){
+        for (int i = 0; i < MENU_ITEM_MAX; i++){
             if( menu[i].x < x &&  x < ( menu[i].x + M_WIDTH ) &&
                 menu[i].y < y &&  y < ( menu[i].y + M_HEIGHT) )
                 return i;
@@ -225,14 +178,14 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
 
     /* menu show */
     public void ShowMenuFirst(){
-        confs.SaveUnit ( u , unum );
+        confs.SaveUnit ( un , unum );
         confs.SaveEquip( eq );
         confs.SavePoint( point );
         CL.show( card , "first" );
     }
 
     public void ShowMenuSecond(){
-        unorg.SaveUnit( u , unum );
+        unorg.SaveUnit( un , unum );
         unorg.SaveEquip(eq);
         CL.show( card , "second" );
     }
@@ -244,7 +197,7 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     }
 
     public void ShowMenuFourth(){
-        sortie.SaveUnit( u , unum );
+        sortie.SaveUnit( un , unum );
         CL.show( card , "fourth" );
     }
 

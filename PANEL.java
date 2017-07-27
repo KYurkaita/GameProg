@@ -16,7 +16,8 @@ public class PANEL extends JPanel implements MouseListener , MouseMotionListener
     protected static final int TILE_H = 87;
     protected static final int BUT_W = 150;
     protected static final int BUT_H = 80;
-
+    protected static final int M_WIDTH = 150;
+    protected static final int M_HEIGHT = 85;
 
     /* place data */
     protected static final int MESSAGE_X = 15;
@@ -157,7 +158,7 @@ public class PANEL extends JPanel implements MouseListener , MouseMotionListener
     public int LoadUnitNum(){
         return this.unum;
     }
-    
+
     public void SaveUnit(Unit u[], int n){
         this.un = u;
         this.unum = n;
