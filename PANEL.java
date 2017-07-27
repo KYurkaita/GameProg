@@ -42,20 +42,19 @@ public class PANEL extends JPanel implements MouseListener , MouseMotionListener
     /* user data max */
     protected static final int CHEAM_MEM = 0;
     protected static final int ENEMY_MEM = 1;
-
-    protected static final int FIRST_LINE  = 0;
-    protected static final int SECOND_LINE = 1;
-
     protected static final int UNIT_SCORE_MAX = 400;
     protected static final int EQ_MAX = 5;
-
-    protected static final int PLAYER_SIDE = 0;
-    protected static final int ENEMY_SIDE  = 1;
 
     protected static final int BATTLE_UNIT_MAX = 6;
     protected static final int UNIT_MAX = 25;
 
     protected static final int NONE = -1;
+
+    protected static final int FIRST_LINE  = 0;
+    protected static final int SECOND_LINE = 1;
+
+    protected static final int PLAYER_SIDE = 0;
+    protected static final int ENEMY_SIDE  = 1;
 
     protected String str;
 

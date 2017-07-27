@@ -38,29 +38,7 @@ class HPBAR extends MENU{
 
 }
 
-public class War extends JPanel implements MouseListener , MouseMotionListener{
-    private static final int MENU_ITEM_MAX = 4;
-    private static final int WIDTH = 600;
-    private static final int HEIGHT = 350;
-    private static final int MESSAGE_X = 15;
-    private static final int MESSAGE_Y = 420;
-    private static final int CHEAM_MEM = 0;
-    private static final int ENEMY_MEM = 1;
-    private static final int FIRST_LINE  = 0;
-    private static final int SECOND_LINE = 1;
-    private static final int PLAYER_SIDE = 0;
-    private static final int ENEMY_SIDE  = 1;
-
-    private String str;
-
-    private int x = 0;
-    private int y = 0;
-    private int mx = 0;
-    private int my = 0;
-
-
-    public static boolean changeFlag = false;
-
+public class War extends PANEL{
     private MENU Sett;
 
     private MENU TeamHp;
@@ -81,15 +59,12 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
     private MENU ChrTile;
     private MENU EnmTile;
 
-    private Unit btmem[] = new Unit[6];
-    private int btnum[] = new int[6];
-
-    private Unit enmem[] = new Unit[6];
-    private int ennum[] = new int[6];
+    private Unit enmem[] = new Unit[BATTLE_UNIT_MAX];
+    private int ennum[] = new int[BATTLE_UNIT_MAX];
 
     private Unit que[] = new Unit[12];
     private int qnum = 0;
-    private int unum[] = new int[2];
+    private int unit_num[] = new int[2];
 
 
     private int turn = 0;
@@ -99,13 +74,7 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
 
     public War(){
         /* panelsize */
-
-        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")";
-
-        addMouseListener(this);
-        addMouseMotionListener(this);
-
-        setLayout(null);
+        super();
         setBounds( 0 , 0 , WIDTH , HEIGHT );
 
         /* draw */
@@ -142,12 +111,9 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
 
         /* draw ends */
 
-        for(int i = 0; i < 6; i++){
-            btmem[i] = new Unit();
-            btnum[i] = -1;
-
+        for(int i = 0; i < BATTLE_UNIT_MAX; i++){
             enmem[i] = new Unit();
-            ennum[i] = -1;
+            ennum[i] = NONE;
         }
 
         enmem[0].set(200,50,50,10);
@@ -157,6 +123,7 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         for(int i = 0 ; i < 12 ; i++ ){
             que[i] = new Unit();
         }
+
         sumdmg[CHEAM_MEM] = 0;
         sumdmg[ENEMY_MEM] = 0;
 
@@ -164,13 +131,9 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
 
 
     /*MouseEvent*/
-    public void mouseClicked (MouseEvent e){;}
-    public void mouseEntered (MouseEvent e){;}
-    public void mouseExited  (MouseEvent e){;}
-    public void mouseReleased(MouseEvent e){;}
+    @Override
     public void mousePressed (MouseEvent e){
-        x = e.getX();
-        y = e.getY();
+        super.mousePressed(e);
         int t;
         if( ( t = TurnAdd() ) != 0 ){
             // if( t == 2 )
@@ -181,29 +144,27 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         }
 
     }
-    public void mouseDragged(MouseEvent e){;}
     public void mouseMoved(MouseEvent e){
-        mx = e.getX() ;
-        my = e.getY() ;
+        super.mouseMoved(e);
     }
 
     private void QueInput(){
         qnum = 0 ;
 
         int i = 0;
-        unum[CHEAM_MEM] = 0;
-        unum[ENEMY_MEM] = 0;
+        unit_num[CHEAM_MEM] = 0;
+        unit_num[ENEMY_MEM] = 0;
 
-        while( qnum < 12 && i < 6){
-            if( btnum[ i ] != -1 ){
+        while( qnum < 12 && i < BATTLE_UNIT_MAX ){
+            if( btnum[ i ] != NONE ){
                 que[ qnum ] = btmem[ i ];
                 qnum++;
-                unum[CHEAM_MEM]++;
+                unit_num[CHEAM_MEM]++;
             }
-            if( ennum[ i ] != -1 ){
+            if( ennum[ i ] != NONE ){
                 que[ qnum ] = enmem[ i ];
                 qnum++;
-                unum[ENEMY_MEM]++;
+                unit_num[ENEMY_MEM]++;
             }
             i++;
         }
@@ -221,21 +182,21 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
     }
 
     private int UnitCheck(){
-        for( int i = 0; i < 6 ;i++ ){
-            if( btnum[ i ] != -1 ){
-                if( !( btmem[i].nh > 0 ) ) btnum[i] = -1;
+        for( int i = 0; i < BATTLE_UNIT_MAX ;i++ ){
+            if( btnum[ i ] != NONE ){
+                if( !( btmem[i].nh > 0 ) ) btnum[i] = NONE;
             }
 
             if( ennum[ i ] != -1 ){
-                if( !(enmem[i].nh > 0 )  ) ennum[i] = -1;
+                if( !(enmem[i].nh > 0 )  ) ennum[i] = NONE;
             }
         }
 
         nhp  = 0;
         enhp = 0;
-        for(int i = 0; i < 6; i++ ){
-            if( btnum[i] != -1) nhp += this.btmem[i].nh;
-            if( ennum[i] != -1) enhp += this.enmem[i].nh;
+        for(int i = 0; i < BATTLE_UNIT_MAX ; i++ ){
+            if( btnum[i] != NONE ) nhp += this.btmem[i].nh;
+            if( ennum[i] != NONE ) enhp += this.enmem[i].nh;
         }
 
         if( mhp != 0 ) chper = nhp * 100 / mhp;
@@ -244,8 +205,8 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         if( emhp != 0 ) enper = enhp * 100 / emhp;
         else enper = 1;
 
-        if( unum[ENEMY_MEM] == 0 ) return 2;
-        if( unum[CHEAM_MEM] == 0 ) return 1;
+        if( unit_num[ENEMY_MEM] == 0 ) return 2;
+        if( unit_num[CHEAM_MEM] == 0 ) return 1;
 
         return 0;
 
@@ -261,19 +222,19 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         Random rnd = new Random();
         int ran = rnd.nextInt(100);
 
-        if( ! ( 0 <= ( at % 10 ) && ( at % 10 ) < 6) ||
-            ! ( 0 <= ( df % 10 ) && ( df % 10 ) < 6) )
+        if( ! ( 0 <= ( at % 10 ) && ( at % 10 ) < BATTLE_UNIT_MAX) ||
+            ! ( 0 <= ( df % 10 ) && ( df % 10 ) < BATTLE_UNIT_MAX) )
             return;
 
         if( ( at / 10 ) == CHEAM_MEM ){
-            if( ennum[(df % 10)] == -1 || btnum[at] == -1
+            if( ennum[(df % 10)] == NONE || btnum[at] == NONE
              )
               return;
             Aunit = btmem[ at ];
             Dunit = enmem[ df % 10 ] ;
         }else{
-            if( btnum[df] == -1 ||
-                ennum[at % 10] == -1 )
+            if( btnum[df] == NONE ||
+                ennum[at % 10] == NONE )
                 return;
             Aunit = enmem[ at % 10  ];
             Dunit = btmem[ df ] ;
@@ -296,12 +257,12 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         int pos = ( row % 10 ) % 3;
 
         if( ( row / 10 ) == CHEAM_MEM ){
-            if( ennum[ pos ] != -1 ) return pos + 10;
-            else if( ennum[ pos + 3 ] != -1 ) return pos + 13;
+            if( ennum[ pos ] != NONE ) return pos + 10;
+            else if( ennum[ pos + 3 ] != NONE ) return pos + 13;
         }
         else {
-            if( btnum[ pos ] != -1 ) return pos;
-            else if( btnum[ pos + 3 ] != -1 ) return pos + 3;
+            if( btnum[ pos ] != NONE ) return pos;
+            else if( btnum[ pos + 3 ] != NONE ) return pos + 3;
         }
 
         return -1;
@@ -314,12 +275,12 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
 
         if( pos == CHEAM_MEM ){
             for (int i = 0; i < 3 ; i++ ){
-                if( btnum[ i + LN ] != -1 )    return i + LN;
+                if( btnum[ i + LN ] != NONE )    return i + LN;
             }
         }
         else {
             for (int i = 0; i < 3 ; i++ ){
-                if( ennum[ i + LN ] != -1 )  return i + LN;
+                if( ennum[ i + LN ] != NONE )  return i + LN;
             }
         }
 
@@ -362,17 +323,17 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
 
     private int RandomDmg( int p ){
         Random rnd = new Random();
-        int ran = rnd.nextInt(6);
+        int ran = rnd.nextInt(BATTLE_UNIT_MAX);
         int count = 0;
         if( p / 10 == CHEAM_MEM ){
-            while( ennum[ran] == -1 && count < 10000 ){
-                ran = rnd.nextInt(6);
+            while( ennum[ran] == NONE && count < 10000 ){
+                ran = rnd.nextInt(BATTLE_UNIT_MAX);
                 count++;
             }
         }
         else {
-            while( btnum[ran] == -1 && count < 10000 ){
-                ran = rnd.nextInt(6);
+            while( btnum[ran] == NONE && count < 10000 ){
+                ran = rnd.nextInt(BATTLE_UNIT_MAX);
                 count++;
             }
         }
@@ -408,7 +369,7 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
                 DamageCalc( at , df + 2 , select);
                 break;
             case 6:
-                for(int i = 0 ; i < 6 ; i++ ){
+                for(int i = 0 ; i < BATTLE_UNIT_MAX ; i++ ){
                     DamageCalc( at , df + i , select);
                 }
                 break;
@@ -483,9 +444,9 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         /* chara draw */
         int cx = 0 , cy = 0;
 
-        for ( int i = 0; i < 6 ; i++ ){
-            if( btnum[i] != -1 ) btmem[i].wdraw( g , i );
-            if( ennum[i] != -1 ) enmem[i].edraw( g , i );
+        for ( int i = 0; i < BATTLE_UNIT_MAX ; i++ ){
+            if( btnum[i] != NONE ) btmem[i].wdraw( g , i );
+            if( ennum[i] != NONE ) enmem[i].edraw( g , i );
         }
 
         g.drawString(str, 0, 10);
@@ -493,7 +454,7 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
             for(int i = 0 ; i < qnum ; i++){
                 g.drawString( que[i].spd + ":(" + que[i].place+ ")", MESSAGE_X + 50 * i , MESSAGE_Y );
             }
-            g.drawString( unum[CHEAM_MEM] + ":" + unum[ENEMY_MEM] , MESSAGE_X  , MESSAGE_Y + 20 );
+            g.drawString( unit_num[CHEAM_MEM] + ":" + unit_num[ENEMY_MEM] , MESSAGE_X  , MESSAGE_Y + 20 );
         }
 
         g.drawString( btnum[3] + "," + btnum[0] , 0, 130 );
@@ -513,9 +474,9 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         emhp = 0;
 
         /*ENEMY DATA LOADED*/
-        for(int i = 0; i < 6; i++){
+        for(int i = 0; i < BATTLE_UNIT_MAX; i++){
             enmem[i] = new Unit();
-            ennum[i] = -1;
+            ennum[i] = NONE;
         }
 
         enmem[0].set(200,50,50,51);
@@ -533,20 +494,20 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         enmem[5].set(new Equip(0),0,100);
         ennum[5] = 2 ;
 
-        for(int i = 0; i < 6; i++ ){
+        for(int i = 0; i < BATTLE_UNIT_MAX; i++ ){
             this.btmem[i].nh = this.btmem[i].hp;
 
-            if( ennum[i] != -1 ){
+            if( ennum[i] != NONE ){
                 this.enmem[i].nh = this.enmem[i].hp;
             }
         }
 
-        for(int i = 0; i < 6; i++ ){
-            if( btnum[i] != -1 ){
+        for(int i = 0; i < BATTLE_UNIT_MAX; i++ ){
+            if( btnum[i] != NONE ){
                 mhp += this.btmem[i].hp;
             }
 
-            if( ennum[i] != -1 ){
+            if( ennum[i] != NONE ){
                 emhp += this.enmem[i].hp;
             }
         }
@@ -555,32 +516,22 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
     }
 
     public void Exit(){
-        for(int i = 0; i < 6; i++ ){
+        for(int i = 0; i < BATTLE_UNIT_MAX; i++ ){
             this.btmem[i].nh = this.btmem[i].hp;
-            this.btmem[i].place = -1;
-            if( ennum[i] != -1 ){
+            this.btmem[i].place = NONE;
+            if( ennum[i] != NONE ){
                 this.enmem[i].nh = this.enmem[i].hp;
             }
         }
         turn = 0;
     }
 
-
     public void SaveUnit(Unit u[], int[] n){
-        for (int i = 0 ; i < 6 ; i++ ){
-            if( n[i] != -1 ) this.btmem[i] = u[i];
+        for (int i = 0 ; i < BATTLE_UNIT_MAX ; i++ ){
+            if( n[i] != NONE ) this.btmem[i] = u[i];
         }
         this.btnum = n;
     }
 
-
-    public void SetFlag(boolean b){
-        this.changeFlag = b;
-    }
-
-
-    public boolean GetFlag(){
-        return this.changeFlag;
-    }
 
 }
