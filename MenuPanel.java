@@ -119,20 +119,6 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         select = new MENU();
         select.set("IMG/ITEM/select.png");
 
-
-        /* Unit first menu */
-        u[0] = new Unit();
-        u[0].set("IMG/CHARA/ch_rabbit1.png");
-        u[0].set(150,50,50,50);
-        u[0].set(new Equip(2),0,100);
-
-
-        u[1] = new Unit();
-        u[1].set("IMG/CHARA/ch_rabbit.png");
-        u[1].set(100,70,80,40);
-        u[1].set(new Equip(0),0,100);
-        unum = 2;
-
         for (int i = 0; i < 6 ; i++){
             btmem[i] = new Unit();
             btnum[i] = -1;
@@ -143,6 +129,18 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
         }
 
         point = 100;
+        /* Unit first menu */
+        u[0] = new Unit();
+        u[0].set("IMG/CHARA/ch_rabbit1.png");
+        u[0].set(150,50,50,50);
+        u[0].set(eq[2],0,100);
+
+
+        u[1] = new Unit();
+        u[1].set("IMG/CHARA/ch_rabbit.png");
+        u[1].set(100,70,80,40);
+        u[1].set(eq[0],0,100);
+        unum = 2;
 
     }
 
@@ -248,7 +246,6 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
     public void ShowMenuFourth(){
         sortie.SaveUnit( u , unum );
         CL.show( card , "fourth" );
-        // sortie.LoadUnit( u , unum );
     }
 
     public Unit[] LoadBtMember(){

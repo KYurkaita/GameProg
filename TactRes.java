@@ -29,6 +29,8 @@ public class TactRes extends JPanel implements MouseListener , MouseMotionListen
     private MENU AddBt = new MENU();
 
 
+
+
     private int point;
 
     private int wh_point = -1;
@@ -49,11 +51,12 @@ public class TactRes extends JPanel implements MouseListener , MouseMotionListen
         MSubBak.set("IMG/ITEM/submenu.png");
         MSubBak.put(450,0);
 
+        AddBt.set("IMG/ICON/add.png");
+
+
         for( int i = 0 ; i < MAX_EQ_NUM ; i++ ){
             eq[i] = new Equip(i);
         }
-
-        AddBt.set("IMG/ICON/add.png");
 
         point = 0;
 
@@ -101,6 +104,7 @@ public class TactRes extends JPanel implements MouseListener , MouseMotionListen
             AddBt.draw(g);
             g.drawString( "消費ポイント：" , 285 , 45 + i * 40 );
         }
+
 
         DrawEqRef(g);
 

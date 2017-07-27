@@ -123,7 +123,11 @@ public class UnitOrg extends JPanel implements MouseListener , MouseMotionListen
 
         if( createflag == false ){
             selnum = SetWhM();
-            if ( selnum == -2 )  createflag = true;
+            if( e.getButton() == MouseEvent.BUTTON3 ){
+
+            }else{
+                if ( selnum  == -2 )  createflag = true;
+            }
         }else{
             SetWhWin();
         }
