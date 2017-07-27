@@ -8,79 +8,31 @@ import java.awt.event.* ;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseEvent;
 
-public class TactRes extends JPanel implements MouseListener , MouseMotionListener{
-    private static final int WIDTH = 600;
-    private static final int HEIGHT = 350;
-    private static final int MAX_EQ_NUM = 5;
-
-    private String str;
-
-    private int x = 0;
-    private int y = 0;
-    private int mx = 0;
-    private int my = 0;
-
-    public static boolean changeFlag = false;
-
-    private MENU MBak = new MENU();
-    private MENU MSubBak = new MENU();
-
-    private Equip eq[] = new Equip[MAX_EQ_NUM];
+public class TactRes extends PANEL{
     private MENU AddBt = new MENU();
 
-
-
-
-    private int point;
+    private int[] req_p = new int[ EQ_MAX ];
 
     private int wh_point = -1;
 
-
     public TactRes(){
         /* panelsize */
-
-        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")";
-
-        addMouseListener(this);
-        addMouseMotionListener(this);
-
-        setLayout(null);
-        setBounds( 20 , 170 , WIDTH , HEIGHT );
-
-        MBak.set("IMG/ITEM/menu.png");
-        MSubBak.set("IMG/ITEM/submenu.png");
-        MSubBak.put(450,0);
-
+        super();
+        setBounds( MENU_X , MENU_Y , MENU_WIDTH , MENU_HEIGHT );
         AddBt.set("IMG/ICON/add.png");
-
-
-        for( int i = 0 ; i < MAX_EQ_NUM ; i++ ){
-            eq[i] = new Equip(i);
-        }
-
-        point = 0;
 
     }
 
 
     /*MouseEvent*/
-    public void mouseClicked (MouseEvent e){;}
-    public void mouseEntered (MouseEvent e){;}
-    public void mouseExited  (MouseEvent e){;}
-    public void mouseReleased(MouseEvent e){;}
+    @Override
     public void mousePressed (MouseEvent e){
         x = e.getX();
         y = e.getY();
         AddLevel();
     }
 
-    public void mouseDragged(MouseEvent e){;}
-    public void mouseMoved(MouseEvent e){
-        mx = e.getX() ;
-        my = e.getY() ;
-    }
-
-
+    @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")" + eq[0].getLv();
@@ -95,7 +47,7 @@ public class TactRes extends JPanel implements MouseListener , MouseMotionListen
         g.drawString( "ATK(%)"  , 130 , 25 );
         g.drawString( "RNG"  , 185 , 25 );
 
-        for(int i = 0 ; i <  MAX_EQ_NUM;i++){
+        for(int i = 0 ; i <  EQ_MAX ; i++){
             g.drawString( "・" + eq[i].getName() , 25 , 45 + i * 40 );
             g.drawString( ":Lv." + eq[i].getLv() , 95 , 45 + i * 40 );
             g.drawString( ":" + eq[i].getAtk(), 130 , 45 + i * 40 );
@@ -104,11 +56,7 @@ public class TactRes extends JPanel implements MouseListener , MouseMotionListen
             AddBt.draw(g);
             g.drawString( "消費ポイント：" , 285 , 45 + i * 40 );
         }
-
-
         DrawEqRef(g);
-
-
     }
 
     private void AddLevel(){
@@ -118,7 +66,7 @@ public class TactRes extends JPanel implements MouseListener , MouseMotionListen
     }
 
     private int wh_menu(){
-        for(int i = 0 ; i < MAX_EQ_NUM ; i++ ){
+        for(int i = 0 ; i < EQ_MAX ; i++ ){
             if( 240 < x && x < 280 &&
                 25 + 40 * i < y  && y < 65 + 40 * i )
                 return i;
@@ -128,28 +76,13 @@ public class TactRes extends JPanel implements MouseListener , MouseMotionListen
     }
 
     private void DrawEqRef( Graphics g ){
-        for(int i = 0 ; i < MAX_EQ_NUM ; i++ ){
+        for(int i = 0 ; i < EQ_MAX ; i++ ){
             if( 25 < mx && mx < 410 &&
                 25 + 40 * i  < my && my <  65 + 40 * i )
                 eq[i].drawRef(g);
         }
     }
 
-    public Equip[] LoadEquip(){
-        return this.eq;
-    }
-
-    public void SaveEquip(Equip[] e){
-        this.eq = e;
-    }
-
-    public void SavePoint(int p){
-        this.point = p;
-    }
-
-    public int LoadPoint(){
-        return this.point;
-    }
 
 
 }

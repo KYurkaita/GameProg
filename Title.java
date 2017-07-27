@@ -1,68 +1,41 @@
-import java.awt.Dimension;
-import java.awt.Graphics;
+import javax.swing.*;
 import javax.swing.JPanel;
+import javax.swing.ImageIcon;
+import java.awt.*;
+import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.MediaTracker;
-import java.awt.Toolkit;
 import java.awt.event.* ;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseEvent;
 
 
-public class Title extends JPanel implements MouseListener {
-	private static final int WIDTH = 640;
-	private static final int HEIGHT = 480;
-	private String str;
-	private Image image;
-	private Image img;
-	private int x = 100;
-	private int y = 100;
+public class Title extends PANEL {
+	private MENU rab[] = new MENU[2];
 
     public Title(){
-        //panel size
-        //setPreferredSize(new Dimension(WIDTH,HEIGHT));
+		super();
+
 		setBounds(0,0,640,480);
         str = "("+ x + ","+ y + ")";
 
-		/*MouseEvent*/
-		addMouseListener(this);
-
-		/*image initialize*/
-		image = Toolkit.getDefaultToolkit().getImage(
-		getClass().getResource("IMG/ch_rabbit_1.png"));
-		img = Toolkit.getDefaultToolkit().getImage(
-		getClass().getResource("IMG/ch_rabbit_1.png"));
-		/*mediatracker input*/
-		MediaTracker tracker = new MediaTracker(this);
-		/*add(image,id)*/
-        tracker.addImage(image,0);
-		tracker.addImage(img,0);
-
-        try{
-            tracker.waitForID(0);
-        }catch(InterruptedException e){
-            e.printStackTrace();
-            return;
-        }
+		for(int i = 0; i < 2 ; i++){
+			rab[i] = new MENU();
+			rab[i].set("IMG/ch_rabbit_1.png");
+			rab[i].put( 300 + 200 * i , 300 + 200 * i );
+		}
 
     }
-    public void mouseClicked (MouseEvent e){}
-    public void mouseEntered (MouseEvent e){}
-    public void mouseExited  (MouseEvent e){}
-	public void mouseReleased(MouseEvent e){}
-    public void mousePressed (MouseEvent e){
-		x = e.getX();
-		y = e.getY();
-	}
 
+	@Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        int wh = image.getWidth(this)/4;
-        int hg = image.getHeight(this)/4;
         str = "("+ x + ","+ y + ")";
 
-		g.drawImage(img,300,300,this);
-        g.drawImage(image,400,100,-wh,hg,this);
+		rab[0].draw(g);
+		rab[1].draw(g);
 
         g.drawString(str, 0, 20);
     }
+
 
 }

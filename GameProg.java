@@ -6,7 +6,6 @@ import java.io.File;
 
 public class GameProg extends JFrame implements ActionListener {
     JPanel change;
-    MainPanel mainp;
 
     public GameProg(){
         /*title panel*/
@@ -23,7 +22,7 @@ public class GameProg extends JFrame implements ActionListener {
         title.add(tit);
 
         /*main panel*/
-        mainp = new MainPanel();
+        MainPanel mainp = new MainPanel();
 
         /*change card*/
         change = new JPanel();

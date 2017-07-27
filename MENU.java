@@ -29,4 +29,5 @@ public class MENU{
     public void draw(Graphics g){
         g.drawImage( this.img, this.x, this.y, null );
     }
+
 }

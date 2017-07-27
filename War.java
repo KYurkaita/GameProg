@@ -46,8 +46,8 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
     private static final int MESSAGE_Y = 420;
     private static final int CHEAM_MEM = 0;
     private static final int ENEMY_MEM = 1;
-    private static final boolean FIRST_LINE  = true;
-    private static final boolean SECOND_LINE = false;
+    private static final int FIRST_LINE  = 0;
+    private static final int SECOND_LINE = 1;
     private static final int PLAYER_SIDE = 0;
     private static final int ENEMY_SIDE  = 1;
 
@@ -307,7 +307,7 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         return -1;
     }
 
-    private int CheckColumn( int pos , boolean line ){
+    private int CheckColumn( int pos , int line ){
         //if line is true ,its 1st
         int LN = 0;
         if( line == SECOND_LINE ){ LN = 3; }
@@ -430,7 +430,7 @@ public class War extends JPanel implements MouseListener , MouseMotionListener{
         turn++;
         sumdmg[CHEAM_MEM] = 0;
         sumdmg[ENEMY_MEM] = 0;
-        
+
         QueInput();
         if(qnum == 0) return 3;
 

@@ -260,11 +260,11 @@ public class MenuPanel extends JPanel implements MouseListener , MouseMotionList
 
     /*flag*/
     public boolean GetFlag(){
-        return sortie.GetSorFlag();
+        return sortie.GetFlag();
     }
 
     public void SetFlag(boolean f){
-        sortie.SetSorFlag(f);
+        sortie.SetFlag(f);
     }
 
     public void Init(){
