@@ -60,7 +60,7 @@ public class Unit {
 
     }
 
-    void set( int h , int a , int d , int s ){
+    public void set( int h , int a , int d , int s ){
         this.hp  = h;
         this.atk = a;
         this.def = d;
@@ -72,31 +72,31 @@ public class Unit {
         this.ns = s;
     }
 
-    void set( Equip e , int n , int pre ){
+    public void set( Equip e , int n , int pre ){
         if( n >= 3 ) return ;
         this.eq[n] = e;
         this.pre[n] = pre;
         this.eqnum = HvEqNum();
     }
 
-    void set(String s){
+    public void set(String s){
         ImageIcon icon = new ImageIcon(getClass().getResource(s));
         this.img = icon.getImage();
     }
 
-    void put( int n ){
+    public void put( int n ){
         this.place = n;
     }
 
-    void draw(Graphics g, int x, int y ){
+    public void draw(Graphics g, int x, int y ){
         g.drawImage( this.img , x + 80 , y , -80 , 100 , null );
     }
 
-    void sdraw(Graphics g, int x, int y ){
+    public void sdraw(Graphics g, int x, int y ){
         g.drawImage( this.img , x + 2 , y + 2 , 80 , 60 , null );
     }
 
-    void wdraw(Graphics g , int n){
+    public void wdraw(Graphics g , int n){
         int cx,cy;
         switch(n){
             case 0: cx = 186; cy = 100; break;
@@ -111,7 +111,7 @@ public class Unit {
         draw( g , cx , cy );
     }
 
-    void edraw(Graphics g , int n){
+    public void edraw(Graphics g , int n){
         int cx,cy;
         switch(n){
             case 0: cx = 370; cy = 100; break;
@@ -126,7 +126,7 @@ public class Unit {
         g.drawImage( this.img , cx  , cy , 80 , 100 , null );
     }
 
-    void drawSubMenu(Graphics g){
+    public void drawSubMenu(Graphics g){
         g.drawString( "HP :" + hp  , 450 + 20 , 160 );
         g.drawString( "ATK:" + atk , 450 + 20 , 180 );
         g.drawString( "DEF:" + def , 450 + 20 , 200 );

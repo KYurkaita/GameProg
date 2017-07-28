@@ -17,18 +17,17 @@ public class UnitOrg extends PANEL{
     private int selnum = 0;
 
     private MENU MWindow = new MENU();
-    private int  place = -1;
+    private int  place = NONE;
     private MENU LArr = new MENU();
     private MENU RArr = new MENU();
     private MENU AddUnBt= new MENU();
     private MENU Exit = new MENU();
 
-    private boolean eqsel[][] = new boolean[EQ_MAX][3];
+    private boolean eqsel[][] = new boolean[EQ_MAX][EQ_SEL_MAX];
     private MENU AddBt = new MENU();
     private MENU SubBt = new MENU();
 
     private Unit crmem = new Unit();
-    private int max = 0;
     protected int eqnum ;
 
 
@@ -51,17 +50,17 @@ public class UnitOrg extends PANEL{
         SubBt.set("IMG/ICON/sub.png");
 
         int xy;
-        for(int y = 0 ; y < 5 ; y++ ){
-            for(int x = 0 ; x < 5 ; x++ ){
-                xy = y * 5 + x ;
+        for(int y = 0 ; y < UNIT_COLUMN ; y++ ){
+            for(int x = 0 ; x < UNIT_ROW ; x++ ){
+                xy = y * UNIT_ROW + x ;
                 Chr[ xy ] = new MENU();
                 Chr[ xy ].set("IMG/ITEM/ch_menu.png");
-                Chr[ xy ].put( x * 90 , y * 70 );
+                Chr[ xy ].put( x * CHRWIN_X , y * CHRWIN_Y );
             }
         }
 
         for( int j = 0 ; j < EQ_MAX ; j++ ){
-            for( int i = 0 ; i < 3 ;i++){
+            for( int i = 0 ; i < EQ_SEL_MAX ;i++){
                 eqsel[j][i] = false;
             }
         }
@@ -101,15 +100,15 @@ public class UnitOrg extends PANEL{
 
         /* MENU */
         MBak.draw(g);
-        for (int i = 0 ; i < 25 ; i++){
+        for (int i = 0 ; i < UNIT_MAX ; i++){
             Chr[ i ].draw(g);
         }
 
         /* CHARA DRAW */
         int sx = 0 , sy = 0;
         for (int i = 0 ; i < unum ; i++ ){
-            sx = i % 5; sy = i / 5 ;
-            un[i].sdraw( g , 90 * sx , 70 * sy );
+            sx = i % UNIT_COLUMN; sy = i / UNIT_ROW ;
+            un[i].sdraw( g , sx * CHRWIN_X , sy * CHRWIN_Y );
         }
 
         /* SUB MENU */
@@ -129,7 +128,7 @@ public class UnitOrg extends PANEL{
     private void DrawCreateWindow( Graphics g ){
         int cy = 0 ;
         MWindow.draw(g);
-        max = crmem.hp + crmem.atk + crmem.def + crmem.spd;
+        int max = crmem.hp + crmem.atk + crmem.def + crmem.spd;
         g.drawString( max + "/400" , 100 , 180 );
 
         for( int i = 0 ; i < 4 ; i++ ){
@@ -146,11 +145,9 @@ public class UnitOrg extends PANEL{
             RArr.draw(g);
         }
 
-        // Font font = new Font("", Font.PLAIN, 12);
-        // setFont(font);
         g.drawString( "equip"  , 250 , 15 );
         for(int i = 0; i < EQ_MAX ; i++ ){
-            for (int j = 0 ; j < 3 ; j++){
+            for (int j = 0 ; j < EQ_SEL_MAX ; j++){
                 if( eqsel[i][j] == true )
                     g.setColor(Color.red);
             }
@@ -159,7 +156,7 @@ public class UnitOrg extends PANEL{
             g.drawString( ":Lv." + eq[i].getLv() + " : " + eq[i].getAtk() + ":" + eq[i].getRng() , 320 , 35 + i * 40 );
 
             g.setColor(Color.black);
-            for (int j = 0 ; j < 3 ; j++){
+            for (int j = 0 ; j < EQ_SEL_MAX ; j++){
                 if( eqsel[i][j] == false ){
                     AddBt.put( 400 + 40 * j , 15 + i * 40 );
                     AddBt.draw(g);
@@ -182,8 +179,10 @@ public class UnitOrg extends PANEL{
 
 
     private void SetWhWin(){
-        int cy = 0 ;
         final int ADD = 10;
+
+        int cy = 0 ;
+        int max = 0;
 
         for( int i = 0 ; i < 4 ; i++ ){
             cy = 180 +  40 * i;
@@ -206,7 +205,7 @@ public class UnitOrg extends PANEL{
         }
 
         for(int i = 0; i < EQ_MAX; i++ ){
-            for(int j = 0 ; j < 3 ; j++ ){
+            for(int j = 0 ; j < EQ_SEL_MAX ; j++ ){
                 if( 400 + 40 * j < x && x < 440 + 40 * j &&
                      15 + i * 40 < y && y < 55 + i * 40 ){
                     if( eqsel[i][j] ){
@@ -215,7 +214,7 @@ public class UnitOrg extends PANEL{
                             eqnum--;
                         }
                     } else {
-                        if( eqnum < 3 ){
+                        if( eqnum < EQ_SEL_MAX ){
                             eqsel[i][j] = true ;
                             eqnum++;
                         }
@@ -229,7 +228,7 @@ public class UnitOrg extends PANEL{
             createflag = false;
             crmem = new Unit();
             for( int x = 0 ; x < EQ_MAX ; x++ ){
-                for( int y = 0 ; y < 3 ;y++){
+                for( int y = 0 ; y < EQ_SEL_MAX ;y++){
                     eqsel[x][y] = false;
                 }
             }
@@ -243,7 +242,7 @@ public class UnitOrg extends PANEL{
             createflag = false;
 
             int i = 0 , num = 0;
-            while( num < 3  && i < 3 ){
+            while( num < 3  && i < EQ_SEL_MAX ){
                 for(int j = 0 ; j < EQ_MAX ; j++ ){
                     if( eqsel[j][i] == true ){
                         un[unum].set( eq[j] , num , 100 );
@@ -255,7 +254,7 @@ public class UnitOrg extends PANEL{
             unum += 1;
 
             for( int x = 0 ; x < EQ_MAX ; x++ ){
-                for( int y = 0 ; y < 3 ;y++){
+                for( int y = 0 ; y < EQ_SEL_MAX ;y++){
                     eqsel[x][y] = false;
                 }
             }
@@ -268,15 +267,15 @@ public class UnitOrg extends PANEL{
     }
 
     private int SetWhM(){
-        for (int i = 0 ; i < 25 ; i++ ){
-            if( Chr[ i ].x < mx && mx < ( Chr[ i ].x + 90)  &&
-                Chr[ i ].y < my && my < ( Chr[ i ].y + 70)  &&
+        for (int i = 0 ; i < UNIT_MAX ; i++ ){
+            if( Chr[ i ].x < mx && mx < ( Chr[ i ].x + CHRWIN_X )  &&
+                Chr[ i ].y < my && my < ( Chr[ i ].y + CHRWIN_Y )  &&
                 i < unum )
             return i;
         }
 
-        if( (SUBMENU_X) < mx && mx < (MENU_WIDTH) &&
-            (SUBMENU_Y) < my && my < (MENU_HEIGHT) ){
+        if( ( SUBMENU_X ) < mx && mx < ( MENU_WIDTH ) &&
+            ( SUBMENU_Y ) < my && my < ( MENU_HEIGHT ) ){
             return -2;
         }
         else{

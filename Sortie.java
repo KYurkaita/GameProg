@@ -11,11 +11,11 @@ import java.awt.Graphics2D;
 import java.awt.Color;
 
 public class Sortie extends PANEL{
-    protected static final int SOR_TILE_X = 10;
-    protected static final int SOR_TILE_Y = 48;
+    private static final int SOR_TILE_X = 10;
+    private static final int SOR_TILE_Y = 48;
 
-    protected static final int CHARA_WIN_X = 85;
-    protected static final int CHARA_WIN_Y = 66;
+    private static final int CHARA_WIN_X = 85;
+    private static final int CHARA_WIN_Y = 66;
 
     private MENU But = new MENU();
     private MENU Tile;
@@ -67,7 +67,7 @@ public class Sortie extends PANEL{
             if( selnum == -2 && HasBtnumUnit() ){
                 SetFlag(true);
             }
-            if( 0 <= selnum && selnum < 6 ) CreateWinF = true;
+            if( 0 <= selnum && selnum < BATTLE_UNIT_MAX ) CreateWinF = true;
         } else{
             CreateBtMem( selnum , SetBtNum() );
             CreateWinF = false;
@@ -100,7 +100,7 @@ public class Sortie extends PANEL{
 
         Tile.draw(g);
 
-        int tx = 0 , ty = 0,xy = 0;
+        int tx = 0 , ty = 0 , xy = 0;
         for (int y = 0 ; y < TILE_ROW ; y++ ){
             for ( int x = 0 ; x < TILE_COLUMN ; x++ ){
                 tx = TILE_W * ( 1 - y ) ;
@@ -192,8 +192,8 @@ public class Sortie extends PANEL{
     private int SetBtNum(){
         for( int i = 0 ; i < 5 ; i++ ){
             for( int j = 0 ; j < 5 ; j++ ){
-                if( ( CHARA_WIN_X * j + 10 ) < mx && mx < ( CHARA_WIN_X * j + 95 ) &&
-                    ( CHARA_WIN_Y * i + 10 ) < my && my < ( CHARA_WIN_Y * i + 76 ) ){
+                if( ( CHARA_WIN_X * j + 10 ) < mx && mx < ( CHARA_WIN_X * ( j + 1 ) + 10 ) &&
+                    ( CHARA_WIN_Y * i + 10 ) < my && my < ( CHARA_WIN_Y * ( i + 1 ) + 76 ) ){
                     if( ( i * 5 + j ) < unum )  return i * 5 + j ;
                 }
             }
@@ -204,8 +204,8 @@ public class Sortie extends PANEL{
     private int SetWhM(){
         int tx , ty ;
 
-        for (int i = 0 ; i < TILE_COLUMN ; i++ ){
-            for ( int j = 0 ; j < TILE_ROW ; j++){
+        for (int i = 0 ; i < TILE_ROW ; i++ ){
+            for ( int j = 0 ; j < TILE_COLUMN ; j++){
                 tx = TILE_W * ( 1 - i ) ;
                 ty = TILE_H * j ;
 

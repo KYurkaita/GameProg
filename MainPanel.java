@@ -44,7 +44,7 @@ public class MainPanel extends JPanel implements Runnable {
         for( int i = 0; i < 6 ; i++){
             btmem[i] = new Unit();
         }
-        
+
         menu.Init();
 
         gameLoop = new Thread(this);
@@ -68,7 +68,7 @@ public class MainPanel extends JPanel implements Runnable {
                 for(int i = 0 ; i < 6; i++){
                     this.btmem = menu.LoadBtMember();
                 }
-                war.SaveUnit( btmem , btnum );
+                war.SaveBtUnit( btmem , btnum );
                 war.Init();
                 ChangeShow("war");
             }

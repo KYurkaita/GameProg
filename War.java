@@ -9,6 +9,9 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseEvent;
 import java.util.Random;
 import java.lang.Math;
+import java.awt.Graphics2D;
+import java.awt.Color;
+
 
 class HPBAR extends MENU{
     int width;
@@ -60,17 +63,19 @@ public class War extends PANEL{
     private MENU EnmTile;
 
     private Unit enmem[] = new Unit[BATTLE_UNIT_MAX];
-    private int ennum[] = new int[BATTLE_UNIT_MAX];
+    private int[] ennum = new int[BATTLE_UNIT_MAX];
 
-    private Unit que[] = new Unit[12];
+    private Unit que[] = new Unit[ BATTLE_UNIT_MAX * 2 ];
     private int qnum = 0;
     private int unit_num[] = new int[2];
 
 
     private int turn = 0;
     private int[] sumdmg = new int[2];
-    public  boolean t_next = false;
 
+    private int CreateWinFlag = 0;
+
+    private MENU ExitMessage;
 
     public War(){
         /* panelsize */
@@ -109,8 +114,10 @@ public class War extends PANEL{
         Mess.set("IMG/ITEM/warmess.png");
         Mess.put(0,400);
 
-        /* draw ends */
+        ExitMessage = MBak;
 
+
+        /* draw ends */
         for(int i = 0; i < BATTLE_UNIT_MAX; i++){
             enmem[i] = new Unit();
             ennum[i] = NONE;
@@ -120,74 +127,97 @@ public class War extends PANEL{
         ennum[0] = 1 ;
 
 
-        for(int i = 0 ; i < 12 ; i++ ){
+        for(int i = 0 ; i < BATTLE_UNIT_MAX * 2 ; i++ ){
             que[i] = new Unit();
         }
 
-        sumdmg[CHEAM_MEM] = 0;
-        sumdmg[ENEMY_MEM] = 0;
+        sumdmg[PLAYER] = 0;
+        sumdmg[ENEMY] = 0;
 
     }
 
-
-    /*MouseEvent*/
     @Override
     public void mousePressed (MouseEvent e){
         super.mousePressed(e);
-        int t;
-        if( ( t = TurnAdd() ) != 0 ){
-            // if( t == 2 )
-             SetFlag(true);
-            // if( unum[ENEMY_MEM] == 0 ) return 2;
-            // if( unum[CHEAM_MEM] == 0 ) return 1;
-            // return 0;
+
+        if( CreateWinFlag == 0 ){
+             CreateWinFlag = TurnAdd();
+        }
+        else {
+            CreateWinFlag = 0;
+            SetFlag(true);
         }
 
     }
+    @Override
     public void mouseMoved(MouseEvent e){
         super.mouseMoved(e);
+    }
+
+    private void MessageDraw( Graphics g ){
+        Graphics2D g2 = (Graphics2D)g;
+        AlphaComposite half = AlphaComposite.getInstance(
+                    AlphaComposite.SRC_OVER, 0.95f);
+        AlphaComposite def = AlphaComposite.getInstance(
+                    AlphaComposite.SRC_OVER, 1f);
+
+        ExitMessage.put( x , y );
+        g2.setComposite(half);
+        ExitMessage.draw(g);
+        g2.setComposite(def);
+
+        if( CreateWinFlag == 1 ){
+
+        }else if( CreateWinFlag == 2 ){
+
+        }else{
+
+        }
+
     }
 
     private void QueInput(){
         qnum = 0 ;
 
         int i = 0;
-        unit_num[CHEAM_MEM] = 0;
-        unit_num[ENEMY_MEM] = 0;
+        unit_num[ PLAYER ] = 0;
+        unit_num[ ENEMY  ] = 0;
 
-        while( qnum < 12 && i < BATTLE_UNIT_MAX ){
+        while( qnum < BATTLE_UNIT_MAX * 2 && i < BATTLE_UNIT_MAX ){
             if( btnum[ i ] != NONE ){
                 que[ qnum ] = btmem[ i ];
                 qnum++;
-                unit_num[CHEAM_MEM]++;
+                unit_num[ PLAYER ]++;
             }
             if( ennum[ i ] != NONE ){
                 que[ qnum ] = enmem[ i ];
                 qnum++;
-                unit_num[ENEMY_MEM]++;
+                unit_num[ ENEMY ]++;
             }
             i++;
         }
 
+        /*sorting*/
         Unit tmp = new Unit();
-        for ( int x = 0 ; x < qnum-1 ; x++ ){
+        for ( int x = 0 ; x < qnum -1 ; x++ ){
             for ( int y = x ; y < qnum ; y++ ){
-                if( que[x].spd < que[y].spd ){
-                    tmp = que[x];
-                    que[x] = que[y];
-                    que[y] = tmp;
+                if( que[ x ].spd < que[ y ].spd ){
+                    tmp = que[ x ];
+                    que[ x ] = que[ y ];
+                    que[ y ] = tmp;
                 }
             }
         }
+
     }
 
     private int UnitCheck(){
+
         for( int i = 0; i < BATTLE_UNIT_MAX ;i++ ){
             if( btnum[ i ] != NONE ){
                 if( !( btmem[i].nh > 0 ) ) btnum[i] = NONE;
             }
-
-            if( ennum[ i ] != -1 ){
+            if( ennum[ i ] != NONE ){
                 if( !(enmem[i].nh > 0 )  ) ennum[i] = NONE;
             }
         }
@@ -205,8 +235,8 @@ public class War extends PANEL{
         if( emhp != 0 ) enper = enhp * 100 / emhp;
         else enper = 1;
 
-        if( unit_num[ENEMY_MEM] == 0 ) return 2;
-        if( unit_num[CHEAM_MEM] == 0 ) return 1;
+        if( unit_num[ENEMY] == 0 )  return 2;
+        if( unit_num[PLAYER] == 0 ) return 1;
 
         return 0;
 
@@ -226,15 +256,13 @@ public class War extends PANEL{
             ! ( 0 <= ( df % 10 ) && ( df % 10 ) < BATTLE_UNIT_MAX) )
             return;
 
-        if( ( at / 10 ) == CHEAM_MEM ){
-            if( ennum[(df % 10)] == NONE || btnum[at] == NONE
-             )
-              return;
+        if( ( at / 10 ) == PLAYER ){
+            if( ennum[ df % 10 ] == NONE || btnum[at] == NONE )
+                return;
             Aunit = btmem[ at ];
             Dunit = enmem[ df % 10 ] ;
         }else{
-            if( btnum[df] == NONE ||
-                ennum[at % 10] == NONE )
+            if( btnum[df] == NONE || ennum[at % 10] == NONE )
                 return;
             Aunit = enmem[ at % 10  ];
             Dunit = btmem[ df ] ;
@@ -242,7 +270,7 @@ public class War extends PANEL{
 
         lg = (double)Aunit.atk / Dunit.def;
 
-        dmg = ( (double)(Aunit.eq[sel].getAtk())/100) * Aunit.atk *  Math.log10( lg + 1);
+        dmg = ( (double)( Aunit.eq[sel].getAtk() ) /100) * Aunit.atk *  Math.log10( lg + 1 );
 
         // random dmg
         dmg *= ( 1.00 - (double)( 50 - ran ) / 1000 );
@@ -256,7 +284,7 @@ public class War extends PANEL{
     private int CheckRow( int row ){
         int pos = ( row % 10 ) % 3;
 
-        if( ( row / 10 ) == CHEAM_MEM ){
+        if( ( row / 10 ) == PLAYER ){
             if( ennum[ pos ] != NONE ) return pos + 10;
             else if( ennum[ pos + 3 ] != NONE ) return pos + 13;
         }
@@ -264,7 +292,6 @@ public class War extends PANEL{
             if( btnum[ pos ] != NONE ) return pos;
             else if( btnum[ pos + 3 ] != NONE ) return pos + 3;
         }
-
         return -1;
     }
 
@@ -273,7 +300,7 @@ public class War extends PANEL{
         int LN = 0;
         if( line == SECOND_LINE ){ LN = 3; }
 
-        if( pos == CHEAM_MEM ){
+        if( pos == PLAYER ){
             for (int i = 0; i < 3 ; i++ ){
                 if( btnum[ i + LN ] != NONE )    return i + LN;
             }
@@ -311,7 +338,6 @@ public class War extends PANEL{
             df = 10 - ( p / 10 ) * 10;
             break;
         case 5:
-
             break;
         default:
             break;
@@ -323,17 +349,17 @@ public class War extends PANEL{
 
     private int RandomDmg( int p ){
         Random rnd = new Random();
-        int ran = rnd.nextInt(BATTLE_UNIT_MAX);
+        int ran = rnd.nextInt( 6 );
         int count = 0;
-        if( p / 10 == CHEAM_MEM ){
+        if( p / 10 == PLAYER ){
             while( ennum[ran] == NONE && count < 10000 ){
-                ran = rnd.nextInt(BATTLE_UNIT_MAX);
+                ran = rnd.nextInt( 6 );
                 count++;
             }
         }
         else {
             while( btnum[ran] == NONE && count < 10000 ){
-                ran = rnd.nextInt(BATTLE_UNIT_MAX);
+                ran = rnd.nextInt( 6 );
                 count++;
             }
         }
@@ -389,8 +415,8 @@ public class War extends PANEL{
     private int TurnAdd(){
         //input que aft sort
         turn++;
-        sumdmg[CHEAM_MEM] = 0;
-        sumdmg[ENEMY_MEM] = 0;
+        sumdmg[PLAYER] = 0;
+        sumdmg[ENEMY] = 0;
 
         QueInput();
         if(qnum == 0) return 3;
@@ -401,7 +427,7 @@ public class War extends PANEL{
         System.out.println( "turn(" + turn + "):start"  );
 
         int i = 0;
-        while( i < qnum && ch == 0){
+        while( i < qnum && ch == 0 ){
             //check
             if( ( ch = UnitCheck() ) != 0 ) break;
 
@@ -411,7 +437,7 @@ public class War extends PANEL{
         }
         UnitCheck();//update
 
-        System.out.println( "CHEAM_DMG = [" + sumdmg[CHEAM_MEM] + "]:ENEMY_DMG = [" + sumdmg[ENEMY_MEM] + "]");
+        System.out.println( "CHEAM_DMG = [" + sumdmg[PLAYER] + "]:ENEMY_DMG = [" + sumdmg[ENEMY] + "]");
 
         return ch;
 
@@ -419,8 +445,6 @@ public class War extends PANEL{
 
 
     public void paintComponent(Graphics g){
-
-
         super.paintComponent(g);
         str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")" + btnum[0] + changeFlag;
 
@@ -454,7 +478,7 @@ public class War extends PANEL{
             for(int i = 0 ; i < qnum ; i++){
                 g.drawString( que[i].spd + ":(" + que[i].place+ ")", MESSAGE_X + 50 * i , MESSAGE_Y );
             }
-            g.drawString( unit_num[CHEAM_MEM] + ":" + unit_num[ENEMY_MEM] , MESSAGE_X  , MESSAGE_Y + 20 );
+            g.drawString( unit_num[PLAYER] + ":" + unit_num[ENEMY] , MESSAGE_X  , MESSAGE_Y + 20 );
         }
 
         g.drawString( btnum[3] + "," + btnum[0] , 0, 130 );
@@ -465,6 +489,7 @@ public class War extends PANEL{
         g.drawString( ennum[1] + "," + ennum[4] , 580, 140 );
         g.drawString( ennum[2] + "," + ennum[5] , 580, 150 );
 
+        if( CreateWinFlag != 0 ) MessageDraw(g);
 
     }
 
@@ -496,7 +521,6 @@ public class War extends PANEL{
 
         for(int i = 0; i < BATTLE_UNIT_MAX; i++ ){
             this.btmem[i].nh = this.btmem[i].hp;
-
             if( ennum[i] != NONE ){
                 this.enmem[i].nh = this.enmem[i].hp;
             }
@@ -506,7 +530,6 @@ public class War extends PANEL{
             if( btnum[i] != NONE ){
                 mhp += this.btmem[i].hp;
             }
-
             if( ennum[i] != NONE ){
                 emhp += this.enmem[i].hp;
             }
@@ -524,13 +547,6 @@ public class War extends PANEL{
             }
         }
         turn = 0;
-    }
-
-    public void SaveUnit(Unit u[], int[] n){
-        for (int i = 0 ; i < BATTLE_UNIT_MAX ; i++ ){
-            if( n[i] != NONE ) this.btmem[i] = u[i];
-        }
-        this.btnum = n;
     }
 
 
