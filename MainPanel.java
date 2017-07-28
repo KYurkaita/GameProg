@@ -72,7 +72,7 @@ public class MainPanel extends JPanel implements Runnable {
                 war.Init();
                 ChangeShow("war");
             }
-
+            war.Time();
             if( war.GetFlag() ){
                 war.SetFlag(false);
                 war.Exit();

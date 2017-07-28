@@ -43,7 +43,7 @@ public class PANEL extends JPanel implements MouseListener , MouseMotionListener
     protected static final int SUBMENU_Y = 0;
 
     /* user data max */
-    protected static final int UNIT_SCORE_MAX = 400;
+
     protected static final int EQ_MAX = 5;
     protected static final int EQ_SEL_MAX = 3;
 
@@ -81,8 +81,17 @@ public class PANEL extends JPanel implements MouseListener , MouseMotionListener
     protected Unit btmem[] = new Unit[ BATTLE_UNIT_MAX ];
     protected int  btnum[] = new int [ BATTLE_UNIT_MAX ];
 
+    protected int unit_cost;
     protected Equip eq[] = new Equip[ EQ_MAX ];
+
     protected int point;
+
+    protected int time;
+    protected int move;
+    protected int animate;
+    protected static final int STOP = 0;
+    protected static final int MOVING = 1;
+    protected static final int ENDING = 2;
 
     PANEL(){
         str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")";
@@ -115,7 +124,11 @@ public class PANEL extends JPanel implements MouseListener , MouseMotionListener
         }
 
         point = 0;
+        unit_cost = 400;
 
+        time = 0;
+        animate = 0;
+        move = 0;
     }
 
     /*MouseEvent*/
@@ -186,6 +199,16 @@ public class PANEL extends JPanel implements MouseListener , MouseMotionListener
         return this.point;
     }
 
+
+    public void SaveCost( int p ){
+        this.unit_cost = p;
+    }
+
+    public int LoadCost(){
+        return this.unit_cost;
+    }
+
+
     public void SetFlag(boolean b){
         this.changeFlag = b;
     }
@@ -194,6 +217,30 @@ public class PANEL extends JPanel implements MouseListener , MouseMotionListener
         return this.changeFlag;
     }
 
+    synchronized public void Time(){
+        time++;
+        if( time > 60 ) time = 0;
+        if( move == MOVING ){
+            animate++;
+        }
+    }
 
+    synchronized public void AddAnimated(){
+        animate++;
+    }
+
+    protected void StartMove(){
+        move = MOVING;
+        animate = 0;
+    }
+
+    protected void EndMove(){
+        move = ENDING;
+    }
+
+    protected void StopMove(){
+        move = STOP;
+        animate = 0;
+    }
 
 }

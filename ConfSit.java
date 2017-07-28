@@ -27,6 +27,7 @@ public class ConfSit extends PANEL{
 
         g.drawString("所持ユニット数:" + unum , 20 , 35 );
         g.drawString("所持ポイント:"+point, 20 , 55 );
+        g.drawString("最大ユニットコスト:"+unit_cost, 20 , 75 );
 
         g.drawString( "所持装備" , 250 , 25 );
         g.drawString( "LV"     , 320 , 25 );

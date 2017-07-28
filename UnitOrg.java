@@ -129,7 +129,7 @@ public class UnitOrg extends PANEL{
         int cy = 0 ;
         MWindow.draw(g);
         int max = crmem.hp + crmem.atk + crmem.def + crmem.spd;
-        g.drawString( max + "/400" , 100 , 180 );
+        g.drawString( max + "/" + unit_cost  , 100 , 180 );
 
         for( int i = 0 ; i < 4 ; i++ ){
             cy = 180 +  40 * i;
@@ -196,7 +196,7 @@ public class UnitOrg extends PANEL{
             }
             else if( 200 < x && x < 230 &&
                      cy  < y && y < cy + 30 &&
-                     max < UNIT_SCORE_MAX ){
+                     max < unit_cost ){
                 if( i == 0 ) crmem.hp  += ADD;
                 else if( i == 1 ) crmem.atk += ADD;
                 else if( i == 2 ) crmem.def += ADD;

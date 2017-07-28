@@ -6,6 +6,9 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.* ;
 import java.util.Random;
+import java.lang.Math;
+import java.awt.Graphics2D;
+import java.awt.Color;
 
 enum SEED {
     FROG,
@@ -21,6 +24,7 @@ public class Unit {
     Image atk_icon;
     Image def_icon;
     Image spd_icon;
+    Image small_menu;
 
     int place;
 
@@ -57,6 +61,8 @@ public class Unit {
         this.def_icon = icon.getImage();
         icon = new ImageIcon(getClass().getResource("IMG/ICON/speed.png"));
         this.spd_icon = icon.getImage();
+        icon = new ImageIcon(getClass().getResource("IMG/ITEM/smallmenu.png"));
+        this.small_menu = icon.getImage();
 
     }
 
@@ -99,31 +105,59 @@ public class Unit {
     public void wdraw(Graphics g , int n){
         int cx,cy;
         switch(n){
-            case 0: cx = 186; cy = 100; break;
-            case 1: cx = 186; cy = 185; break;
-            case 2: cx = 186; cy = 270; break;
-            case 3: cx =  89; cy = 100; break;
-            case 4: cx =  89; cy = 185; break;
-            case 5: cx =  89; cy = 270; break;
+            case 0: cx = 188; cy = 100; break;
+            case 1: cx = 188; cy = 185; break;
+            case 2: cx = 188; cy = 270; break;
+            case 3: cx =  90; cy = 100; break;
+            case 4: cx =  90; cy = 185; break;
+            case 5: cx =  90; cy = 270; break;
             default:
                 cx = 0; cy = 0; break;
         }
         draw( g , cx , cy );
+
+        drawSmallMenu( g , cx , cy , true );
     }
 
     public void edraw(Graphics g , int n){
         int cx,cy;
         switch(n){
-            case 0: cx = 370; cy = 100; break;
-            case 1: cx = 370; cy = 185; break;
-            case 2: cx = 370; cy = 270; break;
-            case 3: cx = 470; cy = 100; break;
-            case 4: cx = 470; cy = 185; break;
-            case 5: cx = 470; cy = 270; break;
+            case 0: cx = 369; cy = 100; break;
+            case 1: cx = 369; cy = 185; break;
+            case 2: cx = 369; cy = 270; break;
+            case 3: cx = 466; cy = 100; break;
+            case 4: cx = 466; cy = 185; break;
+            case 5: cx = 466; cy = 270; break;
             default:
                 cx = 0; cy = 0; break;
         }
         g.drawImage( this.img , cx  , cy , 80 , 100 , null );
+
+        drawSmallMenu( g , cx , cy , false );
+    }
+
+    public void drawSmallMenu( Graphics g , int x , int y , boolean f){
+        int wh = 0;
+        if( f == true ) wh = 60;
+
+        Graphics2D g2 = (Graphics2D)g;
+        AlphaComposite half = AlphaComposite.getInstance(
+                    AlphaComposite.SRC_OVER, 0.8f);
+        AlphaComposite all = AlphaComposite.getInstance(
+                    AlphaComposite.SRC_OVER, 1f);
+        g2.setComposite(half);
+        g2.drawImage( this.small_menu , x + wh - 12 , y + 48, null );
+        g2.setComposite(all);
+
+        g.drawImage ( hp_icon  , x + wh - 10 , y + 50 , 10, 10, null );
+        g.drawImage ( atk_icon , x + wh - 10 , y + 60 , 10, 10, null );
+        g.drawImage ( def_icon , x + wh - 10 , y + 70 , 10, 10, null );
+        g.drawImage ( spd_icon , x + wh - 10 , y + 80 , 10, 10, null );
+
+        g.drawString( "" + nh  , x + wh , y + 60 );
+        g.drawString( "" + atk , x + wh , y + 70 );
+        g.drawString( "" + def , x + wh , y + 80 );
+        g.drawString( "" + spd , x + wh , y + 90 );
     }
 
     public void drawSubMenu(Graphics g){

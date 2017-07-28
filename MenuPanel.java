@@ -104,6 +104,8 @@ public class MenuPanel extends PANEL{
         un[1].set(eq[0],0,100);
         unum = 2;
 
+        point = 100;
+
     }
 
     public void mousePressed (MouseEvent e){
@@ -119,6 +121,7 @@ public class MenuPanel extends PANEL{
             case 2:
                 point = tact.LoadPoint();
                 eq = tact.LoadEquip();
+                unit_cost = tact.LoadCost();
                 break;
             case 3: break;
             default:
@@ -181,18 +184,21 @@ public class MenuPanel extends PANEL{
         confs.SaveUnit ( un , unum );
         confs.SaveEquip( eq );
         confs.SavePoint( point );
+        confs.SaveCost(unit_cost);
         CL.show( card , "first" );
     }
 
     public void ShowMenuSecond(){
         unorg.SaveUnit( un , unum );
         unorg.SaveEquip(eq);
+        unorg.SaveCost(unit_cost);
         CL.show( card , "second" );
     }
 
     public void ShowMenuThird(){
         tact.SaveEquip(eq);
         tact.SavePoint(point);
+        tact.SaveCost(unit_cost);
         CL.show( card , "third" );
     }
 

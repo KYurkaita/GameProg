@@ -41,35 +41,52 @@ public class TactRes extends PANEL{
         MSubBak.draw(g);
         g.drawString(str, 0, 10);
 
+        g.drawString( "ユニットの最大コスト上限:  現在値" + unit_cost , 25 , 30 );
+        if( unit_cost < 1000 ) g.drawString( "→ " + (unit_cost + 50) , 244 ,30 );
+        g.drawString("消費P:" , 330 , 30 );
+        AddBt.put( 290 , 10 );
+        AddBt.draw(g);
+
         /* draw eq item */
-        g.drawString( "所持装備" , 25 , 25 );
-        g.drawString( "LV"     , 95 , 25 );
-        g.drawString( "ATK(%)"  , 130 , 25 );
-        g.drawString( "RNG"  , 185 , 25 );
+        g.drawString( "所持装備"  , 25  , 65 );
+        g.drawString( "LV"       , 95  , 65 );
+        g.drawString( "ATK(%)"   , 130 , 65 );
+        g.drawString( "RNG"      , 185 , 65 );
 
         for(int i = 0 ; i <  EQ_MAX ; i++){
-            g.drawString( "・" + eq[i].getName() , 25 , 45 + i * 40 );
-            g.drawString( ":Lv." + eq[i].getLv() , 95 , 45 + i * 40 );
-            g.drawString( ":" + eq[i].getAtk(), 130 , 45 + i * 40 );
-            g.drawString( ":" + eq[i].getRng() , 185 , 45 + i * 40 );
-            AddBt.put( 240 , 25 + i * 40 );
+            g.drawString( "・" + eq[i].getName() , 25 , 85 + i * 40 );
+            g.drawString( ":Lv." + eq[i].getLv() , 95 , 85 + i * 40 );
+            g.drawString( ":" + eq[i].getAtk(), 130 , 85 + i * 40 );
+            g.drawString( ":" + eq[i].getRng() , 185 , 85 + i * 40 );
+            AddBt.put( 240 , 65 + i * 40 );
             AddBt.draw(g);
-            g.drawString( "消費ポイント：" , 285 , 45 + i * 40 );
+            g.drawString( "消費P：" , 285 , 85 + i * 40 );
         }
         DrawEqRef(g);
     }
 
     private void AddLevel(){
         int wh = wh_menu();
-        if( wh != -1 )
+        if( wh >= 0 ){
             if( eq[wh].getLv() < 5 ) eq[wh].LevelAdd();
+        }
+        else if( wh == -2 ){
+            if( unit_cost < 1000 )
+                unit_cost +=50;
+        }
+
     }
 
     private int wh_menu(){
         for(int i = 0 ; i < EQ_MAX ; i++ ){
             if( 240 < x && x < 280 &&
-                25 + 40 * i < y  && y < 65 + 40 * i )
+                65 + 40 * i < y  && y < 105 + 40 * i )
                 return i;
+        }
+
+        if( 280 < x && x < 320 &&
+             10 < y && y < 50 ){
+            return -2;
         }
 
         return -1;
@@ -78,7 +95,7 @@ public class TactRes extends PANEL{
     private void DrawEqRef( Graphics g ){
         for(int i = 0 ; i < EQ_MAX ; i++ ){
             if( 25 < mx && mx < 410 &&
-                25 + 40 * i  < my && my <  65 + 40 * i )
+                65 + 40 * i  < my && my <  105 + 40 * i )
                 eq[i].drawRef(g);
         }
     }

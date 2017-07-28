@@ -53,7 +53,7 @@ public class Equip{
         for( int i = 0 ; i < 5 ; i++ ){
             RangMap[i] = new MENU();
             RangMap[i].set("IMG/ITEM/range" + i + ".png");
-            RangMap[i].put(315,245);
+            RangMap[i].put(315,260);
         }
     }
 
@@ -80,41 +80,41 @@ public class Equip{
         String s;
         switch( this.no ){
             case SWORD:
-            RangMap[3].draw(g);
-            g.drawString( "敵1列に威力" + getAtk() + "%のダメージ." , 25 , 290 );
-            g.drawString( "列で攻撃でき、威力も高い。" , 25 , 310 );
-            g.drawString( "だが、前列に一体でもユニットが残っていると後列には攻撃できない。" , 25 , 330 );
-            break;
+                RangMap[3].draw(g);
+                g.drawString( "敵1列に威力" + getAtk() + "%のダメージ." , 25 , 300 );
+                g.drawString( "列で攻撃でき、威力も高い。" , 25 , 320 );
+                g.drawString( "だが、前列に一体でもユニットが残っていると後列には攻撃できない。" , 25 , 340 );
+                break;
             case RANCE:
-            RangMap[2].draw(g);
-            g.drawString( "敵1行に威力" + getAtk() + "%のダメージ." , 25 , 290 );
-            g.drawString( "行で攻撃するため、後列のユニットに安定してダメージを与えられる。" , 25 , 310 );
-            break;
+                RangMap[2].draw(g);
+                g.drawString( "敵1行に威力" + getAtk() + "%のダメージ." , 25 , 300 );
+                g.drawString( "行で攻撃するため、後列のユニットに安定してダメージを与えられる。" , 25 , 320 );
+                break;
             case ARROW:
-            RangMap[1].draw(g);
-            g.drawString( "敵単体に威力"+ getAtk() + "%のダメージ." , 25 , 290 );
-            g.drawString( "威力は高いが、単体にしか攻撃できない。" , 25 , 310 );
-            break;
+                RangMap[1].draw(g);
+                g.drawString( "敵単体に威力"+ getAtk() + "%のダメージ." , 25 , 300 );
+                g.drawString( "威力は高いが、単体にしか攻撃できない。" , 25 , 320 );
+                break;
             case RMISSILE:
-            RangMap[4].draw(g);
-            g.drawString( "ランダムな敵に威力" + getAtk() + "% ×　5回　のダメージ." , 25 , 290 );
-            g.drawString( "一発の威力は低く、敵の狙い撃ちも難しいが敵の数が少ないほど高威力となる。" , 25 , 310 );
-            break;
+                RangMap[4].draw(g);
+                g.drawString( "ランダムな敵に威力" + getAtk() + "% ×　5回　のダメージ." , 25 , 300 );
+                g.drawString( "一発の威力は低く、敵の狙い撃ちも難しいが敵の数が少ないほど高威力となる。" , 25 , 320 );
+                break;
             case AMISSILE:
-            RangMap[4].draw(g);
-            g.drawString( "すべての敵に威力" + getAtk() + "%のダメージ." , 25 , 290 );
-            g.drawString( "敵全体に攻撃できるが、威力は低い。" , 25 , 310 );
-            break;
+                RangMap[4].draw(g);
+                g.drawString( "すべての敵に威力" + getAtk() + "%のダメージ." , 25 , 300 );
+                g.drawString( "敵全体に攻撃できるが、威力は低い。" , 25 , 320 );
+                break;
             default:
-            g.drawString( "エラーメッセージだろう." , 25 , 290 );
+                g.drawString( "エラーメッセージだろう." , 25 , 350 );
         }
     }
 
     public void drawRef( Graphics g ){
-        g.drawString( "" + getName() , 25 , 270 );
-        g.drawString( "Lv." + getLv() , 95 , 270 );
-        g.drawString( "威力：" + getAtk()+" % ", 130 , 270 );
-        g.drawString( "範囲:" + getRng() , 200 , 270 );
+        g.drawString( "" + getName() , 25 , 280 );
+        g.drawString( "Lv." + getLv() , 95 , 280 );
+        g.drawString( "威力：" + getAtk()+" % ", 130 , 280 );
+        g.drawString( "範囲:" + getRng() , 200 , 280 );
         refs(g);
 
     }
