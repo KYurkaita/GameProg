@@ -72,7 +72,7 @@ public class TactRes extends PANEL{
         }
         else if( wh == -2 ){
             if( unit_cost < 1000 )
-                unit_cost +=50;
+                unit_cost += 50;
         }
 
     }

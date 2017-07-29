@@ -22,6 +22,7 @@ public class MainPanel extends JPanel implements Runnable {
 
     private Unit btmem[] = new Unit[6];
     private int btnum[] = new int[6];
+    private int point = 0;
 
     public MainPanel(){
         /* panelsize */
@@ -68,6 +69,7 @@ public class MainPanel extends JPanel implements Runnable {
                 for(int i = 0 ; i < 6; i++){
                     this.btmem = menu.LoadBtMember();
                 }
+                point = menu.LoadPoint();
                 war.SaveBtUnit( btmem , btnum );
                 war.Init();
                 ChangeShow("war");
@@ -75,6 +77,7 @@ public class MainPanel extends JPanel implements Runnable {
             war.Time();
             if( war.GetFlag() ){
                 war.SetFlag(false);
+                menu.SavePoint( war.LoadPoint() + point );
                 war.Exit();
                 menu.Init();
                 ChangeShow("menu");

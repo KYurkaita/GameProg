@@ -115,6 +115,7 @@ public class MenuPanel extends PANEL{
         switch(before_menu){
             case 0: break;
             case 1:
+                point = unorg.LoadPoint();
                 unum = unorg.LoadUnitNum();
                 un = unorg.LoadUnit();
                 break;
@@ -190,7 +191,8 @@ public class MenuPanel extends PANEL{
 
     public void ShowMenuSecond(){
         unorg.SaveUnit( un , unum );
-        unorg.SaveEquip(eq);
+        unorg.SaveEquip( eq );
+        unorg.SavePoint( point );
         unorg.SaveCost(unit_cost);
         CL.show( card , "second" );
     }

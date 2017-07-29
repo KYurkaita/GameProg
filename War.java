@@ -45,6 +45,7 @@ public class War extends PANEL{
     private static final int DEFAULT = 0;
     private static final int LOSE = 1;
     private static final int WIN  = 2;
+    private static final int LOADING = -1;
 
     private MENU Sett;
 
@@ -73,9 +74,7 @@ public class War extends PANEL{
     private int qnum = 0;
     private int unit_num[] = new int[2];
 
-
-    private int stage = 0;
-    private int wave = 0;
+    private Stage stage = new Stage();
     private int turn = 0;
 
     private int[] sumdmg = new int[2];
@@ -84,8 +83,6 @@ public class War extends PANEL{
 
     private MENU ExitMessage;
     private MENU ContinueArr;
-
-    private int getpoint;
 
     public War(){
         /* panelsize */
@@ -139,8 +136,6 @@ public class War extends PANEL{
 
         enmem[0].set(200,50,50,10);
         ennum[0] = 1 ;
-        getpoint = 0;
-
 
         for(int i = 0 ; i < BATTLE_UNIT_MAX * 2 ; i++ ){
             que[i] = new Unit();
@@ -156,14 +151,21 @@ public class War extends PANEL{
         super.mousePressed(e);
 
         if( move != STOP ){
-            SetFlag(true);
-            return;
+            if( LoadStage() != false ){
+                return;
+            }else{
+                SetFlag(true);
+                return;
+            }
         }
 
         if( CreateWinFlag == DEFAULT ){
-             CreateWinFlag = TurnAdd();
+            CreateWinFlag = TurnAdd();
+            if( CreateWinFlag == WIN ) point += stage.point;
+            else if( CreateWinFlag == LOSE ) point += stage.point/2;
+
         }
-        else {
+        else if( CreateWinFlag == WIN || CreateWinFlag == LOSE ){
             StartMove();
         }
 
@@ -173,40 +175,7 @@ public class War extends PANEL{
         super.mouseMoved(e);
     }
 
-    private void MessageDraw( Graphics g ){
-        Graphics2D g2 = (Graphics2D)g;
-        AlphaComposite half = AlphaComposite.getInstance(
-                    AlphaComposite.SRC_OVER, 0.95f);
-        AlphaComposite def = AlphaComposite.getInstance(
-                    AlphaComposite.SRC_OVER, 1f);
 
-        ExitMessage.put( 220 , 160 );
-        g2.setComposite(half);
-        ExitMessage.draw(g);
-        g2.setComposite(def);
-
-        if( CreateWinFlag == LOSE ){
-            g.drawString( "敗北..." , 230 , 180 );
-            g.drawString( "仕方ないね。こんな日もあるさ。" , 230 , 210 );
-        }else if( CreateWinFlag == WIN ){
-            g.drawString( "勝利" , 230 , 180 );
-            g.drawString( "勝った!勝った!夕食はドンペリだ!" , 230 , 210 );
-        }else{
-            g.drawString("ERROR MESSAGE : YABEE HENSUU NI NATERU", 230 , 190 );
-            return;
-        }
-
-        g.drawString( "< 戦闘振り返り >" , 275 , 230 );
-        g.drawString( "進行ステージ数: " + "" , 230 , 250 );
-        g.drawString( "残ったチームメンバー: " + unit_num[PLAYER] , 230 , 270 );
-        g.drawString( "倒した敵の数: " , 230 , 290 );
-        g.drawString( "獲得ポイント:  " + getpoint , 230 , 310 );
-
-        ContinueArr.put( 260 + 20 * animate , 455);
-        if( 260 + 20 * animate > 441 ) EndMove();
-        if( move != STOP ) ContinueArr.draw(g);
-
-    }
 
     private void QueInput(){
         qnum = 0 ;
@@ -475,6 +444,40 @@ public class War extends PANEL{
 
     }
 
+    private void MessageDraw( Graphics g ){
+        Graphics2D g2 = (Graphics2D)g;
+        AlphaComposite half = AlphaComposite.getInstance(
+                    AlphaComposite.SRC_OVER, 0.95f);
+        AlphaComposite def = AlphaComposite.getInstance(
+                    AlphaComposite.SRC_OVER, 1f);
+
+        ExitMessage.put( 220 , 160 );
+        g2.setComposite(half);
+        ExitMessage.draw(g);
+        g2.setComposite(def);
+
+        if( CreateWinFlag == LOSE ){
+            g.drawString( "敗北..." , 230 , 180 );
+            g.drawString( "仕方ないね。こんな日もあるさ。" , 230 , 210 );
+        }else if( CreateWinFlag == WIN ){
+            g.drawString( "勝利" , 230 , 180 );
+            g.drawString( "勝った!勝った!夕食はドンペリだ!" , 230 , 210 );
+        }else{
+            g.drawString("ERROR MESSAGE : YABEE HENSUU NI NATERU", 230 , 190 );
+            return;
+        }
+
+        g.drawString( "< 戦闘振り返り >" , 275 , 230 );
+        g.drawString( "進行ステージ数: " + "" , 230 , 250 );
+        g.drawString( "残ったチームメンバー: " + unit_num[PLAYER] , 230 , 270 );
+        g.drawString( "倒した敵の数: " , 230 , 290 );
+        g.drawString( "獲得ポイント:  " + point , 230 , 310 );
+
+        ContinueArr.put( 260 + 20 * animate , 455);
+        if( 260 + 20 * animate > 441 ) EndMove();
+        if( move != STOP ) ContinueArr.draw(g);
+
+    }
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
@@ -497,7 +500,7 @@ public class War extends PANEL{
         Time.draw(g);
         g.setColor(Color.white);
         g.drawString( "WAVE", 304 , 45);
-        g.drawString( "" + wave , 317 , 55);
+        g.drawString( "" + stage.wave , 317 , 55);
         g.setColor(Color.black);
         g.drawString( "TURN" + turn , 300 , 92);
 
@@ -539,39 +542,29 @@ public class War extends PANEL{
 
     }
 
+    private boolean LoadStage(){
+        if( CreateWinFlag != LOSE && stage.NextWave() == true ){
+            Init();
+            turn = 0;
+            CreateWinFlag = 0;
+            StopMove();
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
 
     public void Init(){
         mhp = 0;
         emhp = 0;
-
         /*ENEMY DATA LOADED*/
-        for(int i = 0; i < BATTLE_UNIT_MAX; i++){
-            enmem[i] = new Unit();
-            ennum[i] = NONE;
-        }
-
-        enmem[0].set(200,50,50,51);
-        enmem[0].put(10);
-        enmem[0].set(new Equip(2),0,100);
-        ennum[0] = 1 ;
-
-        enmem[4].set(150,50,50,52);
-        enmem[4].put(14);
-        enmem[4].set(new Equip(4),0,100);
-        ennum[4] = 1 ;
-
-        enmem[5].set(100,50,50,150);
-        enmem[5].put(15);
-        enmem[5].set(new Equip(0),0,100);
-        ennum[5] = 2 ;
-
-        getpoint = 30;
+        enmem = stage.LoadWave();
+        ennum = stage.LoadWaveNum();
 
         for(int i = 0; i < BATTLE_UNIT_MAX; i++ ){
             this.btmem[i].nh = this.btmem[i].hp;
-            if( ennum[i] != NONE ){
-                this.enmem[i].nh = this.enmem[i].hp;
-            }
         }
 
         for(int i = 0; i < BATTLE_UNIT_MAX; i++ ){
@@ -587,6 +580,8 @@ public class War extends PANEL{
     }
 
     public void Exit(){
+        point = 0;
+
         for(int i = 0; i < BATTLE_UNIT_MAX; i++ ){
             this.btmem[i].nh = this.btmem[i].hp;
             this.btmem[i].place = NONE;
@@ -595,7 +590,10 @@ public class War extends PANEL{
             }
         }
 
+
         turn = 0;
+        stage.wave = 0;
+        stage.NextWave();
         CreateWinFlag = 0;
         StopMove();
 

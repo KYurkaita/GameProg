@@ -11,6 +11,7 @@ import java.awt.Color;
 
 
 public class UnitOrg extends PANEL{
+    private static final int CREATE_COST = 30;
     private boolean createflag = false;
 
     private MENU Chr[] = new MENU[UNIT_MAX];
@@ -28,7 +29,9 @@ public class UnitOrg extends PANEL{
     private MENU SubBt = new MENU();
 
     private Unit crmem = new Unit();
-    protected int eqnum ;
+    private int  crnum =0;
+    private int eqnum ;
+    private int cost;
 
 
     public UnitOrg(){
@@ -76,12 +79,19 @@ public class UnitOrg extends PANEL{
         if( createflag == false ){
             selnum = SetWhM();
             if( e.getButton() == MouseEvent.BUTTON3 ){
-
+                if( 0 <= selnum && selnum < unum ){
+                    crmem = un[selnum];
+                    crnum = selnum;
+                    createflag = true;
+                }
             }else{
-                if ( selnum  == -2 )  createflag = true;
+                if ( selnum  == -2 ){
+                    createflag = true;
+                    crnum = unum;
+                }
             }
         }else{
-            SetWhWin();
+            OperateUnit();
         }
 
     }
@@ -116,7 +126,8 @@ public class UnitOrg extends PANEL{
         MSubIcon.draw(g);
         if( selnum >= 0 ) un[ selnum ].drawSubMenu(g);
         else {
-            g.drawString( "新規ユニットを作成する." , 450 + 5 , 160 );
+            g.drawString( "新規ユニットの作成" , 450 + 5 , 160 );
+            g.drawString( "消費ポイント:30" , 450 + 5 , 180 );
         }
 
         if( createflag ) DrawCreateWindow(g);
@@ -130,7 +141,7 @@ public class UnitOrg extends PANEL{
         MWindow.draw(g);
         int max = crmem.hp + crmem.atk + crmem.def + crmem.spd;
         g.drawString( max + "/" + unit_cost  , 100 , 180 );
-
+        crmem.draw( g, 60 , 20 );
         for( int i = 0 ; i < 4 ; i++ ){
             cy = 180 +  40 * i;
             g.drawString( "減　　　　　　　　　増" , 60 , cy + 20 );
@@ -145,23 +156,24 @@ public class UnitOrg extends PANEL{
             RArr.draw(g);
         }
 
-        g.drawString( "equip"  , 250 , 15 );
+        g.drawString( "  equip"  , 250 , 25 );
+        g.drawString( "  LV: 威力:範囲"  , 320 , 25 );
         for(int i = 0; i < EQ_MAX ; i++ ){
             for (int j = 0 ; j < EQ_SEL_MAX ; j++){
                 if( eqsel[i][j] == true )
                     g.setColor(Color.red);
             }
 
-            g.drawString( "・" + eq[i].getName() , 250 , 35 + i * 40 );
-            g.drawString( ":Lv." + eq[i].getLv() + " : " + eq[i].getAtk() + ":" + eq[i].getRng() , 320 , 35 + i * 40 );
+            g.drawString( "・" + eq[i].getName() , 250 , 45 + i * 40 );
+            g.drawString( ":Lv." + eq[i].getLv() + " : " + eq[i].getAtk() + ":" + eq[i].getRng() , 320 , 45 + i * 40 );
 
             g.setColor(Color.black);
             for (int j = 0 ; j < EQ_SEL_MAX ; j++){
                 if( eqsel[i][j] == false ){
-                    AddBt.put( 400 + 40 * j , 15 + i * 40 );
+                    AddBt.put( 400 + 40 * j , 25 + i * 40 );
                     AddBt.draw(g);
                 }else{
-                    SubBt.put( 400 + 40 * j , 15 + i * 40 );
+                    SubBt.put( 400 + 40 * j , 25 + i * 40 );
                     SubBt.draw(g);
                 }
             }
@@ -178,15 +190,13 @@ public class UnitOrg extends PANEL{
 
 
 
-    private void SetWhWin(){
+    private void OperateUnit(){
         final int ADD = 10;
 
         int cy = 0 ;
-        int max = 0;
-
+        int max = crmem.hp + crmem.atk + crmem.def + crmem.spd;
         for( int i = 0 ; i < 4 ; i++ ){
             cy = 180 +  40 * i;
-            max = crmem.hp + crmem.atk + crmem.def + crmem.spd;
             if( 20 < x && x < 50 &&
                 cy < y && y < cy + 30 ){
                 if( crmem.hp  > 10 && i == 0 ) crmem.hp  -= ADD;
@@ -207,7 +217,7 @@ public class UnitOrg extends PANEL{
         for(int i = 0; i < EQ_MAX; i++ ){
             for(int j = 0 ; j < EQ_SEL_MAX ; j++ ){
                 if( 400 + 40 * j < x && x < 440 + 40 * j &&
-                     15 + i * 40 < y && y < 55 + i * 40 ){
+                     25 + i * 40 < y && y < 65 + i * 40 ){
                     if( eqsel[i][j] ){
                         if( 0 <= eqnum  ){
                             eqsel[i][j] = false ;
@@ -237,33 +247,41 @@ public class UnitOrg extends PANEL{
 
         if( 440 < x && x < 590 &&
             255 < y && y < 255 + 85 &&
-            unum < 25  && 0 < eqnum ){
-            un[unum] = crmem;
-            createflag = false;
-
-            int i = 0 , num = 0;
-            while( num < 3  && i < EQ_SEL_MAX ){
-                for(int j = 0 ; j < EQ_MAX ; j++ ){
-                    if( eqsel[j][i] == true ){
-                        un[unum].set( eq[j] , num , 100 );
-                        num++;
-                    }
-                }
-                i++;
+            eqnum != 0 && point >= CREATE_COST ){
+            if( crnum == unum ){
+                if( unum < UNIT_MAX ) CreateUnit( unum );
             }
-            unum += 1;
-
-            for( int x = 0 ; x < EQ_MAX ; x++ ){
-                for( int y = 0 ; y < EQ_SEL_MAX ;y++){
-                    eqsel[x][y] = false;
-                }
+            else{
+                CreateUnit(crnum);
             }
-            eqnum = 0;
-            crmem = new Unit();
         }
 
+    }
 
+    private void CreateUnit( int t ){
+        un[t] = crmem;
+        createflag = false;
 
+        int i = 0 , num = 0;
+        while( num < 3  && i < EQ_SEL_MAX ){
+            for(int j = 0 ; j < EQ_MAX ; j++ ){
+                if( eqsel[j][i] == true ){
+                    un[t].set( eq[j] , num , 100 );
+                    num++;
+                }
+            }
+            i++;
+        }
+        if( t == unum ) unum += 1;
+        point -= CREATE_COST;
+
+        for( int x = 0 ; x < EQ_MAX ; x++ ){
+            for( int y = 0 ; y < EQ_SEL_MAX ;y++){
+                eqsel[x][y] = false;
+            }
+        }
+        eqnum = 0;
+        crmem = new Unit();
     }
 
     private int SetWhM(){
