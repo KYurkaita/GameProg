@@ -46,6 +46,12 @@ public class PANEL extends JPanel implements MouseListener , MouseMotionListener
 
     protected static final int EQ_MAX = 5;
     protected static final int EQ_SEL_MAX = 3;
+    
+    protected static final int SWORD = 0;
+    protected static final int RANCE = 1;
+    protected static final int ARROW = 2;
+    protected static final int RMISSILE = 3;
+    protected static final int AMISSILE = 4;
 
     protected static final int BATTLE_UNIT_MAX = 6;
     protected static final int UNIT_MAX = 25;

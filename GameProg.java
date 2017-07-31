@@ -32,7 +32,7 @@ public class GameProg extends JFrame implements ActionListener {
 
         /*content */
         Container contentPane = getContentPane();
-        setTitle("test");
+        setTitle("íπèbÉMÉK");
         setLayout(new BorderLayout(0,0));
         contentPane.add(change);
 

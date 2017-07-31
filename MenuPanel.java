@@ -102,7 +102,17 @@ public class MenuPanel extends PANEL{
         un[1].set("IMG/CHARA/ch_rabbit1.png");
         un[1].set(100,70,80,40);
         un[1].set(eq[0],0,100);
-        unum = 2;
+
+        un[2] = new Unit();
+        un[2].set("IMG/CHARA/ch_rabbit1.png");
+        un[2].set(700,300,300,300);
+        un[2].set(eq[AMISSILE],0,100);
+
+        un[3] = new Unit();
+        un[3].set("IMG/CHARA/ch_rabbit1.png");
+        un[3].set(700,300,300,300);
+        un[3].set(eq[AMISSILE],0,100);
+        unum = 4;
 
         point = 100;
 

@@ -85,6 +85,7 @@ public class War extends PANEL{
 
     private MENU ExitMessage;
     private MENU ContinueArr;
+    private int deadmem = 0;
 
     public War(){
         /* panelsize */
@@ -224,10 +225,17 @@ public class War extends PANEL{
 
         for( int i = 0; i < BATTLE_UNIT_MAX ;i++ ){
             if( btnum[ i ] != NONE ){
-                if( !( btmem[i].nh > 0 ) ) btnum[i] = NONE;
+                if( !( btmem[i].nh > 0 ) ){
+                    System.out.println("my team [" + i + "] dead" );
+                    btnum[i] = NONE;
+                }
             }
             if( ennum[ i ] != NONE ){
-                if( !(enmem[i].nh > 0 )  ) ennum[i] = NONE;
+                if( !(enmem[i].nh > 0 )  ){
+                    System.out.println("enemy [" + i + "] dead" );
+                    ennum[i] = NONE;
+                    deadmem++;
+                }
             }
         }
 
@@ -476,9 +484,9 @@ public class War extends PANEL{
         }
 
         g.drawString( "< 戦闘振り返り >" , 275 , 230 );
-        g.drawString( "進行ステージ数: " + "" , 230 , 250 );
+        g.drawString( "進行wave数: " + stage.wave + "/" + stage.max_wave , 230 , 250 );
         g.drawString( "残ったチームメンバー: " + unit_num[PLAYER] , 230 , 270 );
-        g.drawString( "倒した敵の数: " , 230 , 290 );
+        g.drawString( "倒した敵の数: " + deadmem, 230 , 290 );
         g.drawString( "獲得ポイント:  " + point , 230 , 310 );
 
         ContinueArr.put( 260 + 20 * animate , 455);
@@ -570,10 +578,11 @@ public class War extends PANEL{
 
     private boolean LoadStage(){
         if( CreateWinFlag != LOSE && stage.NextWave() == true ){
+            StopMove();
             Init();
             turn = 0;
             CreateWinFlag = 0;
-            StopMove();
+
             return true;
         }
         else{
@@ -602,6 +611,7 @@ public class War extends PANEL{
             }
         }
         UnitCheck();
+        System.out.println("\n wave " + stage.wave);
         QueInput();
     }
 
@@ -616,7 +626,7 @@ public class War extends PANEL{
             }
         }
 
-
+        deadmem = 0;
         turn = 0;
         stage.wave = 0;
         stage.NextWave();
