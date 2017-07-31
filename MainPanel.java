@@ -61,6 +61,8 @@ public class MainPanel extends JPanel implements Runnable {
     public void run(){
         while(true){
             repaint();
+            menu.Time();
+            war.Time();
 
             /* change main panel main to war */
             if( menu.GetFlag() ){
@@ -74,7 +76,6 @@ public class MainPanel extends JPanel implements Runnable {
                 war.Init();
                 ChangeShow("war");
             }
-            war.Time();
             if( war.GetFlag() ){
                 war.SetFlag(false);
                 menu.SavePoint( war.LoadPoint() + point );

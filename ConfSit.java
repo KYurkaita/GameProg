@@ -9,10 +9,17 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseEvent;
 
 public class ConfSit extends PANEL{
+
+    private MENU GraphFrog;
+
     public ConfSit(){
         /* panelsize */
         super();
         setBounds( MENU_X , MENU_Y , MENU_WIDTH , MENU_HEIGHT );
+
+        GraphFrog = new MENU();
+        GraphFrog.set("IMG/EFF/graph.png");
+        GraphFrog.put(40,220);
 
     }
 
@@ -40,6 +47,8 @@ public class ConfSit extends PANEL{
             g.drawString( ":" + eq[i].getAtk(), 355 , 45 + i * 20 );
             g.drawString( ":" + eq[i].getRng() , 405 , 45 + i * 20 );
         }
+
+        GraphFrog.draw( g , 150 , 100 );
 
     }
 

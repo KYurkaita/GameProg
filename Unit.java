@@ -46,7 +46,7 @@ public class Unit {
     Unit(){
         set(50,50,50,50);
         set(new Equip(),0,0);
-        set("IMG/CHARA/ch_frog.png");
+        set("IMG/CHARA/ch_frog0.png");
         this.place = -1;
 
         for (int i = 0 ; i < 3 ; i++ ){
@@ -99,7 +99,7 @@ public class Unit {
     }
 
     public void sdraw(Graphics g, int x, int y ){
-        g.drawImage( this.img , x + 2 , y + 2 , 80 , 60 , null );
+        g.drawImage( this.img , x + 4 , y + 4 , 80 , 60 , null );
     }
 
     public void wdraw(Graphics g , int n){

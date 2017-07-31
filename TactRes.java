@@ -7,13 +7,22 @@ import java.awt.Image;
 import java.awt.event.* ;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseEvent;
+import java.awt.Graphics2D;
+import java.awt.Color;
 
 public class TactRes extends PANEL{
+
     private MENU AddBt = new MENU();
+    private MENU MoveRabbit = new MENU();
 
     private int[] req_p = new int[ EQ_MAX ];
 
     private int wh_point = -1;
+
+    private boolean moveflag = true;
+    private AlphaComposite aniAlph;
+    private AlphaComposite def;
+    private float d;
 
     public TactRes(){
         /* panelsize */
@@ -21,8 +30,16 @@ public class TactRes extends PANEL{
         setBounds( MENU_X , MENU_Y , MENU_WIDTH , MENU_HEIGHT );
         AddBt.set("IMG/ICON/add.png");
 
-    }
+        MoveRabbit.set("IMG/EFF/move.png");
+        MoveRabbit.put( 460 , 100 );
 
+        aniAlph = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f);
+
+        def = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f);
+        StartMove();
+        d = 0.0f;
+
+    }
 
     /*MouseEvent*/
     @Override
@@ -35,7 +52,7 @@ public class TactRes extends PANEL{
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")" + eq[0].getLv();
+        str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")" ;
 
         MBak.draw(g);
         MSubBak.draw(g);
@@ -63,6 +80,37 @@ public class TactRes extends PANEL{
             g.drawString( "è¡îÔPÅF" , 285 , 85 + i * 40 );
         }
         DrawEqRef(g);
+
+        Graphics2D g2 = (Graphics2D)g;
+
+        d = animate % 100 * 0.01f;
+
+        if( animate == 100 ){
+            moveflag = !moveflag;
+            animate = 0;
+        }
+
+        if( moveflag == true )
+        aniAlph = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, d );
+        else
+        aniAlph = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f - d );
+
+        g2.setComposite(aniAlph);
+        MoveRabbit.put( 460 , 100 );
+        MoveRabbit.draw( g2 , 130 , 100 );
+
+        if( moveflag == true )
+        aniAlph = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f - d );
+        else
+        aniAlph = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,  d );
+
+        g2.setComposite(aniAlph);
+        MoveRabbit.put( 590 , 100 );
+        MoveRabbit.draw( g2 , -130 , 100 );
+        g2.setComposite(def);
+
+
+
     }
 
     private void AddLevel(){

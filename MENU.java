@@ -30,4 +30,8 @@ public class MENU{
         g.drawImage( this.img, this.x, this.y, null );
     }
 
+    public void draw( Graphics g , int w , int h ){
+        g.drawImage( this.img, this.x, this.y, w, h , null );
+    }
+
 }

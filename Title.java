@@ -20,7 +20,7 @@ public class Title extends PANEL {
 
 		for(int i = 0; i < 2 ; i++){
 			rab[i] = new MENU();
-			rab[i].set("IMG/ch_rabbit_1.png");
+			rab[i].set("IMG/EFF/ch_rabbit_1.png");
 			rab[i].put( 300 + 200 * i , 300 + 200 * i );
 		}
 

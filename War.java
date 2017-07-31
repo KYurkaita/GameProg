@@ -48,6 +48,8 @@ public class War extends PANEL{
     private static final int LOADING = -1;
 
     private MENU Sett;
+    private MENU BackGround;
+    private MENU Clouds[] = new MENU[2];
 
     private MENU TeamHp;
     private MENU EnemyHp;
@@ -93,6 +95,16 @@ public class War extends PANEL{
         Sett = new MENU();
         Sett.set("IMG/ITEM/config.png");
         Sett.put(10,20);
+        BackGround = new MENU();
+        BackGround.set("IMG/EFF/mounten.png");
+        BackGround.put( 100 , 10 );
+
+        /* 0 to 100 */
+        Clouds[0] = new MENU();
+        Clouds[0].set("IMG/EFF/cloud0.png");
+        Clouds[0].put(50,5);
+        Clouds[1] = new MENU();
+        Clouds[1].set("IMG/EFF/cloud1.png");
 
         /* Time and HP */
         TeamHp = new MENU();
@@ -169,10 +181,6 @@ public class War extends PANEL{
             StartMove();
         }
 
-    }
-    @Override
-    public void mouseMoved(MouseEvent e){
-        super.mouseMoved(e);
     }
 
 
@@ -480,15 +488,14 @@ public class War extends PANEL{
     }
 
     public void paintComponent(Graphics g){
+
+
         super.paintComponent(g);
         str = "("+ x + ","+ y + ")" + "m("+ mx + "," + my + ")" + time;
 
         // ChrTile.put(x,y);
-        /* menu panel */
-        Sett.draw(g);
-        Mess.draw(g);
-        ChrTile.draw(g);
-        EnmTile.draw(g);
+        /* BG draw */
+        DrawBackGround(g);
 
         /*hp*/
         g.drawString( nhp + "/" + mhp + ":" + chper  + "%", 83 , 33);
@@ -540,6 +547,25 @@ public class War extends PANEL{
         g.drawString( ennum[2] + "," + ennum[5] , 580, 150 );
 
 
+    }
+
+    private void DrawBackGround(Graphics g){
+        Graphics2D g2 = (Graphics2D)g;
+        AlphaComposite half = AlphaComposite.getInstance(
+                    AlphaComposite.SRC_OVER, 0.5f);
+        AlphaComposite def = AlphaComposite.getInstance(
+                    AlphaComposite.SRC_OVER, 1f);
+
+        g2.setComposite(half);
+        Clouds[0].draw( g2 , 100 , 60 );
+        BackGround.draw( g2 , 300 , 100 );
+        g2.setComposite(def);
+
+        /* menu panel */
+        Sett.draw(g);
+        Mess.draw(g);
+        ChrTile.draw(g);
+        EnmTile.draw(g);
     }
 
     private boolean LoadStage(){

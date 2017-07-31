@@ -78,14 +78,14 @@ public class UnitOrg extends PANEL{
 
         if( createflag == false ){
             selnum = SetWhM();
-            if( e.getButton() == MouseEvent.BUTTON3 ){
-                if( 0 <= selnum && selnum < unum ){
-                    crmem = un[selnum];
-                    crnum = selnum;
-                    createflag = true;
-                }
+            if( 0 <= selnum && selnum < unum ){
+                    // if( e.getButton() == MouseEvent.BUTTON3 ){
+                crmem = un[selnum];
+                crnum = selnum;
+                createflag = true;
+
             }else{
-                if ( selnum  == -2 ){
+                if ( selnum == -1 || selnum  == -2 ){
                     createflag = true;
                     crnum = unum;
                 }
@@ -126,8 +126,15 @@ public class UnitOrg extends PANEL{
         MSubIcon.draw(g);
         if( selnum >= 0 ) un[ selnum ].drawSubMenu(g);
         else {
+            g.drawString( "所持ポイント:" + point , 450 + 5 , 30 );
+            g.drawString( "所持ユニット数:" + unum , 450 + 5 , 50 );
+            g.drawString( "コスト最大値:" + unit_cost , 450 + 5 , 70 );
+
             g.drawString( "新規ユニットの作成" , 450 + 5 , 160 );
-            g.drawString( "消費ポイント:30" , 450 + 5 , 180 );
+            g.drawString( "> 消費ポイント:30"  , 450 + 5 , 180 );
+            g.drawString( ""  , 450 + 5 , 200 );
+            g.drawString( "既存ユニットの更新" , 450 + 5 , 240 );
+            g.drawString( "> 消費ポイント:30"  , 450 + 5 ,  260 );
         }
 
         if( createflag ) DrawCreateWindow(g);
@@ -138,10 +145,18 @@ public class UnitOrg extends PANEL{
 
     private void DrawCreateWindow( Graphics g ){
         int cy = 0 ;
-        MWindow.draw(g);
         int max = crmem.hp + crmem.atk + crmem.def + crmem.spd;
+
+        MWindow.draw(g);
+
+        if( crnum == unum ){
+            g.drawString( "ユニット作成" , 60 , 25 );
+        }else{
+            g.drawString( "ユニット更新"  , 60 , 25 );
+        }
+
         g.drawString( max + "/" + unit_cost  , 100 , 180 );
-        crmem.draw( g, 60 , 20 );
+        crmem.draw( g, 60 , 30 );
         for( int i = 0 ; i < 4 ; i++ ){
             cy = 180 +  40 * i;
             g.drawString( "減　　　　　　　　　増" , 60 , cy + 20 );
@@ -180,6 +195,14 @@ public class UnitOrg extends PANEL{
 
         }
 
+        g.drawString( "所持ポイント:" + point + " → "  + ( point - 30 ) , 260 , 260 );
+
+        g.setColor(Color.red);
+        if( point < 30 )
+            g.drawString( "所持ポイントが足りません。" , 260 , 280 );
+
+        if( !( unum < UNIT_MAX ) )
+            g.drawString( "所持ユニット数が上限です。" , 260 , 300 );
         g.setColor(Color.black);
 
 

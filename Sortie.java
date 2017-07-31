@@ -26,6 +26,8 @@ public class Sortie extends PANEL{
     private MENU SelWin = new MENU();
     private int selnum = 0;
 
+    private MENU RabFight = new MENU();
+
     private int bt_sec = 0;
 
     public Sortie(){
@@ -43,6 +45,9 @@ public class Sortie extends PANEL{
         Tile.put( SOR_TILE_X , SOR_TILE_Y );
         CreWin.set("IMG/ITEM/mwin2.png");
         SelWin.set("IMG/ITEM/ch_menu4.png");
+
+        RabFight.set("IMG/EFF/fight.png");
+        RabFight.put( 460 , 10 );
 
         int xy;
         for(int y = 0 ; y < 5 ; y++ ){
@@ -97,9 +102,29 @@ public class Sortie extends PANEL{
         /*Sub Menu Panel*/
         MSubBak.draw(g);
         But.draw(g);
-
         Tile.draw(g);
 
+        DrawUnit(g);
+
+
+        if( CreateWinF ){
+            DrawWindow(g);
+            if( 0 <= bt_sec && bt_sec <= unum ) un[ bt_sec ].drawSubMenu(g);
+        }else {
+            if( 0 <= selnum && selnum < BATTLE_UNIT_MAX && btnum[ selnum ] != NONE ){
+                    un[ btnum[ selnum ] ].drawSubMenu(g);
+            }
+            else RabFight.draw( g , 130 , 270 );
+        }
+
+        g.drawString(str, 0, 10);
+        g.drawString( btnum[3] + "," + btnum[0] , 400, 20 );
+        g.drawString( btnum[4] + "," + btnum[1] , 400, 30 );
+        g.drawString( btnum[5] + "," + btnum[2] , 400, 40 );
+
+    }
+
+    private void DrawUnit(Graphics g){
         int tx = 0 , ty = 0 , xy = 0;
         for (int y = 0 ; y < TILE_ROW ; y++ ){
             for ( int x = 0 ; x < TILE_COLUMN ; x++ ){
@@ -107,24 +132,29 @@ public class Sortie extends PANEL{
                 ty = TILE_H * x ;
                 xy = y * TILE_COLUMN + x;
                 if( 0 <= btnum[ xy ] && btnum[ xy ] < unum )
-                    btmem[ xy ].sdraw( g , SOR_TILE_X + tx , SOR_TILE_Y + ty );
+                    g.drawImage(btmem[ xy ].img , SOR_TILE_X + 100 + tx , SOR_TILE_Y + ty ,-80 , 80 , this);
             }
         }
 
-
-        if( CreateWinF ){
-            DrawWindow(g);
-            if( 0 <= bt_sec && bt_sec <= unum ) un[ bt_sec ].drawSubMenu(g);
-        }else {
-            if( 0 <= selnum && selnum < BATTLE_UNIT_MAX )
-                if( btnum[ selnum ] != NONE )
-                    un[ btnum[ selnum ] ].drawSubMenu(g);
+        int bt = 0;
+        int maxhp = 0 , matk = 0 , mdef = 0 , mspd = 0;
+        for( int i = 0; i < BATTLE_UNIT_MAX ; i++ ){
+            if( btnum[i] != NONE ){
+                bt++;
+                maxhp += un[ btnum[ i ] ].hp;
+                matk += un[ btnum[ i ] ].atk;
+                mdef += un[ btnum[ i ] ].def;
+                mspd += un[ btnum[ i ] ].spd;
+            }
         }
+        if(bt == 0) bt = 1;
 
-        g.drawString(str, 0, 10);
-        g.drawString( btnum[3] + "," + btnum[0] , 400, 20 );
-        g.drawString( btnum[4] + "," + btnum[1] , 400, 30 );
-        g.drawString( btnum[5] + "," + btnum[2] , 400, 40 );
+        g.drawString( "ユニット情報" , 260 , 80 );
+        g.drawString( "総合HP：" + maxhp , 260 , 100 );
+
+        g.drawString( "平均ATK：" + matk / bt , 260 , 120 );
+        g.drawString( "平均DEF：" + mdef / bt , 260 , 140 );
+        g.drawString( "平均SPD：" + mspd / bt  , 260 , 160 );
 
     }
 

@@ -93,13 +93,13 @@ public class MenuPanel extends PANEL{
 
         /* Unit first menu */
         un[0] = new Unit();
-        un[0].set("IMG/CHARA/ch_rabbit1.png");
+        un[0].set("IMG/CHARA/ch_rabbit3.png");
         un[0].set(150,50,50,50);
         un[0].set(eq[2],0,100);
 
 
         un[1] = new Unit();
-        un[1].set("IMG/CHARA/ch_rabbit.png");
+        un[1].set("IMG/CHARA/ch_rabbit1.png");
         un[1].set(100,70,80,40);
         un[1].set(eq[0],0,100);
         unum = 2;
@@ -238,5 +238,26 @@ public class MenuPanel extends PANEL{
         }
         ShowMenuFirst();
     }
+
+    @Override
+    synchronized public void Time(){
+        switch( ch_menu ){
+            case 0:
+                confs.Time();
+                break;
+            case 1:
+                unorg.Time();
+                break;
+            case 2:
+                tact.Time();
+                break;
+            case 3:
+                sortie.Time();
+                break;
+            default:
+                break;
+        }
+    }
+
 
 }
